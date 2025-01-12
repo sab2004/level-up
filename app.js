@@ -52,12 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    // Si l'utilisateur est connecté et essaie d'accéder à index.html, rediriger vers dashboard.html
-    if (isConnected && window.location.pathname.endsWith('index.html')) {
-        window.location.href = 'dashboard.html';
-        return;
-    }
-
     // Gestion du bouton de connexion/déconnexion
     const logoutButton = document.querySelector('.btn-connexion');
     if (logoutButton) {
