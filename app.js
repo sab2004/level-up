@@ -52,6 +52,20 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
+    // Ajouter l'onglet Tableau de bord si l'utilisateur est connecté
+    if (isConnected && window.location.pathname.endsWith('index.html')) {
+        const navLinks = document.querySelector('.nav-links');
+        const connexionLink = document.querySelector('.btn-connexion').parentElement;
+        if (navLinks && connexionLink) {
+            const dashboardLi = document.createElement('li');
+            const dashboardLink = document.createElement('a');
+            dashboardLink.href = 'dashboard.html';
+            dashboardLink.textContent = 'Tableau de Bord';
+            dashboardLi.appendChild(dashboardLink);
+            navLinks.insertBefore(dashboardLi, connexionLink);
+        }
+    }
+
     // Gestion du bouton de connexion/déconnexion
     const logoutButton = document.querySelector('.btn-connexion');
     if (logoutButton) {
