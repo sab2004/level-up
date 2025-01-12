@@ -45,6 +45,7 @@ if (connexionForm) {
 // Vérification de la connexion et redirection
 document.addEventListener('DOMContentLoaded', function() {
     const isConnected = localStorage.getItem('levelup_profile') || localStorage.getItem('userProfile');
+    console.log('État de connexion:', isConnected);
     
     // Si l'utilisateur n'est pas connecté et essaie d'accéder au dashboard, rediriger vers connexion.html
     if (!isConnected && window.location.pathname.endsWith('dashboard.html')) {
@@ -53,9 +54,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Ajouter l'onglet Tableau de bord si l'utilisateur est connecté
-    if (isConnected && window.location.pathname.endsWith('index.html')) {
+    if (isConnected && window.location.pathname.includes('index.html')) {
+        console.log('Tentative d\'ajout de l\'onglet Tableau de bord');
         const navLinks = document.querySelector('.nav-links');
         const connexionLink = document.querySelector('.btn-connexion').parentElement;
+        console.log('Navigation trouvée:', !!navLinks, 'Bouton connexion trouvé:', !!connexionLink);
+        
         if (navLinks && connexionLink) {
             const dashboardLi = document.createElement('li');
             const dashboardLink = document.createElement('a');
@@ -63,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
             dashboardLink.textContent = 'Tableau de Bord';
             dashboardLi.appendChild(dashboardLink);
             navLinks.insertBefore(dashboardLi, connexionLink);
+            console.log('Onglet Tableau de bord ajouté');
         }
     }
 
