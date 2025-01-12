@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level Up Fitness</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="container">
+            <a href="#" class="logo">Level Up!</a>
+            <div class="nav-links">
+                <a href="#" class="active">Accueil</a>
+                <a href="#programmes">Programmes</a>
+                <a href="#planning">Planning</a>
+                <a href="#profil" class="cta-button">Mon Profil</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="hero" class="hero-section">
+        <div class="container">
+            <h1>Améliorez vos performances avec LEVEL UP!</h1>
+            <p>Des programmes personnalisés, un suivi expert et des résultats garantis</p>
+            <a href="#profil" class="cta-button">Créer mon profil</a>
+        </div>
+    </section>
+
+    <section id="profil" class="section-profil">
+        <div class="container">
+            <div class="profile-info">
+                <div class="welcome-message">
+                    <h2>Bienvenue sur Level Up Fitness !</h2>
+                    <p>Pour commencer votre parcours fitness, créez votre profil :</p>
+                    <button class="create-profile-btn">
+                        <i class="fas fa-user-plus"></i> Créer mon profil
+                    </button>
+                </div>
+            </div>
+            <div class="profile-stats">
+                <div class="stats-container">
+                    <div class="chart-container">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+                    <div class="detailed-stats">
+                        <h3>Statistiques détaillées</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <i class="fas fa-fire-alt"></i>
+                                <h4>Calories brûlées</h4>
+                                <div class="stat-value">0</div>
+                                <div class="stat-progress"></div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-dumbbell"></i>
+                                <h4>Séances complétées</h4>
+                                <div class="stat-value">0</div>
+                                <div class="stat-progress"></div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-clock"></i>
+                                <h4>Temps total</h4>
+                                <div class="stat-value">0h</div>
+                                <div class="stat-progress"></div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-trophy"></i>
+                                <h4>Objectifs atteints</h4>
+                                <div class="stat-value">0</div>
+                                <div class="stat-progress"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="achievements-container">
+                    <h3>Badges et récompenses</h3>
+                    <div class="badges-grid">
+                        <!-- Les badges seront générés dynamiquement -->
+                    </div>
+                </div>
+                <div class="history-container">
+                    <h3>Historique des modifications</h3>
+                    <div class="history-list">
+                        <!-- L'historique sera généré dynamiquement -->
+                    </div>
+                </div>
+                <div class="objectifs-list">
+                    <!-- Les objectifs seront générés dynamiquement -->
+                    <button class="add-objectif-btn">
+                        <i class="fas fa-plus"></i> Ajouter un objectif
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="exercices" class="section-exercices">
+        <div class="container">
+            <h2>Bibliothèque d'exercices</h2>
+            <div class="exercices-filters">
+                <div class="search-bar">
+                    <input type="text" id="exerciceSearch" placeholder="Rechercher un exercice...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">Tous</button>
+                    <button class="filter-btn" data-filter="musculation">Musculation</button>
+                    <button class="filter-btn" data-filter="cardio">Cardio</button>
+                    <button class="filter-btn" data-filter="yoga">Yoga</button>
+                    <button class="filter-btn" data-filter="stretching">Stretching</button>
+                </div>
+                <div class="muscle-filters">
+                    <select id="muscleFilter">
+                        <option value="">Groupe musculaire</option>
+                        <option value="pectoraux">Pectoraux</option>
+                        <option value="dos">Dos</option>
+                        <option value="epaules">Épaules</option>
+                        <option value="biceps">Biceps</option>
+                        <option value="triceps">Triceps</option>
+                        <option value="jambes">Jambes</option>
+                        <option value="abdos">Abdominaux</option>
+                    </select>
+                    <select id="difficultyFilter">
+                        <option value="">Niveau de difficulté</option>
+                        <option value="debutant">Débutant</option>
+                        <option value="intermediaire">Intermédiaire</option>
+                        <option value="avance">Avancé</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="exercices-grid">
+                <!-- Les exercices seront générés dynamiquement -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Modale pour les détails d'exercice -->
+    <template id="exerciceModalTemplate">
+        <div class="modal-content exercice-details">
+            <div class="exercice-video">
+                <video controls>
+                    <source src="" type="video/mp4">
+                    Votre navigateur ne supporte pas la lecture de vidéos.
+                </video>
+            </div>
+            <div class="exercice-info">
+                <h3 class="exercice-title"></h3>
+                <div class="exercice-meta">
+                    <span class="muscle-group"></span>
+                    <span class="difficulty"></span>
+                    <span class="equipment"></span>
+                </div>
+                <div class="exercice-description">
+                    <h4>Description</h4>
+                    <p></p>
+                </div>
+                <div class="exercice-instructions">
+                    <h4>Instructions</h4>
+                    <ol></ol>
+                </div>
+                <div class="exercice-tips">
+                    <h4>Conseils</h4>
+                    <ul></ul>
+                </div>
+                <div class="exercice-variations">
+                    <h4>Variations</h4>
+                    <ul></ul>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="add-to-favorites">
+                    <i class="far fa-heart"></i> Favoris
+                </button>
+                <button class="close-modal">Fermer</button>
+            </div>
+        </div>
+    </template>
+
+</body>
+</html> 

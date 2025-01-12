@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - FitCoach</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-dumbbell"></i>
+                <span>FitCoach</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="index.html#programmes">Programmes</a></li>
+                <li><a href="index.html#connectivity">Connectivité</a></li>
+                <li><a href="index.html#pricing">Formules</a></li>
+                <li><a href="#" class="btn-connexion">Connexion</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Section Connexion -->
+    <section class="connexion-section">
+        <div class="connexion-container">
+            <h1>Connexion</h1>
+            <p class="connexion-intro">Accédez à votre espace personnel et suivez vos progrès</p>
+            
+            <form id="connexion-form" class="connexion-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Se souvenir de moi</label>
+                    </div>
+                    <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+                </div>
+                
+                <button type="submit" class="btn-submit">Se connecter</button>
+            </form>
+            
+            <div class="connexion-footer">
+                <p>Pas encore de compte ? <a href="inscription.html">Inscrivez-vous</a></p>
+            </div>
+        </div>
+    </section>
+
+    <script src="app.js" defer></script>
+</body>
+</html> 

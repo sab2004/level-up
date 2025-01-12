@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - FitCoach</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-dumbbell"></i>
+                <span>FitCoach</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="index.html#programmes">Programmes</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="#connexion" class="btn-connexion">Connexion</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Section Inscription -->
+    <section class="inscription-section">
+        <div class="inscription-container">
+            <h1>Créez votre profil FitCoach</h1>
+            <p class="inscription-intro">Rejoignez la communauté FitCoach et commencez votre transformation dès aujourd'hui</p>
+            
+            <form class="inscription-form" id="inscription-form" autocomplete="on">
+                <!-- Objectifs et niveau -->
+                <div class="form-section">
+                    <h2>Vos objectifs</h2>
+                    <div class="form-group">
+                        <label for="objectif-principal">Objectif principal</label>
+                        <select id="objectif-principal" name="objectif-principal" required>
+                            <option value="">Sélectionnez votre objectif</option>
+                            <option value="perte-poids">Perte de poids</option>
+                            <option value="musculation">Prise de muscle</option>
+                            <option value="endurance">Amélioration de l'endurance</option>
+                            <option value="bien-etre">Bien-être général</option>
+                            <option value="competition">Préparation compétition</option>
+                            <option value="amelioration-discipline">S'améliorer dans une discipline</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="discipline-group" style="display: none;">
+                        <label for="discipline">Discipline spécifique</label>
+                        <select id="discipline" name="discipline">
+                            <option value="">Sélectionnez votre discipline</option>
+                            <option value="course">Course à pied</option>
+                            <option value="natation">Natation</option>
+                            <option value="cyclisme">Cyclisme</option>
+                            <option value="crossfit">CrossFit</option>
+                            <option value="yoga">Yoga</option>
+                            <option value="boxe">Boxe</option>
+                            <option value="arts-martiaux">Arts martiaux</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="niveau">Niveau actuel</label>
+                        <select id="niveau" name="niveau" required>
+                            <option value="">Sélectionnez votre niveau</option>
+                            <option value="debutant">Débutant</option>
+                            <option value="intermediaire">Intermédiaire</option>
+                            <option value="avance">Avancé</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Informations physiques -->
+                <div class="form-section">
+                    <h2>Informations physiques</h2>
+                    <div class="form-group">
+                        <label for="age">Âge</label>
+                        <input type="number" id="age" name="age" min="16" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taille">Taille (cm)</label>
+                        <input type="number" id="taille" name="taille" min="100" max="250" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="poids">Poids (kg)</label>
+                        <input type="number" id="poids" name="poids" min="30" max="250" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Genre</label>
+                        <div class="radio-group">
+                            <input type="radio" id="homme" name="genre" value="homme" required>
+                            <label for="homme">Homme</label>
+                            <input type="radio" id="femme" name="genre" value="femme">
+                            <label for="femme">Femme</label>
+                            <input type="radio" id="autre" name="genre" value="autre">
+                            <label for="autre">Autre</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Disponibilités -->
+                <div class="form-section">
+                    <h2>Vos disponibilités</h2>
+                    <div class="form-group">
+                        <label for="frequence">Fréquence d'entraînement souhaitée (par semaine)</label>
+                        <select id="frequence" name="frequence" required>
+                            <option value="">Sélectionnez une fréquence</option>
+                            <option value="1-2">1-2 fois</option>
+                            <option value="3-4">3-4 fois</option>
+                            <option value="5+">5 fois ou plus</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="duree">Durée moyenne par séance</label>
+                        <select id="duree" name="duree" required>
+                            <option value="">Sélectionnez une durée</option>
+                            <option value="30">30 minutes</option>
+                            <option value="45">45 minutes</option>
+                            <option value="60">1 heure</option>
+                            <option value="90">1 heure 30</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Informations personnelles -->
+                <div class="form-section">
+                    <h2>Informations personnelles</h2>
+                    <div class="form-group">
+                        <label for="prenom">Prénom</label>
+                        <input type="text" id="prenom" name="prenom" required autocomplete="given-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="nom">Nom</label>
+                        <input type="text" id="nom" name="nom" required autocomplete="family-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" id="password" name="password" required autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirmer le mot de passe</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required autocomplete="new-password">
+                    </div>
+                </div>
+
+                <!-- Conditions et validation -->
+                <div class="form-section">
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="conditions" name="conditions" required>
+                        <label for="conditions">J'accepte les conditions d'utilisation et la politique de confidentialité</label>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="newsletter" name="newsletter">
+                        <label for="newsletter">Je souhaite recevoir la newsletter et les conseils personnalisés</label>
+                    </div>
+                    <button type="submit" class="btn-submit">Créer mon profil</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>FitCoach</h4>
+                <p>Votre partenaire vers une meilleure santé</p>
+            </div>
+            <div class="footer-section">
+                <h4>Liens Rapides</h4>
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="index.html#services">Services</a></li>
+                    <li><a href="index.html#programmes">Programmes</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Suivez-nous</h4>
+                <div class="social-links">
+                    <a href="#" title="Suivez-nous sur Facebook" aria-label="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#" title="Suivez-nous sur Instagram" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" title="Suivez-nous sur Twitter" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 FitCoach. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        (function() {
+            emailjs.init("2ok_rFcs8ie6H9RM_");
+        })();
+    </script>
+</body>
+</html> 
