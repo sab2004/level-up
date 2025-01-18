@@ -364,6 +364,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 weightHistory.push(weightEntry);
                 localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
                 
+                // Calculer le poids perdu (différence entre le premier et le dernier poids)
+                if (weightHistory.length > 1) {
+                    const firstWeight = weightHistory[0].weight;
+                    const weightLost = (firstWeight - weight).toFixed(1);
+                    const weightLostElement = document.querySelector('.progress-stats .stat:first-child .stat-value');
+                    if (weightLostElement) {
+                        weightLostElement.textContent = `${weightLost} kg`;
+                    }
+                }
+                
                 // Mettre à jour l'affichage
                 updateWeightDisplay(weight);
                 updateWeightChart();
