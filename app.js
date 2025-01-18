@@ -655,43 +655,41 @@ document.addEventListener('DOMContentLoaded', () => {
     stopWorkoutBtn.addEventListener('click', stopWorkout);
 }); 
 
-// Gestion des détails des exercices et de la modale d'entraînement
-document.addEventListener('DOMContentLoaded', () => {
-    // Gestion des détails des exercices
-    document.querySelectorAll('.exercise-item').forEach(item => {
-        const header = item.querySelector('.exercise-header');
-        const details = item.querySelector('.exercise-details');
-        
-        if (header && details) {
-            header.addEventListener('click', (e) => {
-                // Ne pas déclencher si on clique sur le bouton vidéo
-                if (e.target.closest('.show-video')) {
-                    return;
-                }
-                
-                // Fermer tous les autres détails
-                document.querySelectorAll('.exercise-details').forEach(otherDetails => {
-                    if (otherDetails !== details) {
-                        otherDetails.classList.add('hidden');
-                    }
-                });
-                
-                // Basculer l'affichage des détails
-                details.classList.toggle('hidden');
-            });
-        }
-    });
-
-    // Gestion de la modale d'entraînement
-    const workoutModal = document.querySelector('.workout-modal');
-    const startWorkoutBtn = document.querySelector('.start-workout');
+// Gestion des détails des exercices
+document.addEventListener('DOMContentLoaded', function() {
+    const exerciseHeaders = document.querySelectorAll('.exercise-header');
     
-    if (startWorkoutBtn && workoutModal) {
-        startWorkoutBtn.addEventListener('click', () => {
-            workoutModal.classList.add('visible');
-            startWorkout();
+    exerciseHeaders.forEach(header => {
+        header.addEventListener('click', function(e) {
+            // Empêcher la propagation si on clique sur le bouton vidéo
+            if (e.target.closest('.show-video')) {
+                e.stopPropagation();
+                return;
+            }
+            
+            // Trouver les détails associés à cet exercice
+            const details = this.nextElementSibling;
+            
+            // Fermer tous les autres détails
+            document.querySelectorAll('.exercise-details').forEach(detail => {
+                if (detail !== details) {
+                    detail.classList.remove('visible');
+                }
+            });
+            
+            // Basculer la visibilité des détails actuels
+            details.classList.toggle('visible');
         });
-    }
+    });
+    
+    // Empêcher la fermeture des détails lors du clic sur le bouton vidéo
+    const videoButtons = document.querySelectorAll('.show-video');
+    videoButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // Logique pour afficher la vidéo...
+        });
+    });
 });
 
 // Configuration de la modale vidéo
