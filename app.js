@@ -877,3 +877,67 @@ closeVideoBtn.addEventListener('click', () => {
         iframe.src = iframe.src;
     });
 }); 
+
+// Gestion du bouton "Séance terminée"
+document.addEventListener('DOMContentLoaded', function() {
+    const completeWorkoutButton = document.querySelector('.workout-list + .btn-primary');
+    if (completeWorkoutButton) {
+        completeWorkoutButton.addEventListener('click', function() {
+            const message = `Confirmez-vous avoir terminé votre séance d'aujourd'hui ?
+            
+• Échauffement dynamique - 10 min
+• Circuit HIIT #1 - 15 min
+• Circuit HIIT #2 - 15 min
+• Retour au calme - 5 min
+
+Cela validera votre séance et mettra à jour vos statistiques.`;
+
+            if (confirm(message)) {
+                // Mise à jour des statistiques
+                const statsElement = document.querySelector('.stat-value:nth-child(2)');
+                if (statsElement) {
+                    const [completed, total] = statsElement.textContent.split('/');
+                    const newCompleted = parseInt(completed) + 1;
+                    statsElement.textContent = `${newCompleted}/${total}`;
+                }
+
+                // Mise à jour des calories
+                const caloriesElement = document.querySelector('.stat-value:last-child');
+                if (caloriesElement) {
+                    const currentCalories = parseInt(caloriesElement.textContent.replace(',', ''));
+                    const newCalories = currentCalories + 400; // 400 calories estimées pour la séance HIIT
+                    caloriesElement.textContent = newCalories.toLocaleString();
+                }
+
+                // Ajout de l'activité dans la liste des activités récentes
+                const activityList = document.querySelector('.activity-list');
+                if (activityList) {
+                    const newActivity = document.createElement('div');
+                    newActivity.className = 'activity-item';
+                    newActivity.innerHTML = `
+                        <div class="activity-icon workout">
+                            <i class="fas fa-dumbbell"></i>
+                        </div>
+                        <div class="activity-details">
+                            <h3>HIIT Training</h3>
+                            <p>45min • Séance complétée</p>
+                            <span class="activity-time">Aujourd'hui ${new Date().getHours()}:${String(new Date().getMinutes()).padStart(2, '0')}</span>
+                        </div>
+                        <div class="activity-stats">
+                            <span><i class="fas fa-fire"></i> 400 kcal</span>
+                        </div>
+                    `;
+                    activityList.insertBefore(newActivity, activityList.firstChild);
+                }
+
+                // Désactivation du bouton
+                completeWorkoutButton.disabled = true;
+                completeWorkoutButton.style.opacity = '0.5';
+                completeWorkoutButton.innerHTML = '<i class="fas fa-check"></i> Séance terminée !';
+
+                // Message de félicitations
+                alert('Félicitations ! Vous avez terminé votre séance d\'entraînement. 💪');
+            }
+        });
+    }
+}); 
