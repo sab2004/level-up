@@ -280,8 +280,8 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const weightForm = document.getElementById('weight-form');
     const connectScaleBtn = document.getElementById('connect-scale');
-    const weightDisplay = document.querySelector('.summary-card .value');
-    const weightTrend = document.querySelector('.summary-card .trend');
+    const weightDisplay = document.querySelector('.summary-card[data-type="weight"] .value');
+    const weightTrend = document.querySelector('.summary-card[data-type="weight"] .trend');
     
     // Charger l'historique des poids depuis le localStorage
     let weightHistory = JSON.parse(localStorage.getItem('weightHistory')) || [];
