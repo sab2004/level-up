@@ -54,6 +54,7 @@ body {
     display: flex;
     list-style: none;
     gap: 2rem;
+    transition: all 0.3s ease;
 }
 
 .nav-links a {
@@ -83,6 +84,10 @@ body {
     display: none;
     font-size: 1.5rem;
     cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    padding: 0.5rem;
 }
 
 /* Hero Section */
@@ -1620,7 +1625,7 @@ footer {
 } 
 
 /* Menu mobile styles */
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
     .menu-toggle {
         display: block;
         background: none;
@@ -1668,65 +1673,6 @@ footer {
         margin: 0.5rem auto;
         display: inline-block;
     }
-
-    /* Ajustements pour le dashboard sur mobile */
-    .dashboard-content {
-        padding: 1rem;
-    }
-
-    .dashboard-summary {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
-    .summary-card {
-        padding: 1rem;
-    }
-
-    /* Ajustements pour les sections principales */
-    .hero-section {
-        padding: 6rem 1rem 3rem;
-    }
-
-    .hero-content {
-        padding: 0 1rem;
-    }
-
-    .hero-cta {
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .btn-primary, .btn-secondary {
-        width: 100%;
-    }
-
-    /* Grilles responsives */
-    .services-grid,
-    .programmes-grid,
-    .process-grid {
-        grid-template-columns: 1fr;
-        padding: 1rem;
-    }
-
-    /* Formulaires sur mobile */
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-    .form-group input[type="text"],
-    .form-group input[type="email"],
-    .form-group input[type="password"],
-    .form-group select {
-        width: 100%;
-        padding: 0.8rem;
-        font-size: 16px; /* Évite le zoom automatique sur iOS */
-    }
-
-    /* Espacement des sections */
-    section {
-        padding: 2rem 1rem;
-    }
 }
 
 /* Ajustements pour les tablettes */
@@ -1739,5 +1685,137 @@ footer {
 
     .dashboard-summary {
         grid-template-columns: repeat(2, 1fr);
+    }
+} 
+
+/* Styles pour le programme de perte de poids */
+.weight-loss-program {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin: 2rem 0;
+}
+
+.program-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.program-card {
+    background: var(--light-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.program-card h3 {
+    color: var(--dark-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.workout-details .workout-type {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.exercise-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.exercise-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.exercise-list li:last-child {
+    border-bottom: none;
+}
+
+.start-workout {
+    width: 100%;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.nutrition-plan .meal {
+    margin-bottom: 1.5rem;
+}
+
+.nutrition-plan h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.nutrition-plan ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+
+.nutrition-plan ul li {
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+
+.nutrition-plan ul li:before {
+    content: "•";
+    color: var(--primary-color);
+    position: absolute;
+    left: -1rem;
+}
+
+.progress-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.progress-stats .stat {
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.progress-chart {
+    height: 200px;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .program-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .progress-stats {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 } 

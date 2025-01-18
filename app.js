@@ -357,3 +357,193 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 }); 
+
+// Gestion du programme de perte de poids
+document.addEventListener('DOMContentLoaded', function() {
+    const startWorkoutBtn = document.querySelector('.start-workout');
+    const weightLossChart = document.getElementById('weightLossChart');
+    
+    if (startWorkoutBtn) {
+        startWorkoutBtn.addEventListener('click', function() {
+            // Simuler le démarrage d'une séance
+            const workoutDetails = {
+                type: 'HIIT',
+                duration: 45,
+                exercises: [
+                    { name: 'Échauffement dynamique', duration: 10 },
+                    { name: 'Circuit HIIT #1', duration: 15 },
+                    { name: 'Circuit HIIT #2', duration: 15 },
+                    { name: 'Retour au calme', duration: 5 }
+                ]
+            };
+            
+            startWorkout(workoutDetails);
+        });
+    }
+    
+    if (weightLossChart) {
+        initWeightLossChart();
+    }
+});
+
+// Démarrer une séance d'entraînement
+function startWorkout(workoutDetails) {
+    // Créer une modale pour la séance
+    const modal = document.createElement('div');
+    modal.className = 'modal fade-in';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>${workoutDetails.type} - ${workoutDetails.duration} minutes</h3>
+            <div class="workout-progress">
+                <div class="current-exercise">
+                    <h4>Exercice en cours</h4>
+                    <p class="exercise-name">Échauffement dynamique</p>
+                    <div class="timer">10:00</div>
+                </div>
+                <div class="exercise-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="workout-controls">
+                <button class="btn-secondary pause-workout">
+                    <i class="fas fa-pause"></i> Pause
+                </button>
+                <button class="btn-danger stop-workout">
+                    <i class="fas fa-stop"></i> Arrêter
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    setTimeout(() => modal.classList.add('visible'), 10);
+
+    let currentExerciseIndex = 0;
+    let timeLeft = workoutDetails.exercises[0].duration * 60;
+    let isPaused = false;
+
+    const timer = setInterval(() => {
+        if (!isPaused) {
+            timeLeft--;
+            updateWorkoutUI(modal, timeLeft, currentExerciseIndex, workoutDetails.exercises);
+
+            if (timeLeft <= 0) {
+                currentExerciseIndex++;
+                if (currentExerciseIndex < workoutDetails.exercises.length) {
+                    timeLeft = workoutDetails.exercises[currentExerciseIndex].duration * 60;
+                } else {
+                    clearInterval(timer);
+                    completeWorkout(modal);
+                }
+            }
+        }
+    }, 1000);
+
+    // Gestionnaires d'événements pour les boutons
+    modal.querySelector('.pause-workout').addEventListener('click', () => {
+        isPaused = !isPaused;
+        const btn = modal.querySelector('.pause-workout');
+        btn.innerHTML = isPaused ? 
+            '<i class="fas fa-play"></i> Reprendre' : 
+            '<i class="fas fa-pause"></i> Pause';
+    });
+
+    modal.querySelector('.stop-workout').addEventListener('click', () => {
+        if (confirm('Êtes-vous sûr de vouloir arrêter la séance ?')) {
+            clearInterval(timer);
+            modal.classList.remove('visible');
+            setTimeout(() => modal.remove(), 300);
+        }
+    });
+}
+
+// Mettre à jour l'interface de la séance
+function updateWorkoutUI(modal, timeLeft, currentExerciseIndex, exercises) {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    const timer = modal.querySelector('.timer');
+    const exerciseName = modal.querySelector('.exercise-name');
+    const progressFill = modal.querySelector('.progress-fill');
+
+    timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    exerciseName.textContent = exercises[currentExerciseIndex].name;
+
+    const totalDuration = exercises[currentExerciseIndex].duration * 60;
+    const progress = ((totalDuration - timeLeft) / totalDuration) * 100;
+    progressFill.style.width = `${progress}%`;
+}
+
+// Terminer une séance
+function completeWorkout(modal) {
+    modal.querySelector('.workout-progress').innerHTML = `
+        <div class="workout-complete">
+            <i class="fas fa-check-circle"></i>
+            <h4>Séance terminée !</h4>
+            <p>Félicitations, vous avez terminé votre séance d'aujourd'hui.</p>
+            <div class="workout-stats">
+                <div class="stat">
+                    <span class="stat-value">450</span>
+                    <span class="stat-label">Calories brûlées</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">45</span>
+                    <span class="stat-label">Minutes d'exercice</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    modal.querySelector('.workout-controls').innerHTML = `
+        <button class="btn-primary close-workout">Terminer</button>
+    `;
+
+    modal.querySelector('.close-workout').addEventListener('click', () => {
+        modal.classList.remove('visible');
+        setTimeout(() => modal.remove(), 300);
+        updateWorkoutStats();
+    });
+}
+
+// Initialiser le graphique de progression
+function initWeightLossChart() {
+    const ctx = document.getElementById('weightLossChart').getContext('2d');
+    const weightHistory = JSON.parse(localStorage.getItem('weightHistory') || '[]');
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: weightHistory.map(entry => new Date(entry.date).toLocaleDateString()),
+            datasets: [{
+                label: 'Poids (kg)',
+                data: weightHistory.map(entry => entry.weight),
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+}
+
+// Mettre à jour les statistiques après une séance
+function updateWorkoutStats() {
+    const stats = JSON.parse(localStorage.getItem('levelup_stats') || '{}');
+    stats.calories_burned = (stats.calories_burned || 0) + 450;
+    stats.workouts_completed = (stats.workouts_completed || 0) + 1;
+    localStorage.setItem('levelup_stats', JSON.stringify(stats));
+
+    // Ajouter à l'historique
+    addToHistory('workout_completed', 'Séance HIIT terminée', {
+        calories: 450,
+        duration: 45,
+        type: 'HIIT'
+    });
+} 

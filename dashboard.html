@@ -6,6 +6,7 @@
     <title>Tableau de Bord - FitCoach</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js" defer></script>
 </head>
 <body>
@@ -116,6 +117,93 @@
                 <div class="chart-placeholder">
                     <!-- Ici sera intégré un graphique d'évolution du poids -->
                     <p>Graphique d'évolution sur 30 jours</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Programme de Perte de Poids -->
+        <section class="weight-loss-program">
+            <h2>Mon Programme de Perte de Poids</h2>
+            <div class="program-grid">
+                <div class="program-card">
+                    <h3>Séance d'aujourd'hui</h3>
+                    <div class="workout-details">
+                        <div class="workout-type">
+                            <i class="fas fa-fire"></i>
+                            <span>HIIT - 45 minutes</span>
+                        </div>
+                        <ul class="exercise-list">
+                            <li>
+                                <span class="exercise-name">Échauffement dynamique</span>
+                                <span class="exercise-duration">10 min</span>
+                            </li>
+                            <li>
+                                <span class="exercise-name">Circuit HIIT #1</span>
+                                <span class="exercise-duration">15 min</span>
+                            </li>
+                            <li>
+                                <span class="exercise-name">Circuit HIIT #2</span>
+                                <span class="exercise-duration">15 min</span>
+                            </li>
+                            <li>
+                                <span class="exercise-name">Retour au calme</span>
+                                <span class="exercise-duration">5 min</span>
+                            </li>
+                        </ul>
+                        <button class="btn-primary start-workout">
+                            <i class="fas fa-play"></i> Démarrer la séance
+                        </button>
+                    </div>
+                </div>
+                <div class="program-card">
+                    <h3>Plan Nutritionnel</h3>
+                    <div class="nutrition-plan">
+                        <div class="meal">
+                            <h4>Petit-déjeuner</h4>
+                            <ul>
+                                <li>Flocons d'avoine avec fruits frais</li>
+                                <li>Yaourt grec nature</li>
+                                <li>Thé vert ou café noir</li>
+                            </ul>
+                        </div>
+                        <div class="meal">
+                            <h4>Déjeuner</h4>
+                            <ul>
+                                <li>Salade de poulet grillé</li>
+                                <li>Quinoa aux légumes</li>
+                                <li>Huile d'olive extra vierge</li>
+                            </ul>
+                        </div>
+                        <div class="meal">
+                            <h4>Dîner</h4>
+                            <ul>
+                                <li>Poisson blanc au four</li>
+                                <li>Légumes vapeur</li>
+                                <li>Riz complet</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="program-card">
+                    <h3>Progression</h3>
+                    <div class="progress-stats">
+                        <div class="stat">
+                            <span class="stat-label">Poids perdu</span>
+                            <span class="stat-value">-2.5 kg</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Séances complétées</span>
+                            <span class="stat-value">8/12</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Calories brûlées</span>
+                            <span class="stat-value">4,800</span>
+                        </div>
+                    </div>
+                    <div class="progress-chart">
+                        <!-- Le graphique sera ajouté via JavaScript -->
+                        <canvas id="weightLossChart"></canvas>
+                    </div>
                 </div>
             </div>
         </section>
