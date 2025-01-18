@@ -657,7 +657,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Gestion des détails des exercices
 document.addEventListener('DOMContentLoaded', () => {
-    const exerciseItems = document.querySelectorAll('.exercise-item');
+    // Gestionnaire pour les clics sur les exercices
+    document.querySelectorAll('.exercise-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            // Empêche la propagation si on clique sur le bouton vidéo
+            if (e.target.closest('.show-video')) {
+                return;
+            }
+
+            // Ferme tous les autres détails
+            document.querySelectorAll('.exercise-item').forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.querySelector('.exercise-details').classList.add('hidden');
+                }
+            });
+            
+            // Bascule l'affichage des détails de l'exercice cliqué
+            const details = item.querySelector('.exercise-details');
+            details.classList.toggle('hidden');
+        });
+    });
+
+    // Configuration de la modale vidéo
     const videoModal = document.createElement('div');
     videoModal.className = 'modal video-modal';
     
@@ -696,7 +717,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
-    // Configuration de la modale vidéo
     videoModal.innerHTML = `
         <div class="modal-content">
             <h3>Démonstrations des exercices</h3>
@@ -707,24 +727,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     `;
     document.body.appendChild(videoModal);
-
-    // Gestionnaire pour les clics sur les exercices
-    exerciseItems.forEach(item => {
-        const header = item.querySelector('.exercise-header');
-        const details = item.querySelector('.exercise-details');
-        
-        header.addEventListener('click', () => {
-            // Ferme tous les autres détails
-            exerciseItems.forEach(otherItem => {
-                if (otherItem !== item) {
-                    otherItem.querySelector('.exercise-details').classList.add('hidden');
-                }
-            });
-            
-            // Bascule l'affichage des détails de l'exercice cliqué
-            details.classList.toggle('hidden');
-        });
-    });
 
     // Gestionnaire pour les boutons de vidéo
     document.querySelectorAll('.show-video').forEach(button => {
