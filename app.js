@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (weightHistory.length > 1) {
                     const firstWeight = weightHistory[0].weight;
                     const weightLost = (firstWeight - weight).toFixed(1);
-                    const weightLostElement = document.querySelector('.progress-stats .stat:first-child .stat-value');
+                    const weightLostElement = document.querySelector('.progress-stats [data-stat-type="weight-lost"] .stat-value');
                     if (weightLostElement) {
                         weightLostElement.textContent = `${weightLost} kg`;
                     }
