@@ -1993,6 +1993,7 @@ footer {
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     transition: all 0.3s ease;
+    width: 100%;
 }
 
 .exercise-item:hover {
@@ -2008,6 +2009,8 @@ footer {
     justify-content: space-between;
     align-items: center;
     transition: background-color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .exercise-header:hover {
@@ -2018,6 +2021,11 @@ footer {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--dark-color);
+    flex: 1;
+    margin-right: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .exercise-header .exercise-duration {
@@ -2027,29 +2035,22 @@ footer {
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .exercise-details {
     padding: 1.5rem;
     background-color: white;
     border-top: 2px solid #e0e0e0;
-}
-
-.circuit-description {
-    background-color: #f8f9fa;
-    padding: 0.8rem;
-    border-radius: 8px;
-    color: var(--primary-color);
-    font-weight: 500;
-    margin-bottom: 1.2rem;
-    font-size: 0.95rem;
-    border-left: 4px solid var(--primary-color);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .exercise-steps {
     list-style-type: none;
     padding-left: 0;
     margin-bottom: 1.2rem;
+    width: 100%;
 }
 
 .exercise-steps li {
@@ -2059,10 +2060,32 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.exercise-steps li:last-child {
-    border-bottom: none;
+.exercise-steps li span:first-child {
+    flex: 1;
+    margin-right: 1rem;
+}
+
+.exercise-steps li span:last-child {
+    color: var(--primary-color);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.circuit-description {
+    background-color: #f8f9fa;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-bottom: 1.2rem;
+    font-size: 0.95rem;
+    border-left: 4px solid var(--primary-color);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Style amélioré pour le bouton de démonstration */
