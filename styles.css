@@ -1819,3 +1819,168 @@ footer {
         gap: 1.5rem;
     }
 } 
+
+/* Styles pour la modale de séance d'entraînement */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.modal.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal.visible .modal-content {
+    transform: translateY(0);
+}
+
+.modal h3 {
+    color: var(--dark-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.current-exercise {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.current-exercise h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.exercise-name {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.timer {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--dark-color);
+    margin: 1rem 0;
+}
+
+.exercise-progress {
+    margin: 1.5rem 0;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary-color);
+    width: 0;
+    transition: width 0.3s ease;
+}
+
+.workout-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.workout-controls button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary {
+    background: #f8f9fa;
+    color: var(--dark-color);
+}
+
+.btn-secondary:hover {
+    background: #e9ecef;
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+.workout-complete {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.workout-complete i {
+    font-size: 3rem;
+    color: var(--success-color);
+    margin-bottom: 1rem;
+}
+
+.workout-complete h4 {
+    color: var(--success-color);
+    margin-bottom: 0.5rem;
+}
+
+.workout-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .modal .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    .timer {
+        font-size: 2rem;
+    }
+
+    .workout-controls {
+        flex-direction: column;
+    }
+
+    .workout-controls button {
+        width: 100%;
+        justify-content: center;
+    }
+} 

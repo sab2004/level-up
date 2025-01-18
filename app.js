@@ -546,4 +546,111 @@ function updateWorkoutStats() {
         duration: 45,
         type: 'HIIT'
     });
-} 
+}
+
+// Gestion de la séance d'entraînement
+document.addEventListener('DOMContentLoaded', () => {
+    const workoutModal = document.querySelector('.workout-modal');
+    const startWorkoutBtn = document.querySelector('.start-workout');
+    const pauseWorkoutBtn = document.querySelector('.pause-workout');
+    const stopWorkoutBtn = document.querySelector('.stop-workout');
+    const timerDisplay = document.querySelector('.timer');
+    const progressFill = document.querySelector('.progress-fill');
+    const exerciseNameDisplay = document.querySelector('.exercise-name');
+
+    let workoutTimer;
+    let seconds = 0;
+    let isPaused = false;
+    let currentExerciseIndex = 0;
+
+    const exercises = [
+        { name: "Échauffement dynamique", duration: 600 }, // 10 minutes
+        { name: "Circuit HIIT #1", duration: 900 }, // 15 minutes
+        { name: "Circuit HIIT #2", duration: 900 }, // 15 minutes
+        { name: "Retour au calme", duration: 300 } // 5 minutes
+    ];
+
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+
+    function updateTimer() {
+        if (!isPaused) {
+            seconds++;
+            timerDisplay.textContent = formatTime(seconds);
+            
+            const currentExercise = exercises[currentExerciseIndex];
+            const progress = (seconds % currentExercise.duration) / currentExercise.duration * 100;
+            progressFill.style.width = `${progress}%`;
+
+            if (seconds % currentExercise.duration === 0) {
+                currentExerciseIndex++;
+                if (currentExerciseIndex < exercises.length) {
+                    exerciseNameDisplay.textContent = exercises[currentExerciseIndex].name;
+                    seconds = 0;
+                } else {
+                    completeWorkout();
+                }
+            }
+        }
+    }
+
+    function startWorkout() {
+        workoutModal.classList.add('visible');
+        currentExerciseIndex = 0;
+        seconds = 0;
+        exerciseNameDisplay.textContent = exercises[currentExerciseIndex].name;
+        workoutTimer = setInterval(updateTimer, 1000);
+    }
+
+    function pauseWorkout() {
+        isPaused = !isPaused;
+        pauseWorkoutBtn.innerHTML = isPaused ? 
+            '<i class="fas fa-play"></i> Reprendre' : 
+            '<i class="fas fa-pause"></i> Pause';
+    }
+
+    function stopWorkout() {
+        clearInterval(workoutTimer);
+        workoutModal.classList.remove('visible');
+        seconds = 0;
+        isPaused = false;
+        currentExerciseIndex = 0;
+        progressFill.style.width = '0%';
+    }
+
+    function completeWorkout() {
+        clearInterval(workoutTimer);
+        const modalContent = workoutModal.querySelector('.modal-content');
+        modalContent.innerHTML = `
+            <div class="workout-complete">
+                <i class="fas fa-check-circle"></i>
+                <h4>Séance terminée !</h4>
+                <p>Félicitations, vous avez terminé votre séance d'entraînement.</p>
+                <div class="workout-stats">
+                    <div class="stat">
+                        <span class="stat-label">Durée totale</span>
+                        <span class="stat-value">45:00</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Calories brûlées</span>
+                        <span class="stat-value">450</span>
+                    </div>
+                </div>
+                <button class="btn-primary close-modal">Terminer</button>
+            </div>
+        `;
+
+        const closeBtn = modalContent.querySelector('.close-modal');
+        closeBtn.addEventListener('click', () => {
+            workoutModal.classList.remove('visible');
+            location.reload(); // Recharge la page pour réinitialiser l'interface
+        });
+    }
+
+    startWorkoutBtn.addEventListener('click', startWorkout);
+    pauseWorkoutBtn.addEventListener('click', pauseWorkout);
+    stopWorkoutBtn.addEventListener('click', stopWorkout);
+}); 
