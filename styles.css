@@ -1984,3 +1984,62 @@ footer {
         justify-content: center;
     }
 } 
+
+/* Styles pour les détails des exercices */
+.exercise-item {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.exercise-item:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.exercise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+}
+
+.exercise-details {
+    background: #f8f9fa;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.exercise-details.hidden {
+    display: none;
+}
+
+.circuit-description {
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.exercise-steps {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 1rem;
+}
+
+.exercise-steps li {
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed #e9ecef;
+    display: flex;
+    justify-content: space-between;
+}
+
+.exercise-steps li:last-child {
+    border-bottom: none;
+}
+
+.show-video {
+    width: 100%;
+    margin-top: 1rem;
+    justify-content: center;
+} 

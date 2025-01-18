@@ -654,3 +654,58 @@ document.addEventListener('DOMContentLoaded', () => {
     pauseWorkoutBtn.addEventListener('click', pauseWorkout);
     stopWorkoutBtn.addEventListener('click', stopWorkout);
 }); 
+
+// Gestion des détails des exercices
+document.addEventListener('DOMContentLoaded', () => {
+    const exerciseItems = document.querySelectorAll('.exercise-item');
+    const videoModal = document.createElement('div');
+    videoModal.className = 'modal video-modal';
+    
+    // Configuration de la modale vidéo
+    videoModal.innerHTML = `
+        <div class="modal-content">
+            <h3>Démonstration de l'exercice</h3>
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <i class="fas fa-play-circle"></i>
+                    <p>Vidéo de démonstration</p>
+                    <span class="coming-soon">Bientôt disponible</span>
+                </div>
+            </div>
+            <button class="btn-primary close-video">Fermer</button>
+        </div>
+    `;
+    document.body.appendChild(videoModal);
+
+    // Gestionnaire pour les clics sur les exercices
+    exerciseItems.forEach(item => {
+        const header = item.querySelector('.exercise-header');
+        const details = item.querySelector('.exercise-details');
+        
+        header.addEventListener('click', () => {
+            // Ferme tous les autres détails
+            exerciseItems.forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.querySelector('.exercise-details').classList.add('hidden');
+                }
+            });
+            
+            // Bascule l'affichage des détails de l'exercice cliqué
+            details.classList.toggle('hidden');
+        });
+    });
+
+    // Gestionnaire pour les boutons de vidéo
+    document.querySelectorAll('.show-video').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation(); // Empêche la propagation du clic
+            videoModal.classList.add('visible');
+        });
+    });
+
+    // Fermeture de la modale vidéo
+    const closeVideoBtn = videoModal.querySelector('.close-video');
+    closeVideoBtn.addEventListener('click', () => {
+        videoModal.classList.remove('visible');
+    });
+}); 
