@@ -2008,6 +2008,13 @@ footer {
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+/* Masquer le header quand les détails sont visibles */
+.exercise-item .exercise-details.visible + .exercise-header,
+.exercise-item .exercise-details.visible ~ .exercise-header {
+    display: none;
 }
 
 .exercise-name {

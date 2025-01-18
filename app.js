@@ -668,7 +668,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Trouver les détails associés à cet exercice
-            const details = this.nextElementSibling;
+            const details = this.previousElementSibling;
             
             // Fermer tous les autres détails
             document.querySelectorAll('.exercise-details').forEach(detail => {
