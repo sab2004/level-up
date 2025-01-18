@@ -282,9 +282,72 @@ document.addEventListener('DOMContentLoaded', function() {
     const connectScaleBtn = document.getElementById('connect-scale');
     const weightDisplay = document.querySelector('.summary-card[data-type="weight"] .value');
     const weightTrend = document.querySelector('.summary-card[data-type="weight"] .trend');
+    const resetWeightHistoryBtn = document.getElementById('reset-weight-history');
     
     // Charger l'historique des poids depuis le localStorage
     let weightHistory = JSON.parse(localStorage.getItem('weightHistory')) || [];
+    let weightChart = null;
+    
+    // Initialiser le graphique
+    function initWeightChart() {
+        const ctx = document.getElementById('weightChart');
+        if (!ctx) return;
+
+        weightChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: weightHistory.map(entry => new Date(entry.date).toLocaleDateString()),
+                datasets: [{
+                    label: 'Poids (kg)',
+                    data: weightHistory.map(entry => entry.weight),
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                    tension: 0.1,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.parsed.y} kg`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        ticks: {
+                            callback: function(value) {
+                                return `${value} kg`;
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Mettre à jour le graphique
+    function updateWeightChart() {
+        if (!weightChart) return;
+
+        weightChart.data.labels = weightHistory.map(entry => new Date(entry.date).toLocaleDateString());
+        weightChart.data.datasets[0].data = weightHistory.map(entry => entry.weight);
+        weightChart.update();
+    }
     
     if (weightForm) {
         weightForm.addEventListener('submit', function(e) {
@@ -303,6 +366,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Mettre à jour l'affichage
                 updateWeightDisplay(weight);
+                updateWeightChart();
                 weightInput.value = '';
                 
                 // Afficher un message de succès
@@ -312,28 +376,44 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     if (connectScaleBtn) {
         connectScaleBtn.addEventListener('click', function() {
             // Simuler la connexion à une balance
             alert('Recherche des balances connectées...\nCette fonctionnalité sera bientôt disponible !');
         });
     }
+
+    if (resetWeightHistoryBtn) {
+        resetWeightHistoryBtn.addEventListener('click', function() {
+            if (confirm('Êtes-vous sûr de vouloir réinitialiser l\'historique des poids ? Cette action est irréversible.')) {
+                weightHistory = [];
+                localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
+                updateWeightDisplay(null);
+                updateWeightChart();
+                alert('Historique des poids réinitialisé avec succès !');
+            }
+        });
+    }
     
     // Fonction pour mettre à jour l'affichage du poids
     function updateWeightDisplay(weight) {
         if (weightDisplay) {
-            weightDisplay.textContent = `${weight} kg`;
+            weightDisplay.textContent = weight ? `${weight} kg` : '-- kg';
         }
         if (weightTrend) {
-            if (weightHistory.length > 1) {
+            if (weight && weightHistory.length > 1) {
                 const previousWeight = weightHistory[weightHistory.length - 2].weight;
                 const difference = (weight - previousWeight).toFixed(1);
                 const trend = difference > 0 ? `+${difference}` : difference;
                 weightTrend.textContent = `${trend} kg depuis la dernière mesure`;
                 weightTrend.className = `trend ${difference < 0 ? 'positive' : 'negative'}`;
-            } else {
+            } else if (weight) {
                 weightTrend.textContent = 'Première mesure enregistrée';
+                weightTrend.className = 'trend';
+            } else {
+                weightTrend.textContent = 'Ajoutez votre poids';
+                weightTrend.className = 'trend';
             }
         }
     }
@@ -343,7 +423,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const lastWeight = weightHistory[weightHistory.length - 1].weight;
         updateWeightDisplay(lastWeight);
     }
-}); 
+
+    // Initialiser le graphique au chargement
+    initWeightChart();
+});
 
 // Gestion des liens de navigation dans le tableau de bord
 document.addEventListener('DOMContentLoaded', function() {
