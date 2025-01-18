@@ -1987,89 +1987,118 @@ footer {
 
 /* Styles pour les détails des exercices */
 .exercise-item {
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    border-bottom: 1px solid #eee;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    margin-bottom: 1.2rem;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
 }
 
-.exercise-item:last-child {
-    border-bottom: none;
+.exercise-item:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
 }
 
 .exercise-header {
+    padding: 1.2rem;
+    background-color: #f8f9fa;
+    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
+    transition: background-color 0.3s ease;
 }
 
-.exercise-name {
-    font-weight: 500;
+.exercise-header:hover {
+    background-color: #e9ecef;
+}
+
+.exercise-header .exercise-name {
+    font-size: 1.1rem;
+    font-weight: 600;
     color: var(--dark-color);
 }
 
-.exercise-duration {
-    color: var(--primary-color);
+.exercise-header .exercise-duration {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
     font-weight: 500;
 }
 
 .exercise-details {
-    background: #f8f9fa;
-    border-radius: 5px;
-    padding: 1rem;
-    margin: 0.5rem 0;
+    padding: 1.5rem;
+    background-color: white;
+    border-top: 2px solid #e0e0e0;
 }
 
-.exercise-details.hidden {
-    display: none;
+.circuit-description {
+    background-color: #f8f9fa;
+    padding: 0.8rem;
+    border-radius: 8px;
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-bottom: 1.2rem;
+    font-size: 0.95rem;
+    border-left: 4px solid var(--primary-color);
 }
 
 .exercise-steps {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1rem 0;
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 1.2rem;
 }
 
 .exercise-steps li {
-    padding: 0.5rem 0;
-    border-bottom: 1px dashed #e9ecef;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #eee;
     color: var(--dark-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .exercise-steps li:last-child {
     border-bottom: none;
 }
 
-.circuit-description {
-    color: var(--primary-color);
-    font-weight: 500;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-}
-
+/* Style amélioré pour le bouton de démonstration */
 .show-video {
     width: 100%;
-    padding: 0.8rem;
-    margin-top: 1rem;
+    padding: 1rem;
+    margin-top: 1.2rem;
+    background: linear-gradient(145deg, var(--primary-color), #4a90e2);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    background: #f8f9fa;
-    border: none;
-    border-radius: 5px;
-    color: var(--dark-color);
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    gap: 0.8rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .show-video:hover {
-    background: #e9ecef;
+    background: linear-gradient(145deg, #4a90e2, var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .show-video i {
-    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.show-video:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 /* Styles pour la modale vidéo */
@@ -2126,70 +2155,6 @@ footer {
         padding: 1rem;
     }
 } 
-
-.exercise-item {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    overflow: hidden;
-}
-
-.exercise-header {
-    padding: 1rem;
-    background-color: #f8f9fa;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.exercise-header:hover {
-    background-color: #e9ecef;
-}
-
-.exercise-details {
-    padding: 1rem;
-    background-color: white;
-    border-top: 1px solid #e0e0e0;
-    transition: all 0.3s ease;
-}
-
-.exercise-details.hidden {
-    display: none;
-}
-
-.exercise-steps {
-    list-style-type: none;
-    padding-left: 0;
-    margin-bottom: 1rem;
-}
-
-.exercise-steps li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.exercise-steps li:last-child {
-    border-bottom: none;
-}
-
-.show-video {
-    width: 100%;
-    margin-top: 1rem;
-    padding: 0.8rem;
-    background-color: #f8f9fa;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.show-video:hover {
-    background-color: #e9ecef;
-}
 
 /* Styles pour la modale d'entraînement */
 .workout-modal {
