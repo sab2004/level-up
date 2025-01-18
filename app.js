@@ -902,7 +902,7 @@ Cela validera votre séance et mettra à jour vos statistiques.`;
                 }
 
                 // Mise à jour des calories
-                const caloriesElement = document.querySelector('.stat-value:last-child');
+                const caloriesElement = document.querySelector('.progress-stats .stat:last-child .stat-value');
                 if (caloriesElement) {
                     const currentCalories = parseInt(caloriesElement.textContent.replace(',', ''));
                     const newCalories = currentCalories + 400; // 400 calories estimées pour la séance HIIT
