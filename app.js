@@ -894,7 +894,7 @@ Cela validera votre séance et mettra à jour vos statistiques.`;
 
             if (confirm(message)) {
                 // Mise à jour des statistiques
-                const statsElement = document.querySelector('.stat-value:nth-child(2)');
+                const statsElement = document.querySelector('.progress-stats .stat:nth-child(2) .stat-value');
                 if (statsElement) {
                     const [completed, total] = statsElement.textContent.split('/');
                     const newCompleted = parseInt(completed) + 1;
