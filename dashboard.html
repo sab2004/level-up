@@ -258,6 +258,45 @@
             </div>
         </section>
 
+        <!-- Section Gestion du Poids -->
+        <section class="weight-management">
+            <h2>Suivi du Poids</h2>
+            <div class="weight-options">
+                <div class="weight-input">
+                    <h3>Ajouter un Poids</h3>
+                    <form id="weight-form">
+                        <div class="input-group">
+                            <input type="number" id="weight" name="weight" step="0.1" min="30" max="250" placeholder="Votre poids en kg">
+                            <button type="submit" class="btn-primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="smart-scale">
+                    <h3>Balance Connectée</h3>
+                    <p>Synchronisez votre balance intelligente pour un suivi automatique</p>
+                    <button id="connect-scale" class="btn-secondary">
+                        <i class="fas fa-link"></i> Connecter une Balance
+                    </button>
+                    <div class="supported-scales">
+                        <p>Balances compatibles :</p>
+                        <div class="scale-brands">
+                            <span>Withings</span>
+                            <span>Fitbit</span>
+                            <span>Garmin</span>
+                            <span>Xiaomi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="weight-chart">
+                <h3>Évolution du Poids</h3>
+                <div class="chart-placeholder">
+                    <!-- Ici sera intégré un graphique d'évolution du poids -->
+                    <p>Graphique d'évolution sur 30 jours</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Résumé -->
         <section class="dashboard-summary">
             <div class="summary-card">
@@ -298,45 +337,6 @@
                     <h3>Poids</h3>
                     <p class="value">-- kg</p>
                     <p class="trend">Ajoutez votre poids</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section Gestion du Poids -->
-        <section class="weight-management">
-            <h2>Suivi du Poids</h2>
-            <div class="weight-options">
-                <div class="weight-input">
-                    <h3>Ajouter un Poids</h3>
-                    <form id="weight-form">
-                        <div class="input-group">
-                            <input type="number" id="weight" name="weight" step="0.1" min="30" max="250" placeholder="Votre poids en kg">
-                            <button type="submit" class="btn-primary">Enregistrer</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="smart-scale">
-                    <h3>Balance Connectée</h3>
-                    <p>Synchronisez votre balance intelligente pour un suivi automatique</p>
-                    <button id="connect-scale" class="btn-secondary">
-                        <i class="fas fa-link"></i> Connecter une Balance
-                    </button>
-                    <div class="supported-scales">
-                        <p>Balances compatibles :</p>
-                        <div class="scale-brands">
-                            <span>Withings</span>
-                            <span>Fitbit</span>
-                            <span>Garmin</span>
-                            <span>Xiaomi</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="weight-chart">
-                <h3>Évolution du Poids</h3>
-                <div class="chart-placeholder">
-                    <!-- Ici sera intégré un graphique d'évolution du poids -->
-                    <p>Graphique d'évolution sur 30 jours</p>
                 </div>
             </div>
         </section>
