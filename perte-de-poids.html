@@ -92,7 +92,7 @@
                 <h2>Prêt à commencer votre transformation ?</h2>
                 <p>Rejoignez-nous dès aujourd'hui et commencez votre voyage vers une meilleure version de vous-même.</p>
                 <div style="text-align: center;">
-                    <a href="inscription.html" class="btn-primary">Commencer maintenant</a>
+                    <a href="inscription.html" class="btn-primary" id="start-program">Commencer maintenant</a>
                 </div>
             </div>
         </div>
@@ -128,6 +128,18 @@
         </div>
     </footer>
 
+    <script>
+        // Vérifier si l'utilisateur est connecté
+        document.addEventListener('DOMContentLoaded', function() {
+            const startButton = document.getElementById('start-program');
+            const isConnected = localStorage.getItem('levelup_profile') || localStorage.getItem('userProfile');
+            
+            if (isConnected) {
+                startButton.href = 'dashboard.html#weight-management';
+                startButton.textContent = 'Accéder à mon programme';
+            }
+        });
+    </script>
     <script src="app.js"></script>
 </body>
 </html> 
