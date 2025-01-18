@@ -2126,3 +2126,53 @@ footer {
         padding: 1rem;
     }
 } 
+
+.exercise-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.exercise-header {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.exercise-header:hover {
+    background-color: #e9ecef;
+}
+
+.exercise-details {
+    padding: 1rem;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.exercise-details.hidden {
+    display: none;
+}
+
+.exercise-steps {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 1rem;
+}
+
+.exercise-steps li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.exercise-steps li:last-child {
+    border-bottom: none;
+}
+
+.show-video {
+    width: 100%;
+    margin-top: 1rem;
+} 
