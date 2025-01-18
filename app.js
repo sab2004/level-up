@@ -661,16 +661,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoModal = document.createElement('div');
     videoModal.className = 'modal video-modal';
     
+    // Base de données des vidéos de démonstration
+    const exerciseVideos = {
+        'warmup': {
+            'marche-rapide': 'https://www.youtube.com/embed/HiruV6NOxZw',
+            'rotations-bras': 'https://www.youtube.com/embed/139pV9pXqqk',
+            'jumping-jacks': 'https://www.youtube.com/embed/c4DAnQ6DtF8',
+            'rotations-bassin': 'https://www.youtube.com/embed/66RJz0PXwVk',
+            'montees-genoux': 'https://www.youtube.com/embed/8opcm4D0QJc',
+            'etirements-dynamiques': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
+        },
+        'hiit1': {
+            'burpees': 'https://www.youtube.com/embed/TU8QYVW0gDU',
+            'mountain-climbers': 'https://www.youtube.com/embed/nmwgirgXLYM',
+            'squats-sautes': 'https://www.youtube.com/embed/72BSZupb-1I',
+            'pompes': 'https://www.youtube.com/embed/IODxDxX7oi4',
+            'jumping-jacks': 'https://www.youtube.com/embed/c4DAnQ6DtF8',
+            'planche': 'https://www.youtube.com/embed/ASdvN_XEl_c'
+        },
+        'hiit2': {
+            'fentes-sautees': 'https://www.youtube.com/embed/DrI8CfEO4H0',
+            'crunchs': 'https://www.youtube.com/embed/Xyd_fa5zoEU',
+            'high-knees': 'https://www.youtube.com/embed/ZZZoCNMU48U',
+            'dips': 'https://www.youtube.com/embed/2z8JmcrW-As',
+            'jump-rope': 'https://www.youtube.com/embed/u3zgHI8QnqE',
+            'superman': 'https://www.youtube.com/embed/z6PJMT2y8GQ'
+        },
+        'cooldown': {
+            'marche-lente': 'https://www.youtube.com/embed/HiruV6NOxZw',
+            'etirements-quadriceps': 'https://www.youtube.com/embed/6jVJi7qwpfY',
+            'etirements-ischio': 'https://www.youtube.com/embed/FDwpEdxZ4H4',
+            'etirements-epaules': 'https://www.youtube.com/embed/bP2XL6ebUeM',
+            'relaxation': 'https://www.youtube.com/embed/0H2L4KNGRqI'
+        }
+    };
+    
     // Configuration de la modale vidéo
     videoModal.innerHTML = `
         <div class="modal-content">
-            <h3>Démonstration de l'exercice</h3>
+            <h3>Démonstrations des exercices</h3>
             <div class="video-container">
-                <div class="video-placeholder">
-                    <i class="fas fa-play-circle"></i>
-                    <p>Vidéo de démonstration</p>
-                    <span class="coming-soon">Bientôt disponible</span>
-                </div>
+                <div class="video-list"></div>
             </div>
             <button class="btn-primary close-video">Fermer</button>
         </div>
@@ -698,14 +729,53 @@ document.addEventListener('DOMContentLoaded', () => {
     // Gestionnaire pour les boutons de vidéo
     document.querySelectorAll('.show-video').forEach(button => {
         button.addEventListener('click', (e) => {
-            e.stopPropagation(); // Empêche la propagation du clic
+            e.stopPropagation();
+            const exerciseType = button.closest('.exercise-item').dataset.exercise;
+            const videos = exerciseVideos[exerciseType];
+            const videoList = videoModal.querySelector('.video-list');
+            
+            // Vide la liste des vidéos précédentes
+            videoList.innerHTML = '';
+            
+            // Ajoute les vidéos pour cet exercice
+            Object.entries(videos).forEach(([name, url]) => {
+                const videoWrapper = document.createElement('div');
+                videoWrapper.className = 'video-item';
+                videoWrapper.innerHTML = `
+                    <h4>${formatExerciseName(name)}</h4>
+                    <div class="video-frame">
+                        <iframe 
+                            width="100%" 
+                            height="200" 
+                            src="${url}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                `;
+                videoList.appendChild(videoWrapper);
+            });
+            
             videoModal.classList.add('visible');
         });
     });
+
+    // Fonction pour formater le nom de l'exercice
+    function formatExerciseName(name) {
+        return name
+            .split('-')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    }
 
     // Fermeture de la modale vidéo
     const closeVideoBtn = videoModal.querySelector('.close-video');
     closeVideoBtn.addEventListener('click', () => {
         videoModal.classList.remove('visible');
+        // Arrête toutes les vidéos en cours
+        videoModal.querySelectorAll('iframe').forEach(iframe => {
+            iframe.src = iframe.src;
+        });
     });
 }); 
