@@ -1050,13 +1050,37 @@ function updateProfileAnalysis() {
     const tdee = calculateTDEE(bmr, profile.niveau_activite);
     document.getElementById('tdee-value').textContent = Math.round(tdee);
     
-    // Afficher l'objectif de poids
-    if (profile.objectif_poids) {
-        document.getElementById('target-weight').textContent = profile.objectif_poids;
-        const poidsAPerdre = profile.poids - profile.objectif_poids;
-        document.getElementById('weight-to-lose').innerHTML = 
-            `<span>Poids à perdre : ${Math.abs(poidsAPerdre).toFixed(1)} kg</span>`;
+    // Calculer l'objectif de poids en fonction de l'IMC et de l'objectif
+    let objectifPoids = profile.poids; // Par défaut, maintien du poids actuel
+    let message = "";
+
+    if (profile.objectif_principal === 'prise_de_muscle') {
+        if (imc < 18.5) {
+            // Pour les personnes en sous-poids, viser un IMC de 22
+            objectifPoids = Math.round((22 * (profile.taille/100) * (profile.taille/100)) * 10) / 10;
+            message = "Poids à gagner";
+        } else if (imc < 25) {
+            // Pour les personnes de poids normal, viser +5kg
+            objectifPoids = Math.round((profile.poids + 5) * 10) / 10;
+            message = "Poids à gagner";
+        }
+    } else if (profile.objectif_principal === 'perte_de_poids') {
+        if (imc > 25) {
+            // Pour les personnes en surpoids, viser un IMC de 24
+            objectifPoids = Math.round((24 * (profile.taille/100) * (profile.taille/100)) * 10) / 10;
+            message = "Poids à perdre";
+        } else if (imc > 18.5) {
+            // Pour les personnes de poids normal, viser -2kg
+            objectifPoids = Math.round((profile.poids - 2) * 10) / 10;
+            message = "Poids à perdre";
+        }
     }
+
+    // Afficher l'objectif de poids
+    document.getElementById('target-weight').textContent = objectifPoids;
+    const difference = Math.abs(profile.poids - objectifPoids);
+    document.getElementById('weight-to-lose').innerHTML = 
+        `<span>${message} : ${difference.toFixed(1)} kg</span>`;
     
     // Générer les recommandations
     const recommendations = generateRecommendations(profile, imc, tdee);
