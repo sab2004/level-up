@@ -963,20 +963,21 @@ function generateNextWorkout() {
     const exerciseList = document.querySelector('.exercise-list');
     exerciseList.innerHTML = nextWorkout.exercises.map(exercise => `
         <li class="exercise-item" data-exercise="${exercise.name.toLowerCase()}">
+            <div class="exercise-details">
+                <h3>${exercise.name} - ${exercise.duration} min</h3>
+                ${exercise.name === 'Cardio intensif' ? '<p class="circuit-description">Alternance course intensive et récupération active</p>' : ''}
+                <ul class="exercise-steps">
+                    ${exercise.details.map(step => `
+                        <li>
+                            <span>${step.name}</span>
+                            <span>${step.duration}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
             <div class="exercise-header">
                 <span class="exercise-name">${exercise.name}</span>
                 <span class="exercise-duration">${exercise.duration} min</span>
-            </div>
-            <div class="exercise-details">
-                ${exercise.name === 'Cardio intensif' ? '<p class="circuit-description">Alternance course intensive et récupération active</p>' : ''}
-                <div class="exercise-steps">
-                    ${exercise.details.map(step => `
-                        <div class="exercise-step">
-                            <span class="step-name">${step.name}</span>
-                            <span class="step-duration">${step.duration}</span>
-                        </div>
-                    `).join('')}
-                </div>
             </div>
         </li>
     `).join('');
