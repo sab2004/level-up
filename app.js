@@ -943,14 +943,68 @@ function generateNextWorkout() {
                     ]
                 }
             ]
+        },
+        {
+            type: 'Yoga Fitness',
+            duration: 45,
+            exercises: [
+                {
+                    name: 'Échauffement et respiration',
+                    duration: 10,
+                    details: [
+                        { name: 'Respiration profonde en position assise', duration: '2 min' },
+                        { name: 'Salutation au soleil modifiée', duration: '3 min' },
+                        { name: 'Étirements du cou et des épaules', duration: '2 min' },
+                        { name: 'Rotations douces de la colonne', duration: '3 min' }
+                    ]
+                },
+                {
+                    name: 'Renforcement du corps',
+                    duration: 15,
+                    details: [
+                        { name: 'Posture du guerrier 1', duration: '2 min' },
+                        { name: 'Chien tête en bas', duration: '2 min' },
+                        { name: 'Planche et variations', duration: '3 min' },
+                        { name: 'Posture de la chaise', duration: '2 min' },
+                        { name: 'Équilibre sur une jambe', duration: '3 min' },
+                        { name: 'Posture du cobra', duration: '3 min' }
+                    ]
+                },
+                {
+                    name: 'Flow dynamique',
+                    duration: 15,
+                    details: [
+                        { name: 'Enchaînement de postures debout', duration: '3 min' },
+                        { name: 'Séquence de force abdominale', duration: '3 min' },
+                        { name: 'Flow vinyasa modifié', duration: '3 min' },
+                        { name: 'Équilibres et torsions', duration: '3 min' },
+                        { name: 'Postures d\'ouverture des hanches', duration: '3 min' }
+                    ]
+                },
+                {
+                    name: 'Relaxation finale',
+                    duration: 5,
+                    details: [
+                        { name: 'Étirements profonds', duration: '2 min' },
+                        { name: 'Posture de l\'enfant', duration: '1 min' },
+                        { name: 'Savasana avec respiration guidée', duration: '2 min' }
+                    ]
+                }
+            ]
         }
     ];
 
     // Récupérer la dernière séance effectuée
-    const lastWorkout = localStorage.getItem('last_workout_type') || 'Cardio';
+    const lastWorkout = localStorage.getItem('last_workout_type') || 'Yoga Fitness';
     
-    // Sélectionner l'autre type de séance
-    const nextWorkout = workoutTypes.find(workout => workout.type !== lastWorkout);
+    // Définir l'ordre de rotation des séances
+    const workoutOrder = ['HIIT', 'Cardio', 'Yoga Fitness'];
+    const currentIndex = workoutOrder.indexOf(lastWorkout);
+    const nextIndex = (currentIndex + 1) % workoutOrder.length;
+    const nextWorkoutType = workoutOrder[nextIndex];
+    
+    // Sélectionner la prochaine séance
+    const nextWorkout = workoutTypes.find(workout => workout.type === nextWorkoutType);
     
     // Sauvegarder le type de la nouvelle séance
     localStorage.setItem('last_workout_type', nextWorkout.type);
@@ -963,9 +1017,12 @@ function generateNextWorkout() {
     const exerciseList = document.querySelector('.exercise-list');
     exerciseList.innerHTML = nextWorkout.exercises.map(exercise => `
         <li class="exercise-item" data-exercise="${exercise.name.toLowerCase()}">
+            <div class="exercise-header">
+                <span class="exercise-name">${exercise.name}</span>
+                <span class="exercise-duration">${exercise.duration} min</span>
+            </div>
             <div class="exercise-details">
                 <h3>${exercise.name} - ${exercise.duration} min</h3>
-                ${exercise.name === 'Cardio intensif' ? '<p class="circuit-description">Alternance course intensive et récupération active</p>' : ''}
                 <ul class="exercise-steps">
                     ${exercise.details.map(step => `
                         <li>
@@ -974,10 +1031,6 @@ function generateNextWorkout() {
                         </li>
                     `).join('')}
                 </ul>
-            </div>
-            <div class="exercise-header">
-                <span class="exercise-name">${exercise.name}</span>
-                <span class="exercise-duration">${exercise.duration} min</span>
             </div>
         </li>
     `).join('');
