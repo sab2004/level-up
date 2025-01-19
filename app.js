@@ -903,11 +903,57 @@ function generateNextWorkout() {
                     ]
                 }
             ]
+        },
+        {
+            type: 'Cardio',
+            duration: 45,
+            exercises: [
+                {
+                    name: 'Échauffement progressif',
+                    duration: 10,
+                    details: [
+                        { name: 'Marche rapide', duration: '3 min' },
+                        { name: 'Jogging léger', duration: '3 min' },
+                        { name: 'Course modérée', duration: '2 min' },
+                        { name: 'Étirements dynamiques', duration: '2 min' }
+                    ]
+                },
+                {
+                    name: 'Cardio intensif',
+                    duration: 30,
+                    details: [
+                        { name: 'Course intensive', duration: '5 min' },
+                        { name: 'Marche récupération', duration: '2 min' },
+                        { name: 'Course intensive', duration: '5 min' },
+                        { name: 'Marche récupération', duration: '2 min' },
+                        { name: 'Course intensive', duration: '5 min' },
+                        { name: 'Marche récupération', duration: '2 min' },
+                        { name: 'Course intensive', duration: '5 min' },
+                        { name: 'Marche récupération', duration: '4 min' }
+                    ]
+                },
+                {
+                    name: 'Retour au calme',
+                    duration: 5,
+                    details: [
+                        { name: 'Marche lente', duration: '2 min' },
+                        { name: 'Étirements des mollets', duration: '1 min' },
+                        { name: 'Étirements des quadriceps', duration: '1 min' },
+                        { name: 'Respiration et relaxation', duration: '1 min' }
+                    ]
+                }
+            ]
         }
     ];
 
-    // Sélectionner la séance HIIT
-    const nextWorkout = workoutTypes[0];
+    // Récupérer la dernière séance effectuée
+    const lastWorkout = localStorage.getItem('last_workout_type') || 'Cardio';
+    
+    // Sélectionner l'autre type de séance
+    const nextWorkout = workoutTypes.find(workout => workout.type !== lastWorkout);
+    
+    // Sauvegarder le type de la nouvelle séance
+    localStorage.setItem('last_workout_type', nextWorkout.type);
     
     // Mettre à jour l'affichage
     const workoutTypeElement = document.querySelector('.workout-type span');
