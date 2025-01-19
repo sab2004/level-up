@@ -38,6 +38,58 @@
 
     <!-- Dashboard Content -->
     <main class="dashboard-content">
+        <!-- Analyse du Profil -->
+        <section class="profile-analysis">
+            <h2>Analyse de votre Profil</h2>
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <h3>Indice de Masse Corporelle (IMC)</h3>
+                    <div class="analysis-value">
+                        <span class="value" id="bmi-value">--</span>
+                        <span class="unit">kg/m²</span>
+                    </div>
+                    <div class="analysis-interpretation" id="bmi-interpretation">
+                        Connectez-vous pour voir votre IMC
+                    </div>
+                </div>
+                <div class="analysis-card">
+                    <h3>Métabolisme de Base</h3>
+                    <div class="analysis-value">
+                        <span class="value" id="bmr-value">--</span>
+                        <span class="unit">kcal/jour</span>
+                    </div>
+                    <p class="analysis-description">Calories brûlées au repos</p>
+                </div>
+                <div class="analysis-card">
+                    <h3>Besoins Caloriques Journaliers</h3>
+                    <div class="analysis-value">
+                        <span class="value" id="tdee-value">--</span>
+                        <span class="unit">kcal/jour</span>
+                    </div>
+                    <p class="analysis-description">Basé sur votre niveau d'activité</p>
+                </div>
+                <div class="analysis-card">
+                    <h3>Objectif de Poids</h3>
+                    <div class="analysis-value">
+                        <span class="value" id="target-weight">--</span>
+                        <span class="unit">kg</span>
+                    </div>
+                    <div class="weight-difference" id="weight-to-lose">
+                        <span>Poids à perdre : -- kg</span>
+                    </div>
+                </div>
+            </div>
+            <div class="recommendations">
+                <h3>Recommandations Personnalisées</h3>
+                <div class="recommendation-content" id="profile-recommendations">
+                    <p>En fonction de votre profil, voici nos recommandations :</p>
+                    <ul id="recommendations-list">
+                        <li>Connectez-vous pour voir vos recommandations personnalisées</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
         <!-- Programme de Perte de Poids -->
         <section class="weight-loss-program">
             <h2>Mon Programme de Perte de Poids</h2>
