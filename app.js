@@ -1464,6 +1464,6 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('profilUtilisateur', JSON.stringify(profilComplet));
 
         // Redirection vers le tableau de bord
-        window.location.href = 'tableau-de-bord.html';
+        window.location.href = 'dashboard.html';
     });
 }); 
