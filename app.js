@@ -873,8 +873,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 let videoUrl;
                 
                 // Sélectionner la bonne catégorie de vidéos selon l'exercice
-                if (exerciseName === 'échauffement dynamique') {
+                if (exerciseName === 'échauffement dynamique' || exerciseName === 'echauffement-dynamique') {
+                    console.log('Exercice trouvé:', stepId);
                     videoUrl = exerciseVideos.warmup[stepId];
+                    console.log('URL vidéo:', videoUrl);
                 }
                 
                 if (videoUrl) {
