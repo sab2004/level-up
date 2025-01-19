@@ -75,12 +75,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutButton = document.querySelector('.btn-connexion');
     if (logoutButton) {
         if (isConnected) {
-            logoutButton.textContent = 'Déconnexion';
-            logoutButton.href = '#';
-            logoutButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                handleLogout();
-            });
+        logoutButton.textContent = 'Déconnexion';
+        logoutButton.href = '#';
+        logoutButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            handleLogout();
+        });
         } else {
             logoutButton.textContent = 'Connexion';
             logoutButton.href = 'connexion.html';
@@ -419,7 +419,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-
+    
     if (connectScaleBtn) {
         connectScaleBtn.addEventListener('click', function() {
             // Simuler la connexion à une balance
@@ -739,7 +739,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentExerciseIndex < exercises.length) {
                     exerciseNameDisplay.textContent = exercises[currentExerciseIndex].name;
                     seconds = 0;
-                } else {
+            } else {
                     completeWorkout();
                 }
             }
@@ -805,19 +805,12 @@ document.addEventListener('DOMContentLoaded', () => {
 }); 
 
 // Gestion des détails des exercices
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     const exerciseHeaders = document.querySelectorAll('.exercise-header');
     
     exerciseHeaders.forEach(header => {
-        header.addEventListener('click', function(e) {
-            // Empêcher la propagation si on clique sur le bouton vidéo
-            if (e.target.closest('.show-video')) {
-                e.stopPropagation();
-                return;
-            }
-            
-            // Trouver les détails associés à cet exercice
-            const details = this.previousElementSibling;
+        header.addEventListener('click', function() {
+            const details = this.parentElement.querySelector('.exercise-details');
             
             // Fermer tous les autres détails
             document.querySelectorAll('.exercise-details').forEach(detail => {
@@ -827,16 +820,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             // Basculer la visibilité des détails actuels
-            details.classList.toggle('visible');
-        });
-    });
-    
-    // Empêcher la fermeture des détails lors du clic sur le bouton vidéo
-    const videoButtons = document.querySelectorAll('.show-video');
-    videoButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.stopPropagation();
-            // Logique pour afficher la vidéo...
+            if (details) {
+                details.classList.toggle('visible');
+            }
         });
     });
 });
@@ -1070,7 +1056,6 @@ function generateNextWorkout() {
             <div class="exercise-header">
                 <span class="exercise-name">${exercise.name}</span>
                 <span class="exercise-duration">${exercise.duration} min</span>
-                <i class="fas fa-chevron-down"></i>
             </div>
             <div class="exercise-details">
                 <div class="exercise-steps">
@@ -1088,56 +1073,43 @@ function generateNextWorkout() {
         </li>
     `).join('');
 
-    // Ajouter les gestionnaires d'événements pour les en-têtes d'exercices
-    exerciseList.querySelectorAll('.exercise-header').forEach(header => {
-        header.addEventListener('click', function() {
-            const details = this.previousElementSibling;
-            document.querySelectorAll('.exercise-details').forEach(detail => {
-                if (detail !== details) {
-                    detail.classList.remove('visible');
+    // Gestionnaire pour les éléments d'exercice
+    document.querySelectorAll('.exercise-item').forEach(item => {
+        const header = item.querySelector('.exercise-header');
+        const details = item.querySelector('.exercise-details');
+        
+        if (header) {
+            header.addEventListener('click', () => {
+                // Fermer tous les autres détails d'exercice
+                document.querySelectorAll('.exercise-item').forEach(otherItem => {
+                    if (otherItem !== item) {
+                        const otherDetails = otherItem.querySelector('.exercise-details');
+                        if (otherDetails) {
+                            otherDetails.classList.remove('visible');
+                        }
+                    }
+                });
+                
+                // Basculer la visibilité des détails de l'exercice cliqué
+                if (details) {
+                    details.classList.toggle('visible');
+                    // Basculer l'icône de flèche
+                    const arrow = header.querySelector('.fa-chevron-down');
+                    if (arrow) {
+                        arrow.style.transform = details.classList.contains('visible') ? 'rotate(180deg)' : 'rotate(0deg)';
+                    }
                 }
             });
-            details.classList.toggle('visible');
-        });
+        }
     });
 
-    // Ajouter les gestionnaires d'événements pour les boutons vidéo
-    exerciseList.querySelectorAll('.show-video').forEach(button => {
+    // Gestionnaire pour les boutons de vidéo
+    document.querySelectorAll('.show-video').forEach(button => {
         button.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const exerciseItem = button.closest('.exercise-item');
-            const exerciseDetails = exerciseItem.querySelector('.exercise-steps').children;
-            
-            const videoList = videoModal.querySelector('.video-list');
-            videoList.innerHTML = '';
-            
-            // Ajouter toutes les vidéos de la section
-            Array.from(exerciseDetails).forEach(step => {
-                const stepName = step.querySelector('.step-name').textContent;
-                const stepId = convertToId(stepName);
-                const videoUrl = exerciseVideos[exerciseItem.dataset.exercise] ? exerciseVideos[exerciseItem.dataset.exercise][stepId] : null;
-                
-                if (videoUrl) {
-                    const videoWrapper = document.createElement('div');
-                    videoWrapper.className = 'video-item';
-                    videoWrapper.innerHTML = `
-                        <h4>${stepName}</h4>
-                        <div class="video-frame">
-                            <iframe 
-                                width="100%" 
-                                height="200" 
-                                src="${videoUrl}" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                            </iframe>
-                        </div>
-                    `;
-                    videoList.appendChild(videoWrapper);
-                }
-            });
-            
-            videoModal.classList.add('visible');
+            e.stopPropagation(); // Empêcher la propagation au parent
+            const exerciseId = button.closest('.exercise-item').dataset.exercise;
+            // Ici vous pouvez ajouter la logique pour afficher la vidéo
+            console.log('Afficher la vidéo pour:', exerciseId);
         });
     });
 }
