@@ -86,6 +86,39 @@ document.addEventListener('DOMContentLoaded', function() {
             logoutButton.href = 'connexion.html';
         }
     }
+
+    // Gestion du bouton "Séance terminée"
+    const completeWorkoutBtn = document.querySelector('.program-card .btn-primary');
+    
+    if (completeWorkoutBtn) {
+        completeWorkoutBtn.addEventListener('click', () => {
+            // Mettre à jour les statistiques
+            const stats = JSON.parse(localStorage.getItem('levelup_stats') || '{}');
+            stats.calories_burned = (stats.calories_burned || 0) + 450;
+            stats.workouts_completed = (stats.workouts_completed || 0) + 1;
+            localStorage.setItem('levelup_stats', JSON.stringify(stats));
+
+            // Mettre à jour l'affichage des statistiques
+            const caloriesElement = document.querySelector('.progress-stats .stat:last-child .stat-value');
+            const sessionsElement = document.querySelector('.progress-stats .stat:nth-child(2) .stat-value');
+            
+            if (caloriesElement) {
+                caloriesElement.textContent = `${stats.calories_burned} kcal`;
+            }
+            if (sessionsElement) {
+                sessionsElement.textContent = `${stats.workouts_completed}`;
+            }
+
+            // Générer une nouvelle séance
+            generateNextWorkout();
+
+            // Afficher un message de félicitations
+            alert('Félicitations ! Vous avez terminé votre séance. Une nouvelle séance a été générée.');
+        });
+    }
+
+    const workoutModal = document.querySelector('.workout-modal');
+    const startWorkoutBtn = document.querySelector('.start-workout');
 });
 
 // Fonction de déconnexion
@@ -593,10 +626,33 @@ function completeWorkout(modal) {
     `;
 
     modal.querySelector('.close-workout').addEventListener('click', () => {
+            // Mettre à jour les statistiques
+            const stats = JSON.parse(localStorage.getItem('levelup_stats') || '{}');
+            stats.calories_burned = (stats.calories_burned || 0) + 450;
+            stats.workouts_completed = (stats.workouts_completed || 0) + 1;
+            localStorage.setItem('levelup_stats', JSON.stringify(stats));
+
+            // Mettre à jour l'affichage des statistiques
+            const caloriesElement = document.querySelector('.progress-stats .stat:last-child .stat-value');
+            const sessionsElement = document.querySelector('.progress-stats .stat:nth-child(2) .stat-value');
+            
+            if (caloriesElement) {
+                caloriesElement.textContent = `${stats.calories_burned} kcal`;
+            }
+            if (sessionsElement) {
+                sessionsElement.textContent = `${stats.workouts_completed}`;
+            }
+
+        // Fermer la modale
         modal.classList.remove('visible');
         setTimeout(() => modal.remove(), 300);
-        updateWorkoutStats();
-    });
+
+            // Générer une nouvelle séance
+            generateNextWorkout();
+
+            // Afficher un message de félicitations
+            alert('Félicitations ! Vous avez terminé votre séance. Une nouvelle séance a été générée.');
+        });
 }
 
 // Initialiser le graphique de progression
