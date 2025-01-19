@@ -896,51 +896,48 @@ function generateNextWorkout() {
             duration: 45,
             exercises: [
                 { 
-                    name: 'Échauffement dynamique', 
-                    id: 'warmup',
+                    name: 'Échauffement dynamique',
                     duration: 10,
                     details: [
-                        { name: 'Marche rapide', id: 'marche-rapide', duration: '2 min' },
-                        { name: 'Rotations des bras', id: 'rotations-bras', duration: '2 min' },
-                        { name: 'Jumping Jacks', id: 'jumping-jacks', duration: '2 min' },
-                        { name: 'Montées de genoux', id: 'montees-genoux', duration: '2 min' },
-                        { name: 'Étirements dynamiques', id: 'etirements-dynamiques', duration: '2 min' }
+                        { name: 'Marche rapide sur place', duration: '2 min' },
+                        { name: 'Rotations des bras', duration: '1 min' },
+                        { name: 'Jumping jacks légers', duration: '2 min' },
+                        { name: 'Rotations du bassin', duration: '1 min' },
+                        { name: 'Montées de genoux', duration: '2 min' },
+                        { name: 'Étirements dynamiques', duration: '2 min' }
                     ]
                 },
                 { 
-                    name: 'Circuit HIIT #1', 
-                    id: 'hiit1',
+                    name: 'Circuit cardio intense',
                     duration: 15,
                     details: [
-                        { name: 'Burpees', id: 'burpees', duration: '30s/30s repos' },
-                        { name: 'Mountain Climbers', id: 'mountain-climbers', duration: '30s/30s repos' },
-                        { name: 'Squats sautés', id: 'squats-sautes', duration: '30s/30s repos' },
-                        { name: 'Jumping Jacks', id: 'jumping-jacks', duration: '30s/30s repos' },
-                        { name: 'Planche', id: 'planche', duration: '30s/30s repos' }
+                        { name: 'Jumping jacks rapides', duration: '45s + 15s repos' },
+                        { name: 'Course sur place', duration: '45s + 15s repos' },
+                        { name: 'Montées de genoux rapides', duration: '45s + 15s repos' },
+                        { name: 'Pas chassés', duration: '45s + 15s repos' },
+                        { name: 'Burpees', duration: '45s + 15s repos' }
                     ]
                 },
                 { 
-                    name: 'Circuit HIIT #2', 
-                    id: 'hiit2',
+                    name: 'Circuit cardio explosif',
                     duration: 15,
                     details: [
-                        { name: 'Fentes sautées', id: 'fentes-sautees', duration: '30s/30s repos' },
-                        { name: 'High Knees', id: 'high-knees', duration: '30s/30s repos' },
-                        { name: 'Jump Rope', id: 'jump-rope', duration: '30s/30s repos' },
-                        { name: 'Dips', id: 'dips', duration: '30s/30s repos' },
-                        { name: 'Superman', id: 'superman', duration: '30s/30s repos' }
+                        { name: 'Squats sautés', duration: '40s + 20s repos' },
+                        { name: 'Mountain climbers', duration: '40s + 20s repos' },
+                        { name: 'Jumping lunges', duration: '40s + 20s repos' },
+                        { name: 'High knees', duration: '40s + 20s repos' },
+                        { name: 'Jumping jacks étoile', duration: '40s + 20s repos' }
                     ]
                 },
                 { 
-                    name: 'Retour au calme', 
-                    id: 'cooldown',
+                    name: 'Retour au calme',
                     duration: 5,
                     details: [
-                        { name: 'Marche lente', id: 'marche-lente', duration: '1 min' },
-                        { name: 'Étirements quadriceps', id: 'etirements-quadriceps', duration: '1 min' },
-                        { name: 'Étirements ischio-jambiers', id: 'etirements-ischio', duration: '1 min' },
-                        { name: 'Étirements épaules', id: 'etirements-epaules', duration: '1 min' },
-                        { name: 'Relaxation', id: 'relaxation', duration: '1 min' }
+                        { name: 'Marche lente sur place', duration: '1 min' },
+                        { name: 'Étirements des quadriceps', duration: '1 min' },
+                        { name: 'Étirements des mollets', duration: '1 min' },
+                        { name: 'Étirements des épaules', duration: '1 min' },
+                        { name: 'Respiration profonde', duration: '1 min' }
                     ]
                 }
             ]
@@ -950,21 +947,51 @@ function generateNextWorkout() {
             category: 'renforcement',
             duration: 45,
             exercises: [
-                { name: 'Échauffement dynamique', id: 'echauffement-dynamique', duration: 10 },
-                { name: 'Circuit haut du corps', id: 'circuit-haut-corps', duration: 15 },
-                { name: 'Circuit bas du corps', id: 'circuit-bas-corps', duration: 15 },
-                { name: 'Étirements', id: 'etirements', duration: 5 }
-            ]
-        },
-        {
-            type: 'Yoga Fitness',
-            category: 'yoga',
-            duration: 45,
-            exercises: [
-                { name: 'Respiration et centrage', id: 'respiration-centrage', duration: 5 },
-                { name: 'Salutations au soleil', id: 'salutations-soleil', duration: 10 },
-                { name: 'Postures de force', id: 'postures-force', duration: 20 },
-                { name: 'Relaxation guidée', id: 'relaxation-guidee', duration: 10 }
+                { 
+                    name: 'Échauffement dynamique',
+                    duration: 10,
+                    details: [
+                        { name: 'Marche rapide sur place', duration: '2 min' },
+                        { name: 'Rotations des bras', duration: '1 min' },
+                        { name: 'Jumping jacks légers', duration: '2 min' },
+                        { name: 'Rotations du bassin', duration: '1 min' },
+                        { name: 'Montées de genoux', duration: '2 min' },
+                        { name: 'Étirements dynamiques', duration: '2 min' }
+                    ]
+                },
+                { 
+                    name: 'Circuit haut du corps',
+                    duration: 15,
+                    details: [
+                        { name: 'Pompes', duration: '45s + 15s repos' },
+                        { name: 'Dips sur chaise', duration: '45s + 15s repos' },
+                        { name: 'Superman', duration: '45s + 15s repos' },
+                        { name: 'Rowing avec bouteilles', duration: '45s + 15s repos' },
+                        { name: 'Planche', duration: '45s + 15s repos' }
+                    ]
+                },
+                { 
+                    name: 'Circuit bas du corps',
+                    duration: 15,
+                    details: [
+                        { name: 'Squats', duration: '45s + 15s repos' },
+                        { name: 'Fentes alternées', duration: '45s + 15s repos' },
+                        { name: 'Pont fessier', duration: '45s + 15s repos' },
+                        { name: 'Relevé de jambes', duration: '45s + 15s repos' },
+                        { name: 'Gainage latéral', duration: '45s + 15s repos' }
+                    ]
+                },
+                { 
+                    name: 'Retour au calme',
+                    duration: 5,
+                    details: [
+                        { name: 'Étirements des pectoraux', duration: '1 min' },
+                        { name: 'Étirements des dorsaux', duration: '1 min' },
+                        { name: 'Étirements des quadriceps', duration: '1 min' },
+                        { name: 'Étirements des ischio-jambiers', duration: '1 min' },
+                        { name: 'Respiration profonde', duration: '1 min' }
+                    ]
+                }
             ]
         }
     ];
@@ -983,36 +1010,47 @@ function generateNextWorkout() {
     // Mettre à jour la liste des exercices
     const exerciseList = document.querySelector('.exercise-list');
     exerciseList.innerHTML = nextWorkout.exercises.map(exercise => `
-        <li class="exercise-item" data-exercise="${exercise.id}">
+        <li class="exercise-item" data-exercise="${exercise.name.toLowerCase()}">
             <div class="exercise-details">
                 <h3>${exercise.name} - ${exercise.duration} min</h3>
                 <div class="exercise-steps">
-                    ${exercise.details ? exercise.details.map(step => `
+                    ${exercise.details.map(step => `
                         <div class="exercise-step">
                             <span class="step-name">${step.name}</span>
                             <span class="step-duration">${step.duration}</span>
                         </div>
-                    `).join('') : ''}
+                    `).join('')}
                 </div>
-                <button class="btn-secondary show-video">
-                    <i class="fas fa-play-circle"></i> Voir la démonstration
-                </button>
             </div>
             <div class="exercise-header">
                 <span class="exercise-name">${exercise.name}</span>
                 <span class="exercise-duration">${exercise.duration} min</span>
                 <i class="fas fa-chevron-down"></i>
             </div>
+            <button class="btn-secondary show-video">
+                <i class="fas fa-play-circle"></i> Voir la démonstration
+            </button>
         </li>
     `).join('');
 
+    // Ajouter les gestionnaires d'événements pour les en-têtes d'exercices
+    exerciseList.querySelectorAll('.exercise-header').forEach(header => {
+        header.addEventListener('click', function() {
+            const details = this.previousElementSibling;
+            document.querySelectorAll('.exercise-details').forEach(detail => {
+                if (detail !== details) {
+                    detail.classList.remove('visible');
+                }
+            });
+            details.classList.toggle('visible');
+        });
+    });
+
     // Ajouter les gestionnaires d'événements pour les boutons vidéo
-    const videoButtons = exerciseList.querySelectorAll('.show-video');
-    videoButtons.forEach(button => {
+    exerciseList.querySelectorAll('.show-video').forEach(button => {
         button.addEventListener('click', (e) => {
             e.stopPropagation();
             const exerciseItem = button.closest('.exercise-item');
-            const exerciseType = exerciseItem.dataset.exercise;
             const exerciseDetails = exerciseItem.querySelector('.exercise-steps').children;
             
             const videoList = videoModal.querySelector('.video-list');
@@ -1022,8 +1060,7 @@ function generateNextWorkout() {
             Array.from(exerciseDetails).forEach(step => {
                 const stepName = step.querySelector('.step-name').textContent;
                 const stepId = convertToId(stepName);
-                console.log('Recherche de vidéo pour:', stepId, 'dans la catégorie:', exerciseType);
-                const videoUrl = exerciseVideos[exerciseType] ? exerciseVideos[exerciseType][stepId] : null;
+                const videoUrl = exerciseVideos[exerciseItem.dataset.exercise] ? exerciseVideos[exerciseItem.dataset.exercise][stepId] : null;
                 
                 if (videoUrl) {
                     const videoWrapper = document.createElement('div');
@@ -1042,96 +1079,13 @@ function generateNextWorkout() {
                         </div>
                     `;
                     videoList.appendChild(videoWrapper);
-                } else {
-                    console.log(`Pas de vidéo trouvée pour l'exercice: ${stepName} (ID: ${stepId})`);
                 }
             });
             
             videoModal.classList.add('visible');
         });
     });
-
-    // Ajouter les gestionnaires d'événements pour les en-têtes d'exercices
-    exerciseList.querySelectorAll('.exercise-header').forEach(header => {
-        header.addEventListener('click', function() {
-            const details = this.previousElementSibling;
-            document.querySelectorAll('.exercise-details').forEach(detail => {
-                if (detail !== details) {
-                    detail.classList.remove('visible');
-                }
-            });
-            details.classList.toggle('visible');
-        });
-    });
 }
-
-// Modification de la fonction completeWorkout pour générer une nouvelle séance
-document.addEventListener('DOMContentLoaded', function() {
-    const completeWorkoutButton = document.querySelector('.workout-list + .btn-primary');
-    if (completeWorkoutButton) {
-        completeWorkoutButton.addEventListener('click', function() {
-            const message = `Confirmez-vous avoir terminé votre séance d'aujourd'hui ?
-            
-• Échauffement dynamique - 10 min
-• Circuit HIIT #1 - 15 min
-• Circuit HIIT #2 - 15 min
-• Retour au calme - 5 min
-
-Cela validera votre séance et mettra à jour vos statistiques.`;
-
-            if (confirm(message)) {
-                // Mise à jour des statistiques
-                const statsElement = document.querySelector('.progress-stats .stat:nth-child(2) .stat-value');
-                if (statsElement) {
-                    const [completed, total] = statsElement.textContent.split('/');
-                    const newCompleted = parseInt(completed) + 1;
-                    statsElement.textContent = `${newCompleted}/${total}`;
-                }
-
-                // Mise à jour des calories
-                const caloriesElement = document.querySelector('.progress-stats .stat:last-child .stat-value');
-                if (caloriesElement) {
-                    const currentCalories = parseInt(caloriesElement.textContent.replace(',', ''));
-                    const newCalories = currentCalories + 400;
-                    caloriesElement.textContent = newCalories.toLocaleString();
-                }
-
-                // Ajout de l'activité dans la liste des activités récentes
-                const activityList = document.querySelector('.activity-list');
-                if (activityList) {
-                    const newActivity = document.createElement('div');
-                    newActivity.className = 'activity-item';
-                    newActivity.innerHTML = `
-                        <div class="activity-icon workout">
-                            <i class="fas fa-dumbbell"></i>
-                        </div>
-                        <div class="activity-details">
-                            <h3>HIIT Training</h3>
-                            <p>45min • Séance complétée</p>
-                            <span class="activity-time">Aujourd'hui ${new Date().getHours()}:${String(new Date().getMinutes()).padStart(2, '0')}</span>
-                        </div>
-                        <div class="activity-stats">
-                            <span><i class="fas fa-fire"></i> 400 kcal</span>
-                        </div>
-                    `;
-                    activityList.insertBefore(newActivity, activityList.firstChild);
-                }
-
-                // Générer une nouvelle séance
-                generateNextWorkout();
-
-                // Réactiver le bouton et mettre à jour son apparence
-                completeWorkoutButton.disabled = false;
-                completeWorkoutButton.style.opacity = '1';
-                completeWorkoutButton.innerHTML = '<i class="fas fa-check-circle"></i> Séance terminée';
-
-                // Message de félicitations avec information sur la prochaine séance
-                const workoutType = document.querySelector('.workout-type span').textContent;
-                alert(`Félicitations ! Vous avez terminé votre séance d'entraînement. 💪\n\nVotre prochaine séance sera : ${workoutType}`);
-            }
-        });
-    }
-}); 
 
 // Base de données des vidéos de démonstration
 const exerciseVideos = {
