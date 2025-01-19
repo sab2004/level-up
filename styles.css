@@ -2070,45 +2070,39 @@ footer {
 }
 
 .exercise-steps {
-    margin: 1rem 0;
+    margin: 0;
     padding: 0;
     list-style: none;
-    display: flex;
-    overflow-x: auto;
-    gap: 1rem;
-    padding-bottom: 1rem;
 }
 
 .exercise-steps li {
-    flex: 0 0 auto;
-    background: white;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    min-width: 200px;
-    max-width: 250px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.exercise-steps li:last-child {
+    border-bottom: none;
 }
 
 .step-name {
     font-weight: 500;
     color: var(--dark-color);
-    margin-bottom: 0.5rem;
 }
 
 .step-duration {
     color: var(--primary-color);
     font-size: 0.9rem;
+    padding: 0.25rem 0.75rem;
+    background-color: var(--light-color);
+    border-radius: 15px;
 }
 
 @media (max-width: 768px) {
-    .exercise-steps {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-    }
-    
     .exercise-steps li {
-        scroll-snap-align: start;
+        padding: 0.6rem 0;
     }
 }
 
