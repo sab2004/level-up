@@ -1067,8 +1067,12 @@ function generateNextWorkout() {
     const exerciseList = document.querySelector('.exercise-list');
     exerciseList.innerHTML = nextWorkout.exercises.map(exercise => `
         <li class="exercise-item" data-exercise="${exercise.name.toLowerCase()}">
+            <div class="exercise-header">
+                <span class="exercise-name">${exercise.name}</span>
+                <span class="exercise-duration">${exercise.duration} min</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
             <div class="exercise-details">
-                <h3>${exercise.name} - ${exercise.duration} min</h3>
                 <div class="exercise-steps">
                     ${exercise.details.map(step => `
                         <div class="exercise-step">
@@ -1077,15 +1081,10 @@ function generateNextWorkout() {
                         </div>
                     `).join('')}
                 </div>
+                <button class="btn-secondary show-video">
+                    <i class="fas fa-play-circle"></i> Voir la démonstration
+                </button>
             </div>
-            <div class="exercise-header">
-                <span class="exercise-name">${exercise.name}</span>
-                <span class="exercise-duration">${exercise.duration} min</span>
-                <i class="fas fa-chevron-down"></i>
-            </div>
-            <button class="btn-secondary show-video">
-                <i class="fas fa-play-circle"></i> Voir la démonstration
-            </button>
         </li>
     `).join('');
 
