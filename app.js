@@ -1007,33 +1007,33 @@ function generateNextWorkout() {
                     name: 'Échauffement dynamique',
                     duration: 10,
                     details: [
-                        { name: 'Marche rapide sur place', duration: '2 min' },
-                        { name: 'Rotations des bras', duration: '1 min' },
-                        { name: 'Jumping jacks légers', duration: '2 min' },
-                        { name: 'Rotations du bassin', duration: '1 min' },
-                        { name: 'Montées de genoux', duration: '2 min' },
-                        { name: 'Étirements dynamiques', duration: '2 min' }
+                        { name: 'Rotations des épaules', duration: '2 min' },
+                        { name: 'Rotations des poignets', duration: '1 min' },
+                        { name: 'Squats simples', duration: '2 min' },
+                        { name: 'Fentes sur place', duration: '2 min' },
+                        { name: 'Pompes sur genoux', duration: '1 min' },
+                        { name: 'Planche courte', duration: '2 min' }
                     ]
                 },
                 { 
                     name: 'Circuit haut du corps',
                     duration: 15,
                     details: [
-                        { name: 'Pompes', duration: '45s + 15s repos' },
+                        { name: 'Pompes classiques', duration: '45s + 15s repos' },
                         { name: 'Dips sur chaise', duration: '45s + 15s repos' },
-                        { name: 'Superman', duration: '45s + 15s repos' },
-                        { name: 'Rowing avec bouteilles', duration: '45s + 15s repos' },
-                        { name: 'Planche', duration: '45s + 15s repos' }
+                        { name: 'Développé épaules', duration: '45s + 15s repos' },
+                        { name: 'Extensions triceps', duration: '45s + 15s repos' },
+                        { name: 'Planche dynamique', duration: '45s + 15s repos' }
                     ]
                 },
                 { 
                     name: 'Circuit bas du corps',
                     duration: 15,
                     details: [
-                        { name: 'Squats', duration: '45s + 15s repos' },
+                        { name: 'Squats profonds', duration: '45s + 15s repos' },
                         { name: 'Fentes alternées', duration: '45s + 15s repos' },
                         { name: 'Pont fessier', duration: '45s + 15s repos' },
-                        { name: 'Relevé de jambes', duration: '45s + 15s repos' },
+                        { name: 'Relevés de jambes', duration: '45s + 15s repos' },
                         { name: 'Gainage latéral', duration: '45s + 15s repos' }
                     ]
                 },
@@ -1041,10 +1041,10 @@ function generateNextWorkout() {
                     name: 'Retour au calme',
                     duration: 5,
                     details: [
-                        { name: 'Étirements des pectoraux', duration: '1 min' },
-                        { name: 'Étirements des dorsaux', duration: '1 min' },
-                        { name: 'Étirements des quadriceps', duration: '1 min' },
-                        { name: 'Étirements des ischio-jambiers', duration: '1 min' },
+                        { name: 'Étirements pectoraux', duration: '1 min' },
+                        { name: 'Étirements dorsaux', duration: '1 min' },
+                        { name: 'Étirements quadriceps', duration: '1 min' },
+                        { name: 'Étirements ischio-jambiers', duration: '1 min' },
                         { name: 'Respiration profonde', duration: '1 min' }
                     ]
                 }
@@ -1171,5 +1171,34 @@ const exerciseVideos = {
         'etirements-ischio-jambiers': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
         'etirements-epaules': 'https://www.youtube.com/embed/139pHqVn5xk',
         'relaxation': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
+    },
+    renforcement_warmup: {
+        'rotations-des-epaules': 'https://www.youtube.com/embed/139pHqVn5xk',
+        'rotations-des-poignets': 'https://www.youtube.com/embed/139pHqVn5xk',
+        'squats-simples': 'https://www.youtube.com/embed/72BSZupb-1I',
+        'fentes-sur-place': 'https://www.youtube.com/embed/ZZZoCNMU48U',
+        'pompes-sur-genoux': 'https://www.youtube.com/embed/TU8QYVW0gDU',
+        'planche-courte': 'https://www.youtube.com/embed/ASdvN_XEl_c'
+    },
+    renforcement_haut: {
+        'pompes-classiques': 'https://www.youtube.com/embed/TU8QYVW0gDU',
+        'dips-sur-chaise': 'https://www.youtube.com/embed/v9LABVJzv8A',
+        'developpe-epaules': 'https://www.youtube.com/embed/139pHqVn5xk',
+        'extensions-triceps': 'https://www.youtube.com/embed/v9LABVJzv8A',
+        'planche-dynamique': 'https://www.youtube.com/embed/ASdvN_XEl_c'
+    },
+    renforcement_bas: {
+        'squats-profonds': 'https://www.youtube.com/embed/72BSZupb-1I',
+        'fentes-alternees': 'https://www.youtube.com/embed/ZZZoCNMU48U',
+        'pont-fessier': 'https://www.youtube.com/embed/z6PJMT2y8GQ',
+        'releves-de-jambes': 'https://www.youtube.com/embed/8opcm4D0QJc',
+        'gainage-lateral': 'https://www.youtube.com/embed/ASdvN_XEl_c'
+    },
+    renforcement_cooldown: {
+        'etirements-pectoraux': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
+        'etirements-dorsaux': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
+        'etirements-quadriceps': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
+        'etirements-ischio-jambiers': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
+        'respiration-profonde': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
     }
 }; 
