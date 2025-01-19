@@ -793,9 +793,9 @@ videoModal.className = 'modal video-modal';
 const exerciseVideos = {
     warmup: {
         'marche-rapide': 'https://www.youtube.com/embed/HiruV6NOxZw',
-        'rotations-bras': 'https://www.youtube.com/embed/139pHqVn5xk',
+        'rotations-des-bras': 'https://www.youtube.com/embed/139pHqVn5xk',
         'jumping-jacks': 'https://www.youtube.com/embed/c4DAnQ6DtF8',
-        'montees-genoux': 'https://www.youtube.com/embed/8opcm4D0QJc',
+        'montees-de-genoux': 'https://www.youtube.com/embed/8opcm4D0QJc',
         'etirements-dynamiques': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
     },
     hiit1: {
@@ -815,7 +815,7 @@ const exerciseVideos = {
     cooldown: {
         'marche-lente': 'https://www.youtube.com/embed/HiruV6NOxZw',
         'etirements-quadriceps': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
-        'etirements-ischio': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
+        'etirements-ischio-jambiers': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
         'etirements-epaules': 'https://www.youtube.com/embed/139pHqVn5xk',
         'relaxation': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
     }
@@ -831,6 +831,21 @@ videoModal.innerHTML = `
     </div>
 `;
 document.body.appendChild(videoModal);
+
+// Fonction pour convertir un nom d'exercice en ID
+function convertToId(name) {
+    return name.toLowerCase()
+        .replace(/[éèê]/g, 'e')
+        .replace(/[àâ]/g, 'a')
+        .replace(/[ïî]/g, 'i')
+        .replace(/[ôö]/g, 'o')
+        .replace(/[ûü]/g, 'u')
+        .replace(/[ç]/g, 'c')
+        .replace(/\s+/g, '-')  // Remplace les espaces par des tirets
+        .replace(/[^a-z0-9-]/g, '')  // Supprime tous les caractères non alphanumériques sauf les tirets
+        .replace(/-+/g, '-')  // Remplace les séquences de tirets par un seul tiret
+        .replace(/^-|-$/g, '');  // Supprime les tirets au début et à la fin
+}
 
 // Gestionnaire pour les boutons de vidéo
 document.querySelectorAll('.show-video').forEach(button => {
@@ -865,6 +880,8 @@ document.querySelectorAll('.show-video').forEach(button => {
                     </div>
                 `;
                 videoList.appendChild(videoWrapper);
+            } else {
+                console.log(`Pas de vidéo trouvée pour l'exercice: ${stepName} (ID: ${stepId})`);
             }
         });
         
@@ -1042,26 +1059,14 @@ function generateNextWorkout() {
                         </div>
                     `;
                     videoList.appendChild(videoWrapper);
+                } else {
+                    console.log(`Pas de vidéo trouvée pour l'exercice: ${stepName} (ID: ${stepId})`);
                 }
             });
             
             videoModal.classList.add('visible');
         });
     });
-
-    // Fonction pour convertir un nom d'exercice en ID
-    function convertToId(name) {
-        return name.toLowerCase()
-            .replace(/[éèê]/g, 'e')
-            .replace(/[àâ]/g, 'a')
-            .replace(/[ïî]/g, 'i')
-            .replace(/[ôö]/g, 'o')
-            .replace(/[ûü]/g, 'u')
-            .replace(/[ç]/g, 'c')
-            .replace(/[^a-z0-9]/g, '-')
-            .replace(/-+/g, '-')
-            .replace(/^-|-$/g, '');
-    }
 
     // Ajouter les gestionnaires d'événements pour les en-têtes d'exercices
     exerciseList.querySelectorAll('.exercise-header').forEach(header => {
