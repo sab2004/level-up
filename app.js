@@ -622,7 +622,7 @@ function completeWorkout(modal) {
     `;
 
     modal.querySelector('.workout-controls').innerHTML = `
-        <button class="btn-primary close-workout">Terminer</button>
+        <button type="button" class="btn-primary close-workout">Terminer</button>
     `;
 
     modal.querySelector('.close-workout').addEventListener('click', () => {
@@ -739,7 +739,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentExerciseIndex < exercises.length) {
                     exerciseNameDisplay.textContent = exercises[currentExerciseIndex].name;
                     seconds = 0;
-            } else {
+                } else {
                     completeWorkout();
                 }
             }
@@ -788,7 +788,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="stat-value">450</span>
                     </div>
                 </div>
-                <button class="btn-primary close-modal">Terminer</button>
+                <button type="button" class="btn-primary close-modal">Terminer</button>
             </div>
         `;
 
@@ -840,7 +840,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="video-container">
                 <div class="video-list"></div>
             </div>
-            <button class="btn-primary close-video">Fermer</button>
+            <button type="button" class="btn-primary close-video">Fermer</button>
         </div>
     `;
     document.body.appendChild(videoModal);
@@ -1007,7 +1007,7 @@ function generateNextWorkout() {
                         </div>
                     `).join('')}
                 </div>
-                <button class="btn-secondary show-video">
+                <button type="button" class="btn-secondary show-video">
                     <i class="fas fa-play-circle"></i> Voir la démonstration
                 </button>
             </div>
@@ -1035,6 +1035,58 @@ function generateNextWorkout() {
                 if (details) {
                     details.classList.toggle('visible');
                 }
+            });
+        }
+
+        // Ajouter le gestionnaire pour le bouton vidéo
+        const videoButton = item.querySelector('.show-video');
+        if (videoButton) {
+            videoButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const exerciseName = item.dataset.exercise;
+                const exerciseDetails = item.querySelector('.exercise-steps').children;
+                
+                const videoList = videoModal.querySelector('.video-list');
+                videoList.innerHTML = '';
+                
+                // Ajouter toutes les vidéos de la section
+                Array.from(exerciseDetails).forEach(step => {
+                    const stepName = step.querySelector('.step-name').textContent;
+                    const stepId = convertToId(stepName);
+                    let videoUrl;
+                    
+                    // Sélectionner la bonne catégorie de vidéos selon l'exercice
+                    if (exerciseName === 'échauffement dynamique' || exerciseName === 'echauffement-dynamique') {
+                        videoUrl = exerciseVideos.warmup[stepId];
+                    } else if (exerciseName === 'circuit hiit #1') {
+                        videoUrl = exerciseVideos.hiit1[stepId];
+                    } else if (exerciseName === 'circuit hiit #2') {
+                        videoUrl = exerciseVideos.hiit2[stepId];
+                    } else if (exerciseName === 'retour au calme') {
+                        videoUrl = exerciseVideos.cooldown[stepId];
+                    }
+                    
+                    if (videoUrl) {
+                        const videoWrapper = document.createElement('div');
+                        videoWrapper.className = 'video-item';
+                        videoWrapper.innerHTML = `
+                            <h4>${stepName}</h4>
+                            <div class="video-frame">
+                                <iframe 
+                                    width="100%" 
+                                    height="200" 
+                                    src="${videoUrl}" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                        `;
+                        videoList.appendChild(videoWrapper);
+                    }
+                });
+                
+                videoModal.classList.add('visible');
             });
         }
     });
