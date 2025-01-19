@@ -799,6 +799,24 @@ const exerciseVideos = {
         'montees-genoux': 'https://www.youtube.com/embed/8opcm4D0QJc',
         'etirements-dynamiques': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
     },
+    'cardio': {
+        'echauffement-cardio': 'https://www.youtube.com/embed/HiruV6NOxZw',
+        'course-intervalles': 'https://www.youtube.com/embed/8opcm4D0QJc',
+        'velo-stationnaire': 'https://www.youtube.com/embed/fqx4-SoXNUQ',
+        'retour-calme': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
+    },
+    'renforcement': {
+        'echauffement-dynamique': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
+        'circuit-haut-corps': 'https://www.youtube.com/embed/IODxDxX7oi4',
+        'circuit-bas-corps': 'https://www.youtube.com/embed/72BSZupb-1I',
+        'etirements': 'https://www.youtube.com/embed/FDwpEdxZ4H4'
+    },
+    'yoga': {
+        'respiration-centrage': 'https://www.youtube.com/embed/0H2L4KNGRqI',
+        'salutations-soleil': 'https://www.youtube.com/embed/73sjOu0g58M',
+        'postures-force': 'https://www.youtube.com/embed/b1H3xO3x_Js',
+        'relaxation-guidee': 'https://www.youtube.com/embed/0H2L4KNGRqI'
+    },
     'hiit1': {
         'burpees': 'https://www.youtube.com/embed/TU8QYVW0gDU',
         'mountain-climbers': 'https://www.youtube.com/embed/nmwgirgXLYM',
@@ -893,32 +911,35 @@ function generateNextWorkout() {
     const workoutTypes = [
         {
             type: 'Cardio',
+            category: 'cardio',
             duration: 45,
             exercises: [
-                { name: 'Échauffement cardio', duration: 10 },
-                { name: 'Course/Marche par intervalles', duration: 20 },
-                { name: 'Vélo stationnaire', duration: 10 },
-                { name: 'Retour au calme', duration: 5 }
+                { name: 'Échauffement cardio', id: 'echauffement-cardio', duration: 10 },
+                { name: 'Course/Marche par intervalles', id: 'course-intervalles', duration: 20 },
+                { name: 'Vélo stationnaire', id: 'velo-stationnaire', duration: 10 },
+                { name: 'Retour au calme', id: 'retour-calme', duration: 5 }
             ]
         },
         {
             type: 'Renforcement',
+            category: 'renforcement',
             duration: 45,
             exercises: [
-                { name: 'Échauffement dynamique', duration: 10 },
-                { name: 'Circuit haut du corps', duration: 15 },
-                { name: 'Circuit bas du corps', duration: 15 },
-                { name: 'Étirements', duration: 5 }
+                { name: 'Échauffement dynamique', id: 'echauffement-dynamique', duration: 10 },
+                { name: 'Circuit haut du corps', id: 'circuit-haut-corps', duration: 15 },
+                { name: 'Circuit bas du corps', id: 'circuit-bas-corps', duration: 15 },
+                { name: 'Étirements', id: 'etirements', duration: 5 }
             ]
         },
         {
             type: 'Yoga Fitness',
+            category: 'yoga',
             duration: 45,
             exercises: [
-                { name: 'Respiration et centrage', duration: 5 },
-                { name: 'Salutations au soleil', duration: 10 },
-                { name: 'Postures de force', duration: 20 },
-                { name: 'Relaxation guidée', duration: 10 }
+                { name: 'Respiration et centrage', id: 'respiration-centrage', duration: 5 },
+                { name: 'Salutations au soleil', id: 'salutations-soleil', duration: 10 },
+                { name: 'Postures de force', id: 'postures-force', duration: 20 },
+                { name: 'Relaxation guidée', id: 'relaxation-guidee', duration: 10 }
             ]
         }
     ];
@@ -937,7 +958,7 @@ function generateNextWorkout() {
     // Mettre à jour la liste des exercices
     const exerciseList = document.querySelector('.exercise-list');
     exerciseList.innerHTML = nextWorkout.exercises.map(exercise => `
-        <li class="exercise-item" data-exercise="${exercise.name.toLowerCase().replace(/\s+/g, '-')}">
+        <li class="exercise-item" data-exercise="${exercise.id}" data-category="${nextWorkout.category}">
             <div class="exercise-details">
                 <h3>${exercise.name} - ${exercise.duration} min</h3>
                 <button class="btn-secondary show-video">
@@ -950,6 +971,51 @@ function generateNextWorkout() {
             </div>
         </li>
     `).join('');
+
+    // Ajouter les gestionnaires d'événements pour les nouveaux boutons vidéo
+    exerciseList.querySelectorAll('.show-video').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const exerciseItem = button.closest('.exercise-item');
+            const category = exerciseItem.dataset.category;
+            const exerciseId = exerciseItem.dataset.exercise;
+            const videoUrl = exerciseVideos[category][exerciseId];
+            
+            const videoList = videoModal.querySelector('.video-list');
+            videoList.innerHTML = '';
+            
+            const videoWrapper = document.createElement('div');
+            videoWrapper.className = 'video-item';
+            videoWrapper.innerHTML = `
+                <h4>${formatExerciseName(exerciseId)}</h4>
+                <div class="video-frame">
+                    <iframe 
+                        width="100%" 
+                        height="200" 
+                        src="${videoUrl}" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            `;
+            videoList.appendChild(videoWrapper);
+            videoModal.classList.add('visible');
+        });
+    });
+
+    // Ajouter les gestionnaires d'événements pour les en-têtes d'exercices
+    exerciseList.querySelectorAll('.exercise-header').forEach(header => {
+        header.addEventListener('click', function() {
+            const details = this.previousElementSibling;
+            document.querySelectorAll('.exercise-details').forEach(detail => {
+                if (detail !== details) {
+                    detail.classList.remove('visible');
+                }
+            });
+            details.classList.toggle('visible');
+        });
+    });
 }
 
 // Modification de la fonction completeWorkout pour générer une nouvelle séance
