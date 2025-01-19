@@ -848,44 +848,47 @@ function convertToId(name) {
 }
 
 // Gestionnaire pour les boutons de vidéo
-document.querySelectorAll('.show-video').forEach(button => {
-    button.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const exerciseType = button.closest('.exercise-item').dataset.exercise;
-        const exerciseDetails = button.closest('.exercise-item').querySelector('.exercise-steps').children;
-        
-        const videoList = videoModal.querySelector('.video-list');
-        videoList.innerHTML = '';
-        
-        // Ajouter toutes les vidéos de la section
-        Array.from(exerciseDetails).forEach(step => {
-            const stepName = step.querySelector('.step-name').textContent;
-            const stepId = convertToId(stepName);
-            const videoUrl = exerciseVideos[exerciseType][stepId];
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.show-video').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const exerciseType = button.closest('.exercise-item').dataset.exercise;
+            const exerciseDetails = button.closest('.exercise-item').querySelector('.exercise-steps').children;
             
-            if (videoUrl) {
-                const videoWrapper = document.createElement('div');
-                videoWrapper.className = 'video-item';
-                videoWrapper.innerHTML = `
-                    <h4>${stepName}</h4>
-                    <div class="video-frame">
-                        <iframe 
-                            width="100%" 
-                            height="200" 
-                            src="${videoUrl}" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                `;
-                videoList.appendChild(videoWrapper);
-            } else {
-                console.log(`Pas de vidéo trouvée pour l'exercice: ${stepName} (ID: ${stepId})`);
-            }
+            const videoList = videoModal.querySelector('.video-list');
+            videoList.innerHTML = '';
+            
+            // Ajouter toutes les vidéos de la section
+            Array.from(exerciseDetails).forEach(step => {
+                const stepName = step.querySelector('.step-name').textContent;
+                const stepId = convertToId(stepName);
+                console.log('Recherche de vidéo pour:', stepId, 'dans la catégorie:', exerciseType);
+                const videoUrl = exerciseVideos[exerciseType] ? exerciseVideos[exerciseType][stepId] : null;
+                
+                if (videoUrl) {
+                    const videoWrapper = document.createElement('div');
+                    videoWrapper.className = 'video-item';
+                    videoWrapper.innerHTML = `
+                        <h4>${stepName}</h4>
+                        <div class="video-frame">
+                            <iframe 
+                                width="100%" 
+                                height="200" 
+                                src="${videoUrl}" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    `;
+                    videoList.appendChild(videoWrapper);
+                } else {
+                    console.log(`Pas de vidéo trouvée pour l'exercice: ${stepName} (ID: ${stepId})`);
+                }
+            });
+            
+            videoModal.classList.add('visible');
         });
-        
-        videoModal.classList.add('visible');
     });
 });
 
