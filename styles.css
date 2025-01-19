@@ -2022,73 +2022,94 @@ footer {
     border-radius: 8px;
     margin-bottom: 1rem;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-}
-
-.exercise-item:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
+    background-color: #fff;
 }
 
 .exercise-header {
-    padding: 0.8rem 1rem;
-    background-color: #f8f9fa;
+    padding: 1rem;
+    background-color: #fff;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
-/* Masquer le header quand les détails sont visibles */
-.exercise-item .exercise-details.visible + .exercise-header,
-.exercise-item .exercise-details.visible ~ .exercise-header {
-    display: none;
+.exercise-header:hover {
+    background-color: #f8f9fa;
+}
+
+.exercise-header i {
+    transition: transform 0.3s ease;
 }
 
 .exercise-name {
-    font-size: 1rem;
     font-weight: 500;
-    color: var(--dark-color);
-    flex: 0 1 auto;
-    max-width: 70%;
+    flex: 1;
 }
 
 .exercise-duration {
+    margin-left: 1rem;
+    padding: 0.25rem 0.75rem;
     background-color: var(--primary-color);
     color: white;
-    padding: 0.3rem 0.8rem;
     border-radius: 15px;
     font-size: 0.9rem;
-    font-weight: 500;
-    flex: 0 0 auto;
 }
 
 .exercise-details {
-    padding: 1rem;
-    background-color: white;
-    border-top: 1px solid #e0e0e0;
     display: none;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
 }
 
 .exercise-details.visible {
     display: block;
+    animation: slideDown 0.3s ease-out;
 }
 
 .exercise-steps {
-    list-style: none;
+    margin: 1rem 0;
     padding: 0;
-    margin: 0 0 1rem 0;
+    list-style: none;
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding-bottom: 1rem;
 }
 
 .exercise-steps li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex: 0 0 auto;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    min-width: 200px;
+    max-width: 250px;
+}
+
+.step-name {
+    font-weight: 500;
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+}
+
+.step-duration {
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .exercise-steps {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+    
+    .exercise-steps li {
+        scroll-snap-align: start;
+    }
 }
 
 .circuit-description {
@@ -2210,4 +2231,15 @@ footer {
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 } 
