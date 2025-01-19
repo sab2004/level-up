@@ -249,62 +249,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 prenom: document.getElementById('prenom').value,
                 nom: document.getElementById('nom').value,
                 email: document.getElementById('email').value,
-                objectif: document.getElementById('objectif-principal').value,
-                niveau: document.getElementById('niveau').value,
-                age: document.getElementById('age').value,
-                taille: document.getElementById('taille').value,
-                poids: document.getElementById('poids').value,
-                genre: document.querySelector('input[name="genre"]:checked').value,
-                frequence: document.getElementById('frequence').value,
-                duree: document.getElementById('duree').value,
-                newsletter: document.getElementById('newsletter').checked
+                age: parseInt(document.getElementById('age').value),
+                taille: parseInt(document.getElementById('taille').value),
+                poids: parseFloat(document.getElementById('poids').value),
+                sexe: document.querySelector('input[name="genre"]:checked').value,
+                niveau_activite: 'modere', // Valeur par défaut
+                objectif_poids: parseFloat(document.getElementById('poids').value) - 5, // Objectif par défaut : -5kg
+                lastLogin: new Date().toISOString()
             };
             
-            console.log('Données du formulaire:', formData);
-
-            // Validation du mot de passe
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
+            // Stocker les informations du profil
+            localStorage.setItem('levelup_profile', JSON.stringify(formData));
             
-            if (password !== confirmPassword) {
-                alert('Les mots de passe ne correspondent pas.');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Créer mon profil';
-                return;
-            }
-
-            try {
-                console.log('Tentative d\'envoi d\'email via EmailJS...');
-                // Envoi de l'email de confirmation
-                const emailResponse = await emailjs.send(
-                    'service_e540cuj',
-                    'template_ixwwp55',
-                    {
-                        to_name: formData.prenom,
-                        to_email: formData.email,
-                        objectif: formData.objectif,
-                        niveau: formData.niveau
-                    }
-                );
-                console.log('Réponse EmailJS:', emailResponse);
-
-                // Affichage du message de succès
-                alert('Inscription réussie ! Un email de confirmation a été envoyé.');
-                
-                // Stocker les données utilisateur (simulation)
-                localStorage.setItem('userProfile', JSON.stringify(formData));
-                console.log('Données utilisateur stockées dans localStorage');
-                
-                // Redirection vers le tableau de bord
-                console.log('Tentative de redirection vers dashboard.html');
-                window.location.href = 'dashboard.html';
-                
-            } catch (error) {
-                console.error('Erreur détaillée:', error);
-                alert('Une erreur est survenue lors de l\'envoi de l\'email de confirmation. Veuillez réessayer.');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Créer mon profil';
-            }
+            // Afficher un message de succès
+            alert('Inscription réussie !');
+            
+            // Rediriger vers le tableau de bord
+            window.location.href = 'dashboard.html';
         });
     }
 });
