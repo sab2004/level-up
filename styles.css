@@ -2026,67 +2026,36 @@ footer {
 }
 
 .exercise-header {
-    padding: 1rem;
-    background-color: #fff;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background-color 0.3s ease;
-}
-
-.exercise-header:hover {
-    background-color: #f8f9fa;
-}
-
-.exercise-header i {
-    transition: transform 0.3s ease;
-}
-
-.exercise-name {
-    font-weight: 500;
-    flex: 1;
-}
-
-.exercise-duration {
-    margin-left: 1rem;
-    padding: 0.25rem 0.75rem;
-    background-color: var(--primary-color);
-    color: white;
-    border-radius: 15px;
-    font-size: 0.9rem;
+    display: none;
 }
 
 .exercise-details {
-    display: none;
+    display: block;
     padding: 1rem;
     background-color: #f8f9fa;
-    border-top: 1px solid #e0e0e0;
-}
-
-.exercise-details.visible {
-    display: block;
-    animation: slideDown 0.3s ease-out;
 }
 
 .exercise-steps {
-    margin: 1rem 0;
-    padding: 1rem;
+    margin: 0;
+    padding: 0;
     list-style: none;
-    background: white;
 }
 
 .exercise-steps li {
-    padding: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-.step-name {
-    color: var(--dark-color);
+.exercise-steps li:last-child {
+    border-bottom: none;
 }
 
 .step-duration {
-    float: right;
-    color: var(--dark-color);
+    color: var(--primary-color);
+    font-weight: 500;
 }
 
 .circuit-description {
