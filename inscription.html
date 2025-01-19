@@ -16,12 +16,15 @@
                 <i class="fas fa-dumbbell"></i>
                 <span>FitCoach</span>
             </div>
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
             <ul class="nav-links">
                 <li><a href="index.html">Accueil</a></li>
                 <li><a href="index.html#services">Services</a></li>
                 <li><a href="index.html#programmes">Programmes</a></li>
                 <li><a href="index.html#contact">Contact</a></li>
-                <li><a href="#connexion" class="btn-connexion">Connexion</a></li>
+                <li><a href="connexion.html" class="btn-connexion">Connexion</a></li>
             </ul>
         </div>
     </nav>
@@ -30,101 +33,9 @@
     <section class="inscription-section">
         <div class="inscription-container">
             <h1>Créez votre profil FitCoach</h1>
-            <p class="inscription-intro">Rejoignez la communauté FitCoach et commencez votre transformation dès aujourd'hui</p>
+            <p class="inscription-intro">Pour créer un programme parfaitement adapté à vos besoins, nous avons besoin de quelques informations détaillées.</p>
             
             <form class="inscription-form" id="inscription-form" autocomplete="on">
-                <!-- Objectifs et niveau -->
-                <div class="form-section">
-                    <h2>Vos objectifs</h2>
-                    <div class="form-group">
-                        <label for="objectif-principal">Objectif principal</label>
-                        <select id="objectif-principal" name="objectif-principal" required>
-                            <option value="">Sélectionnez votre objectif</option>
-                            <option value="perte-poids">Perte de poids</option>
-                            <option value="musculation">Prise de muscle</option>
-                            <option value="endurance">Amélioration de l'endurance</option>
-                            <option value="bien-etre">Bien-être général</option>
-                            <option value="competition">Préparation compétition</option>
-                            <option value="amelioration-discipline">S'améliorer dans une discipline</option>
-                        </select>
-                    </div>
-                    <div class="form-group" id="discipline-group" style="display: none;">
-                        <label for="discipline">Discipline spécifique</label>
-                        <select id="discipline" name="discipline">
-                            <option value="">Sélectionnez votre discipline</option>
-                            <option value="course">Course à pied</option>
-                            <option value="natation">Natation</option>
-                            <option value="cyclisme">Cyclisme</option>
-                            <option value="crossfit">CrossFit</option>
-                            <option value="yoga">Yoga</option>
-                            <option value="boxe">Boxe</option>
-                            <option value="arts-martiaux">Arts martiaux</option>
-                            <option value="autre">Autre</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="niveau">Niveau actuel</label>
-                        <select id="niveau" name="niveau" required>
-                            <option value="">Sélectionnez votre niveau</option>
-                            <option value="debutant">Débutant</option>
-                            <option value="intermediaire">Intermédiaire</option>
-                            <option value="avance">Avancé</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Informations physiques -->
-                <div class="form-section">
-                    <h2>Informations physiques</h2>
-                    <div class="form-group">
-                        <label for="age">Âge</label>
-                        <input type="number" id="age" name="age" min="16" max="100" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="taille">Taille (cm)</label>
-                        <input type="number" id="taille" name="taille" min="100" max="250" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="poids">Poids (kg)</label>
-                        <input type="number" id="poids" name="poids" min="30" max="250" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Genre</label>
-                        <div class="radio-group">
-                            <input type="radio" id="homme" name="genre" value="homme" required>
-                            <label for="homme">Homme</label>
-                            <input type="radio" id="femme" name="genre" value="femme">
-                            <label for="femme">Femme</label>
-                            <input type="radio" id="autre" name="genre" value="autre">
-                            <label for="autre">Autre</label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Disponibilités -->
-                <div class="form-section">
-                    <h2>Vos disponibilités</h2>
-                    <div class="form-group">
-                        <label for="frequence">Fréquence d'entraînement souhaitée (par semaine)</label>
-                        <select id="frequence" name="frequence" required>
-                            <option value="">Sélectionnez une fréquence</option>
-                            <option value="1-2">1-2 fois</option>
-                            <option value="3-4">3-4 fois</option>
-                            <option value="5+">5 fois ou plus</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="duree">Durée moyenne par séance</label>
-                        <select id="duree" name="duree" required>
-                            <option value="">Sélectionnez une durée</option>
-                            <option value="30">30 minutes</option>
-                            <option value="45">45 minutes</option>
-                            <option value="60">1 heure</option>
-                            <option value="90">1 heure 30</option>
-                        </select>
-                    </div>
-                </div>
-
                 <!-- Informations personnelles -->
                 <div class="form-section">
                     <h2>Informations personnelles</h2>
@@ -141,12 +52,188 @@
                         <input type="email" id="email" name="email" required autocomplete="email">
                     </div>
                     <div class="form-group">
-                        <label for="password">Mot de passe</label>
-                        <input type="password" id="password" name="password" required autocomplete="new-password">
+                        <label for="age">Âge</label>
+                        <input type="number" id="age" name="age" min="16" max="100" required>
                     </div>
                     <div class="form-group">
-                        <label for="confirm-password">Confirmer le mot de passe</label>
-                        <input type="password" id="confirm-password" name="confirm-password" required autocomplete="new-password">
+                        <label>Genre</label>
+                        <div class="radio-group">
+                            <input type="radio" id="homme" name="genre" value="homme" required>
+                            <label for="homme">Homme</label>
+                            <input type="radio" id="femme" name="genre" value="femme">
+                            <label for="femme">Femme</label>
+                            <input type="radio" id="autre" name="genre" value="autre">
+                            <label for="autre">Autre</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mensurations -->
+                <div class="form-section">
+                    <h2>Mensurations</h2>
+                    <div class="form-group">
+                        <label for="taille">Taille (cm)</label>
+                        <input type="number" id="taille" name="taille" min="140" max="220" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="poids">Poids (kg)</label>
+                        <input type="number" id="poids" name="poids" step="0.1" min="40" max="200" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tour-poitrine">Tour de poitrine (cm)</label>
+                        <input type="number" id="tour-poitrine" name="tour-poitrine" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="tour-bras">Tour de bras (cm)</label>
+                        <input type="number" id="tour-bras" name="tour-bras" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="tour-taille">Tour de taille (cm)</label>
+                        <input type="number" id="tour-taille" name="tour-taille" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="tour-hanches">Tour de hanches (cm)</label>
+                        <input type="number" id="tour-hanches" name="tour-hanches" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="tour-cuisses">Tour de cuisses (cm)</label>
+                        <input type="number" id="tour-cuisses" name="tour-cuisses" step="0.1">
+                    </div>
+                </div>
+
+                <!-- Objectifs et expérience -->
+                <div class="form-section">
+                    <h2>Objectifs et expérience</h2>
+                    <div class="form-group">
+                        <label for="objectif-principal">Objectif principal</label>
+                        <select id="objectif-principal" name="objectif-principal" required>
+                            <option value="">Sélectionnez votre objectif</option>
+                            <option value="perte_de_poids">Perte de poids</option>
+                            <option value="prise_de_muscle">Prise de muscle</option>
+                            <option value="maintien">Maintien de la forme</option>
+                            <option value="endurance">Amélioration de l'endurance</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="poids-cible">Poids cible (kg)</label>
+                        <input type="number" id="poids-cible" name="poids-cible" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="delai-objectif">Délai pour atteindre l'objectif (mois)</label>
+                        <input type="number" id="delai-objectif" name="delai-objectif" min="1" max="24">
+                    </div>
+                    <div class="form-group">
+                        <label>Zones prioritaires</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="zone-bras" name="zones-prioritaires" value="bras">
+                            <label for="zone-bras">Bras</label>
+                            <input type="checkbox" id="zone-jambes" name="zones-prioritaires" value="jambes">
+                            <label for="zone-jambes">Jambes</label>
+                            <input type="checkbox" id="zone-abdos" name="zones-prioritaires" value="abdos">
+                            <label for="zone-abdos">Abdominaux</label>
+                            <input type="checkbox" id="zone-dos" name="zones-prioritaires" value="dos">
+                            <label for="zone-dos">Dos</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Niveau et disponibilité -->
+                <div class="form-section">
+                    <h2>Niveau et disponibilité</h2>
+                    <div class="form-group">
+                        <label for="niveau-activite">Niveau d'activité actuel</label>
+                        <select id="niveau-activite" name="niveau-activite" required>
+                            <option value="sedentaire">Sédentaire (peu ou pas d'exercice)</option>
+                            <option value="leger">Légèrement actif (1-2 fois/semaine)</option>
+                            <option value="modere">Modérément actif (3-4 fois/semaine)</option>
+                            <option value="actif">Très actif (5-6 fois/semaine)</option>
+                            <option value="tres_actif">Extrêmement actif (athlète)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="experience-musculation">Expérience en musculation</label>
+                        <select id="experience-musculation" name="experience-musculation" required>
+                            <option value="debutant">Débutant (moins de 6 mois)</option>
+                            <option value="intermediaire">Intermédiaire (6 mois à 2 ans)</option>
+                            <option value="avance">Avancé (plus de 2 ans)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="frequence-entrainement">Fréquence d'entraînement souhaitée (séances/semaine)</label>
+                        <input type="number" id="frequence-entrainement" name="frequence-entrainement" min="1" max="7" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="horaires-disponibles">Horaires disponibles</label>
+                        <select id="horaires-disponibles" name="horaires-disponibles" required>
+                            <option value="matin">Matin (6h-12h)</option>
+                            <option value="midi">Midi (12h-14h)</option>
+                            <option value="apres_midi">Après-midi (14h-18h)</option>
+                            <option value="soir">Soir (18h-22h)</option>
+                            <option value="flexible">Horaires flexibles</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Équipement et préférences -->
+                <div class="form-section">
+                    <h2>Équipement et préférences</h2>
+                    <div class="form-group">
+                        <label>Matériel disponible</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="materiel-halteres" name="materiel-disponible" value="halteres">
+                            <label for="materiel-halteres">Haltères</label>
+                            <input type="checkbox" id="materiel-banc" name="materiel-disponible" value="banc">
+                            <label for="materiel-banc">Banc de musculation</label>
+                            <input type="checkbox" id="materiel-barre" name="materiel-disponible" value="barre">
+                            <label for="materiel-barre">Barre de traction</label>
+                            <input type="checkbox" id="materiel-elastiques" name="materiel-disponible" value="elastiques">
+                            <label for="materiel-elastiques">Élastiques</label>
+                            <input type="checkbox" id="materiel-salle" name="materiel-disponible" value="salle">
+                            <label for="materiel-salle">Accès à une salle de sport</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Types d'exercices préférés</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="pref-cardio" name="preferences-exercices" value="cardio">
+                            <label for="pref-cardio">Cardio</label>
+                            <input type="checkbox" id="pref-poids" name="preferences-exercices" value="poids">
+                            <label for="pref-poids">Poids libres</label>
+                            <input type="checkbox" id="pref-machines" name="preferences-exercices" value="machines">
+                            <label for="pref-machines">Machines</label>
+                            <input type="checkbox" id="pref-bodyweight" name="preferences-exercices" value="bodyweight">
+                            <label for="pref-bodyweight">Poids du corps</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Santé et mode de vie -->
+                <div class="form-section">
+                    <h2>Santé et mode de vie</h2>
+                    <div class="form-group">
+                        <label for="limitations-physiques">Limitations physiques ou blessures</label>
+                        <textarea id="limitations-physiques" name="limitations-physiques" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="heures-sommeil">Heures de sommeil moyennes par nuit</label>
+                        <input type="number" id="heures-sommeil" name="heures-sommeil" min="4" max="12" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="niveau-stress">Niveau de stress quotidien</label>
+                        <select id="niveau-stress" name="niveau-stress" required>
+                            <option value="faible">Faible</option>
+                            <option value="modere">Modéré</option>
+                            <option value="eleve">Élevé</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="regime-alimentaire">Régime alimentaire</label>
+                        <select id="regime-alimentaire" name="regime-alimentaire" required>
+                            <option value="omnivore">Omnivore</option>
+                            <option value="vegetarien">Végétarien</option>
+                            <option value="vegan">Végan</option>
+                            <option value="flexitarien">Flexitarien</option>
+                        </select>
                     </div>
                 </div>
 

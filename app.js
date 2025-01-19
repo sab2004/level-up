@@ -253,22 +253,145 @@ document.addEventListener('DOMContentLoaded', function() {
                 taille: parseInt(document.getElementById('taille').value),
                 poids: parseFloat(document.getElementById('poids').value),
                 sexe: document.querySelector('input[name="genre"]:checked').value,
-                niveau_activite: 'modere', // Valeur par défaut
-                objectif_poids: parseFloat(document.getElementById('poids').value) - 5, // Objectif par défaut : -5kg
+                niveau_activite: document.getElementById('niveau-activite').value,
+                objectif_principal: document.getElementById('objectif-principal').value,
+                experience_musculation: document.getElementById('experience-musculation').value,
+                frequence_entrainement: parseInt(document.getElementById('frequence-entrainement').value),
+                limitations_physiques: document.getElementById('limitations-physiques').value,
+                preferences_exercices: Array.from(document.querySelectorAll('input[name="preferences-exercices"]:checked')).map(cb => cb.value),
+                horaires_disponibles: document.getElementById('horaires-disponibles').value,
+                materiel_disponible: Array.from(document.querySelectorAll('input[name="materiel-disponible"]:checked')).map(cb => cb.value),
+                mesures_corporelles: {
+                    tour_poitrine: parseFloat(document.getElementById('tour-poitrine').value) || null,
+                    tour_bras: parseFloat(document.getElementById('tour-bras').value) || null,
+                    tour_taille: parseFloat(document.getElementById('tour-taille').value) || null,
+                    tour_hanches: parseFloat(document.getElementById('tour-hanches').value) || null,
+                    tour_cuisses: parseFloat(document.getElementById('tour-cuisses').value) || null
+                },
+                habitudes: {
+                    sommeil: parseInt(document.getElementById('heures-sommeil').value),
+                    stress: document.getElementById('niveau-stress').value,
+                    alimentation: document.getElementById('regime-alimentaire').value
+                },
+                objectifs_specifiques: {
+                    poids_cible: parseFloat(document.getElementById('poids-cible').value) || null,
+                    delai_objectif: parseInt(document.getElementById('delai-objectif').value) || null,
+                    zones_prioritaires: Array.from(document.querySelectorAll('input[name="zones-prioritaires"]:checked')).map(cb => cb.value)
+                },
                 lastLogin: new Date().toISOString()
             };
             
             // Stocker les informations du profil
             localStorage.setItem('levelup_profile', JSON.stringify(formData));
             
+            // Générer un programme personnalisé basé sur l'IA
+            const programme = await genererProgrammePersonnalise(formData);
+            localStorage.setItem('levelup_programme', JSON.stringify(programme));
+            
             // Afficher un message de succès
-            alert('Inscription réussie !');
+            alert('Inscription réussie ! Votre programme personnalisé a été créé.');
             
             // Rediriger vers le tableau de bord
             window.location.href = 'dashboard.html';
         });
     }
 });
+
+// Fonction pour générer un programme personnalisé basé sur l'IA
+async function genererProgrammePersonnalise(profil) {
+    // Analyse des données du profil
+    const programme = {
+        objectif_poids: calculerObjectifPoids(profil),
+        calories_journalieres: calculerCaloriesJournalieres(profil),
+        seances_hebdomadaires: determinerFrequenceEntrainement(profil),
+        exercices_recommandes: selectionnerExercices(profil),
+        progression_prevue: planifierProgression(profil),
+        adaptations_specifiques: genererAdaptations(profil)
+    };
+
+    return programme;
+}
+
+// Fonctions d'analyse et de calcul pour le programme personnalisé
+function calculerObjectifPoids(profil) {
+    let objectifPoids = profil.poids;
+    const imc = calculerIMC(profil.poids, profil.taille);
+    
+    if (profil.objectif_principal === 'prise_de_muscle') {
+        // Calcul basé sur la structure corporelle et l'expérience
+        const potentielMusculation = evaluerPotentielMusculation(profil);
+        const imcCible = determinerIMCCible(profil, potentielMusculation);
+        objectifPoids = Math.round((imcCible * (profil.taille/100) * (profil.taille/100)) * 10) / 10;
+    } else if (profil.objectif_principal === 'perte_de_poids') {
+        // Calcul progressif et sain de la perte de poids
+        const tauxPertePoids = determinerTauxPertePoids(profil);
+        objectifPoids = Math.max(
+            calculerPoidsMinimumSain(profil),
+            profil.poids * (1 - tauxPertePoids)
+        );
+    }
+
+    return objectifPoids;
+}
+
+function calculerCaloriesJournalieres(profil) {
+    const bmr = calculerBMR(profil.poids, profil.taille, profil.age, profil.sexe);
+    const tdee = calculerTDEE(bmr, profil.niveau_activite);
+    
+    // Ajuster selon l'objectif
+    let calories = tdee;
+    if (profil.objectif_principal === 'prise_de_muscle') {
+        calories += 300; // Surplus calorique pour la prise de muscle
+    } else if (profil.objectif_principal === 'perte_de_poids') {
+        calories -= 500; // Déficit calorique pour la perte de poids
+    }
+    
+    return Math.round(calories);
+}
+
+function determinerFrequenceEntrainement(profil) {
+    // Basé sur l'expérience, la disponibilité et l'objectif
+    let frequenceBase = profil.frequence_entrainement;
+    
+    // Ajuster selon l'expérience
+    if (profil.experience_musculation === 'debutant') {
+        frequenceBase = Math.min(frequenceBase, 3);
+    } else if (profil.experience_musculation === 'intermediaire') {
+        frequenceBase = Math.min(frequenceBase, 4);
+    }
+    
+    return frequenceBase;
+}
+
+function selectionnerExercices(profil) {
+    const exercices = [];
+    
+    // Sélectionner les exercices en fonction du niveau et des limitations
+    if (profil.limitations_physiques) {
+        exercices.push(...selectionnerExercicesAdaptes(profil.limitations_physiques));
+    }
+    
+    // Ajouter des exercices selon l'objectif et l'expérience
+    exercices.push(...selectionnerExercicesParObjectif(profil));
+    
+    return exercices;
+}
+
+function planifierProgression(profil) {
+    return {
+        etapes: genererEtapesProgression(profil),
+        duree_estimee: estimerDureeObjectif(profil),
+        points_controle: definirPointsControle(profil)
+    };
+}
+
+function genererAdaptations(profil) {
+    return {
+        modifications_exercices: adapterExercicesSelonLimitations(profil),
+        ajustements_intensite: calculerIntensiteOptimale(profil),
+        recommandations_specifiques: genererRecommandationsPersonnalisees(profil)
+    };
+}
 
 // Gestion du poids
 document.addEventListener('DOMContentLoaded', function() {
@@ -1055,15 +1178,10 @@ function updateProfileAnalysis() {
     let message = "";
 
     if (profile.objectif_principal === 'prise_de_muscle') {
-        if (imc < 18.5) {
-            // Pour les personnes en sous-poids, viser un IMC de 22
-            objectifPoids = Math.round((22 * (profile.taille/100) * (profile.taille/100)) * 10) / 10;
-            message = "Poids à gagner";
-        } else if (imc < 25) {
-            // Pour les personnes de poids normal, viser +5kg
-            objectifPoids = Math.round((profile.poids + 5) * 10) / 10;
-            message = "Poids à gagner";
-        }
+        // Pour la prise de muscle, on vise un IMC entre 22 et 25 selon la taille
+        const imcCible = 23.5; // IMC idéal pour un physique athlétique
+        objectifPoids = Math.round((imcCible * (profile.taille/100) * (profile.taille/100)) * 10) / 10;
+        message = "Poids à gagner";
     } else if (profile.objectif_principal === 'perte_de_poids') {
         if (imc > 25) {
             // Pour les personnes en surpoids, viser un IMC de 24
@@ -1154,4 +1272,198 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.location.pathname.endsWith('dashboard.html')) {
         updateProfileAnalysis();
     }
+});
+
+// Fonction pour calculer l'IMC
+function calculerIMC(poids, taille) {
+    const tailleEnMetres = taille / 100;
+    return poids / (tailleEnMetres * tailleEnMetres);
+}
+
+// Fonction pour interpréter l'IMC
+function interpreterIMC(imc) {
+    if (imc < 18.5) return "Insuffisance pondérale";
+    if (imc < 25) return "Corpulence normale";
+    if (imc < 30) return "Surpoids";
+    if (imc < 35) return "Obésité modérée";
+    if (imc < 40) return "Obésité sévère";
+    return "Obésité morbide";
+}
+
+// Fonction pour calculer le métabolisme de base (formule de Mifflin-St Jeor)
+function calculerMetabolismeBase(poids, taille, age, genre) {
+    if (genre === 'homme') {
+        return (10 * poids) + (6.25 * taille) - (5 * age) + 5;
+    } else {
+        return (10 * poids) + (6.25 * taille) - (5 * age) - 161;
+    }
+}
+
+// Fonction pour calculer les besoins caloriques journaliers
+function calculerBesoinsCaloriques(metabolismeBase, niveauActivite) {
+    const coefficients = {
+        'sedentaire': 1.2,
+        'leger': 1.375,
+        'modere': 1.55,
+        'actif': 1.725,
+        'tres_actif': 1.9
+    };
+    return Math.round(metabolismeBase * coefficients[niveauActivite]);
+}
+
+// Fonction pour calculer l'objectif de poids
+function calculerObjectifPoids(taille, poids, objectifPrincipal) {
+    const imc = calculerIMC(poids, taille);
+    let poidsIdeal = 0;
+    let message = '';
+
+    if (objectifPrincipal === 'prise_de_muscle') {
+        // Pour la prise de muscle, on vise un IMC de 23.5 comme minimum
+        const imcCible = 23.5;
+        poidsIdeal = Math.round((imcCible * (taille/100) * (taille/100)) * 10) / 10;
+        
+        if (poids < poidsIdeal) {
+            message = `Pour optimiser votre prise de muscle, vous devriez gagner ${(poidsIdeal - poids).toFixed(1)} kg`;
+        } else {
+            message = "Votre poids actuel est adapté pour la prise de muscle";
+        }
+    } else if (objectifPrincipal === 'perte_de_poids') {
+        // Pour la perte de poids, on vise un IMC de 22 comme maximum
+        const imcCible = 22;
+        poidsIdeal = Math.round((imcCible * (taille/100) * (taille/100)) * 10) / 10;
+        
+        if (poids > poidsIdeal) {
+            message = `Pour atteindre un poids santé, vous devriez perdre ${(poids - poidsIdeal).toFixed(1)} kg`;
+        } else {
+            message = "Votre poids actuel est déjà dans la zone santé";
+        }
+    } else {
+        // Pour le maintien ou l'endurance
+        const imcCible = 21.7;
+        poidsIdeal = Math.round((imcCible * (taille/100) * (taille/100)) * 10) / 10;
+        
+        if (Math.abs(poids - poidsIdeal) > 2) {
+            message = poids > poidsIdeal 
+                ? `Pour optimiser vos performances, vous pourriez perdre ${(poids - poidsIdeal).toFixed(1)} kg`
+                : `Pour optimiser vos performances, vous pourriez gagner ${(poidsIdeal - poids).toFixed(1)} kg`;
+        } else {
+            message = "Votre poids actuel est optimal pour votre objectif";
+        }
+    }
+
+    return {
+        poidsIdeal: poidsIdeal,
+        message: message
+    };
+}
+
+// Fonction pour générer des recommandations personnalisées
+function genererRecommandations(donnees) {
+    const recommandations = [];
+    
+    // Recommandations basées sur l'IMC
+    const imc = calculerIMC(donnees.poids, donnees.taille);
+    if (imc < 18.5) {
+        recommandations.push("Augmentez progressivement votre apport calorique");
+        recommandations.push("Privilégiez les protéines et les glucides complexes");
+    } else if (imc > 25) {
+        recommandations.push("Créez un déficit calorique modéré");
+        recommandations.push("Augmentez votre activité physique quotidienne");
+    }
+
+    // Recommandations basées sur l'objectif
+    switch (donnees.objectifPrincipal) {
+        case 'prise_de_muscle':
+            recommandations.push("Concentrez-vous sur les exercices de force");
+            recommandations.push("Assurez un apport protéique suffisant (1.6-2.2g/kg)");
+            break;
+        case 'perte_de_poids':
+            recommandations.push("Combinez cardio et musculation");
+            recommandations.push("Surveillez votre alimentation sans restrictions excessives");
+            break;
+        case 'endurance':
+            recommandations.push("Développez progressivement votre endurance cardiovasculaire");
+            recommandations.push("Hydratez-vous bien pendant l'effort");
+            break;
+    }
+
+    // Recommandations basées sur le niveau d'activité
+    if (donnees.niveauActivite === 'sedentaire') {
+        recommandations.push("Augmentez progressivement votre niveau d'activité");
+        recommandations.push("Commencez par des exercices de faible intensité");
+    }
+
+    // Recommandations basées sur l'expérience
+    if (donnees.experienceMusculation === 'debutant') {
+        recommandations.push("Concentrez-vous sur la technique avant la charge");
+        recommandations.push("Commencez par des exercices basiques composés");
+    }
+
+    return recommandations;
+}
+
+// Gestionnaire du formulaire d'inscription
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('inscription-form');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Collecte des données du formulaire
+        const donnees = {
+            prenom: document.getElementById('prenom').value,
+            nom: document.getElementById('nom').value,
+            email: document.getElementById('email').value,
+            age: parseInt(document.getElementById('age').value),
+            genre: document.querySelector('input[name="genre"]:checked').value,
+            taille: parseInt(document.getElementById('taille').value),
+            poids: parseFloat(document.getElementById('poids').value),
+            tourPoitrine: document.getElementById('tour-poitrine').value,
+            tourBras: document.getElementById('tour-bras').value,
+            tourTaille: document.getElementById('tour-taille').value,
+            tourHanches: document.getElementById('tour-hanches').value,
+            tourCuisses: document.getElementById('tour-cuisses').value,
+            objectifPrincipal: document.getElementById('objectif-principal').value,
+            poidsCible: document.getElementById('poids-cible').value,
+            delaiObjectif: document.getElementById('delai-objectif').value,
+            zonesPrioritaires: Array.from(document.querySelectorAll('input[name="zones-prioritaires"]:checked')).map(input => input.value),
+            niveauActivite: document.getElementById('niveau-activite').value,
+            experienceMusculation: document.getElementById('experience-musculation').value,
+            frequenceEntrainement: document.getElementById('frequence-entrainement').value,
+            horairesDisponibles: document.getElementById('horaires-disponibles').value,
+            materielDisponible: Array.from(document.querySelectorAll('input[name="materiel-disponible"]:checked')).map(input => input.value),
+            preferencesExercices: Array.from(document.querySelectorAll('input[name="preferences-exercices"]:checked')).map(input => input.value),
+            limitationsPhysiques: document.getElementById('limitations-physiques').value,
+            heuresSommeil: document.getElementById('heures-sommeil').value,
+            niveauStress: document.getElementById('niveau-stress').value,
+            regimeAlimentaire: document.getElementById('regime-alimentaire').value
+        };
+
+        // Calculs des métriques
+        const imc = calculerIMC(donnees.poids, donnees.taille);
+        const metabolismeBase = calculerMetabolismeBase(donnees.poids, donnees.taille, donnees.age, donnees.genre);
+        const besoinsCaloriques = calculerBesoinsCaloriques(metabolismeBase, donnees.niveauActivite);
+        const objectifPoids = calculerObjectifPoids(donnees.taille, donnees.poids, donnees.objectifPrincipal);
+        const recommandations = genererRecommandations(donnees);
+
+        // Stockage des données et des calculs
+        const profilComplet = {
+            ...donnees,
+            metriques: {
+                imc: imc,
+                interpretationIMC: interpreterIMC(imc),
+                metabolismeBase: metabolismeBase,
+                besoinsCaloriques: besoinsCaloriques,
+                objectifPoids: objectifPoids,
+                recommandations: recommandations
+            }
+        };
+
+        // Stockage dans le localStorage
+        localStorage.setItem('profilUtilisateur', JSON.stringify(profilComplet));
+
+        // Redirection vers le tableau de bord
+        window.location.href = 'tableau-de-bord.html';
+    });
 }); 
