@@ -933,11 +933,10 @@ function formatExerciseName(name) {
 function generateNextWorkout() {
     const workoutTypes = [
         {
-            type: 'Cardio',
-            category: 'cardio',
+            type: 'HIIT',
             duration: 45,
             exercises: [
-                { 
+                {
                     name: 'Échauffement dynamique',
                     duration: 10,
                     details: [
@@ -949,26 +948,28 @@ function generateNextWorkout() {
                         { name: 'Étirements dynamiques', duration: '2 min' }
                     ]
                 },
-                { 
-                    name: 'Circuit cardio intense',
+                {
+                    name: 'Circuit HIIT #1',
                     duration: 15,
                     details: [
-                        { name: 'Jumping jacks rapides', duration: '45s + 15s repos' },
-                        { name: 'Course sur place', duration: '45s + 15s repos' },
-                        { name: 'Montées de genoux rapides', duration: '45s + 15s repos' },
-                        { name: 'Pas chassés', duration: '45s + 15s repos' },
-                        { name: 'Burpees', duration: '45s + 15s repos' }
+                        { name: 'Burpees', duration: '30 sec' },
+                        { name: 'Mountain climbers', duration: '30 sec' },
+                        { name: 'Squats sautés', duration: '30 sec' },
+                        { name: 'Pompes', duration: '30 sec' },
+                        { name: 'Jumping jacks', duration: '30 sec' },
+                        { name: 'Planche', duration: '30 sec' }
                     ]
                 },
-                { 
-                    name: 'Circuit cardio explosif',
+                {
+                    name: 'Circuit HIIT #2',
                     duration: 15,
                     details: [
-                        { name: 'Squats sautés', duration: '40s + 20s repos' },
-                        { name: 'Mountain climbers', duration: '40s + 20s repos' },
-                        { name: 'Jumping lunges', duration: '40s + 20s repos' },
-                        { name: 'High knees', duration: '40s + 20s repos' },
-                        { name: 'Jumping jacks étoile', duration: '40s + 20s repos' }
+                        { name: 'Fentes sautées alternées', duration: '30 sec' },
+                        { name: 'Crunchs', duration: '30 sec' },
+                        { name: 'High knees', duration: '30 sec' },
+                        { name: 'Dips sur chaise', duration: '30 sec' },
+                        { name: 'Jump rope', duration: '30 sec' },
+                        { name: 'Superman', duration: '30 sec' }
                     ]
                 },
                 { 
@@ -977,73 +978,17 @@ function generateNextWorkout() {
                     details: [
                         { name: 'Marche lente sur place', duration: '1 min' },
                         { name: 'Étirements des quadriceps', duration: '1 min' },
-                        { name: 'Étirements des mollets', duration: '1 min' },
-                        { name: 'Étirements des épaules', duration: '1 min' },
-                        { name: 'Respiration profonde', duration: '1 min' }
-                    ]
-                }
-            ]
-        },
-        {
-            type: 'Renforcement',
-            category: 'renforcement',
-            duration: 45,
-            exercises: [
-                { 
-                    name: 'Échauffement dynamique',
-                    duration: 10,
-                    details: [
-                        { name: 'Rotations des épaules', duration: '2 min' },
-                        { name: 'Rotations des poignets', duration: '1 min' },
-                        { name: 'Squats simples', duration: '2 min' },
-                        { name: 'Fentes sur place', duration: '2 min' },
-                        { name: 'Pompes sur genoux', duration: '1 min' },
-                        { name: 'Planche courte', duration: '2 min' }
-                    ]
-                },
-                { 
-                    name: 'Circuit haut du corps',
-                    duration: 15,
-                    details: [
-                        { name: 'Pompes classiques', duration: '45s + 15s repos' },
-                        { name: 'Dips sur chaise', duration: '45s + 15s repos' },
-                        { name: 'Développé épaules', duration: '45s + 15s repos' },
-                        { name: 'Extensions triceps', duration: '45s + 15s repos' },
-                        { name: 'Planche dynamique', duration: '45s + 15s repos' }
-                    ]
-                },
-                { 
-                    name: 'Circuit bas du corps',
-                    duration: 15,
-                    details: [
-                        { name: 'Squats profonds', duration: '45s + 15s repos' },
-                        { name: 'Fentes alternées', duration: '45s + 15s repos' },
-                        { name: 'Pont fessier', duration: '45s + 15s repos' },
-                        { name: 'Relevés de jambes', duration: '45s + 15s repos' },
-                        { name: 'Gainage latéral', duration: '45s + 15s repos' }
-                    ]
-                },
-                { 
-                    name: 'Retour au calme',
-                    duration: 5,
-                    details: [
-                        { name: 'Étirements pectoraux', duration: '1 min' },
-                        { name: 'Étirements dorsaux', duration: '1 min' },
-                        { name: 'Étirements quadriceps', duration: '1 min' },
-                        { name: 'Étirements ischio-jambiers', duration: '1 min' },
-                        { name: 'Respiration profonde', duration: '1 min' }
+                        { name: 'Étirements des ischio-jambiers', duration: '1 min' },
+                        { name: 'Étirements des épaules et du dos', duration: '1 min' },
+                        { name: 'Respiration profonde et relaxation', duration: '1 min' }
                     ]
                 }
             ]
         }
     ];
 
-    // Exclure le type de séance actuel
-    const currentWorkout = document.querySelector('.workout-type span').textContent.split(' - ')[0];
-    const availableWorkouts = workoutTypes.filter(workout => workout.type !== currentWorkout);
-    
-    // Sélectionner aléatoirement une nouvelle séance
-    const nextWorkout = availableWorkouts[Math.floor(Math.random() * availableWorkouts.length)];
+    // Sélectionner la séance HIIT
+    const nextWorkout = workoutTypes[0];
     
     // Mettre à jour l'affichage
     const workoutTypeElement = document.querySelector('.workout-type span');
@@ -1073,7 +1018,7 @@ function generateNextWorkout() {
         </li>
     `).join('');
 
-    // Gestionnaire pour les éléments d'exercice
+    // Ajouter les gestionnaires d'événements pour les exercices
     document.querySelectorAll('.exercise-item').forEach(item => {
         const header = item.querySelector('.exercise-header');
         const details = item.querySelector('.exercise-details');
@@ -1093,24 +1038,9 @@ function generateNextWorkout() {
                 // Basculer la visibilité des détails de l'exercice cliqué
                 if (details) {
                     details.classList.toggle('visible');
-                    // Basculer l'icône de flèche
-                    const arrow = header.querySelector('.fa-chevron-down');
-                    if (arrow) {
-                        arrow.style.transform = details.classList.contains('visible') ? 'rotate(180deg)' : 'rotate(0deg)';
-                    }
                 }
             });
         }
-    });
-
-    // Gestionnaire pour les boutons de vidéo
-    document.querySelectorAll('.show-video').forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.stopPropagation(); // Empêcher la propagation au parent
-            const exerciseId = button.closest('.exercise-item').dataset.exercise;
-            // Ici vous pouvez ajouter la logique pour afficher la vidéo
-            console.log('Afficher la vidéo pour:', exerciseId);
-        });
     });
 }
 
