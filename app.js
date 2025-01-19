@@ -968,6 +968,7 @@ function generateNextWorkout() {
                 <span class="exercise-duration">${exercise.duration} min</span>
             </div>
             <div class="exercise-details">
+                ${exercise.name === 'Cardio intensif' ? '<p class="circuit-description">Alternance course intensive et récupération active</p>' : ''}
                 <div class="exercise-steps">
                     ${exercise.details.map(step => `
                         <div class="exercise-step">
