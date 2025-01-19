@@ -2077,39 +2077,23 @@ footer {
 }
 
 .exercise-steps li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 0;
+    padding: 0.5rem 0;
 }
 
 .step-name {
-    font-weight: normal;
     color: var(--dark-color);
 }
 
 .step-duration {
+    float: right;
     color: var(--dark-color);
-    font-size: 1rem;
-}
-
-@media (max-width: 768px) {
-    .exercise-steps {
-        padding: 0.8rem;
-    }
-    
-    .exercise-steps li {
-        padding: 0.8rem 0;
-    }
 }
 
 .circuit-description {
-    background-color: #f8f9fa;
-    padding: 0.8rem;
-    border-radius: 6px;
     color: var(--primary-color);
     font-size: 0.9rem;
-    margin-bottom: 1rem;
+    margin: 0.5rem 0 1rem 0;
+    padding-left: 1rem;
     border-left: 3px solid var(--primary-color);
 }
 
