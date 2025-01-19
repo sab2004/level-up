@@ -1062,4 +1062,111 @@ function generateNextWorkout() {
             });
         }
     });
-} 
+}
+
+// Calcul et affichage des analyses du profil
+function updateProfileAnalysis() {
+    // Récupérer les données du profil
+    const profile = JSON.parse(localStorage.getItem('levelup_profile') || '{}');
+    
+    if (!profile.poids || !profile.taille) {
+        return; // Sortir si les données essentielles ne sont pas disponibles
+    }
+
+    // Calculer l'IMC
+    const imc = calculateBMI(profile.poids, profile.taille);
+    document.getElementById('bmi-value').textContent = imc.toFixed(1);
+    
+    // Interpréter l'IMC
+    const interpretation = interpretBMI(imc);
+    document.getElementById('bmi-interpretation').textContent = interpretation;
+    
+    // Calculer le métabolisme de base (formule de Mifflin-St Jeor)
+    const bmr = calculateBMR(profile.poids, profile.taille, profile.age, profile.sexe);
+    document.getElementById('bmr-value').textContent = Math.round(bmr);
+    
+    // Calculer les besoins caloriques journaliers
+    const tdee = calculateTDEE(bmr, profile.niveau_activite);
+    document.getElementById('tdee-value').textContent = Math.round(tdee);
+    
+    // Afficher l'objectif de poids
+    if (profile.objectif_poids) {
+        document.getElementById('target-weight').textContent = profile.objectif_poids;
+        const poidsAPerdre = profile.poids - profile.objectif_poids;
+        document.getElementById('weight-to-lose').innerHTML = 
+            `<span>Poids à perdre : ${Math.abs(poidsAPerdre).toFixed(1)} kg</span>`;
+    }
+    
+    // Générer les recommandations
+    const recommendations = generateRecommendations(profile, imc, tdee);
+    const recommendationsList = document.getElementById('recommendations-list');
+    recommendationsList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
+}
+
+// Calcul de l'IMC
+function calculateBMI(weight, height) {
+    const heightInMeters = height / 100;
+    return weight / (heightInMeters * heightInMeters);
+}
+
+// Interprétation de l'IMC
+function interpretBMI(bmi) {
+    if (bmi < 18.5) return "Poids insuffisant";
+    if (bmi < 25) return "Poids normal";
+    if (bmi < 30) return "Surpoids";
+    return "Obésité";
+}
+
+// Calcul du métabolisme de base
+function calculateBMR(weight, height, age, gender) {
+    if (gender === 'homme') {
+        return 10 * weight + 6.25 * height - 5 * age + 5;
+    } else {
+        return 10 * weight + 6.25 * height - 5 * age - 161;
+    }
+}
+
+// Calcul des besoins caloriques journaliers
+function calculateTDEE(bmr, activityLevel) {
+    const activityFactors = {
+        sedentaire: 1.2,
+        leger: 1.375,
+        modere: 1.55,
+        actif: 1.725,
+        tres_actif: 1.9
+    };
+    return bmr * (activityFactors[activityLevel] || 1.2);
+}
+
+// Génération des recommandations personnalisées
+function generateRecommendations(profile, imc, tdee) {
+    const recommendations = [];
+    
+    // Recommandations basées sur l'IMC
+    if (imc < 18.5) {
+        recommendations.push("Augmentez progressivement votre apport calorique quotidien");
+        recommendations.push("Concentrez-vous sur des aliments riches en protéines et en nutriments");
+    } else if (imc >= 25) {
+        recommendations.push("Créez un déficit calorique modéré de 500 kcal par jour");
+        recommendations.push("Privilégiez les aliments peu caloriques et riches en fibres");
+    }
+    
+    // Recommandations basées sur le niveau d'activité
+    if (profile.niveau_activite === 'sedentaire') {
+        recommendations.push("Augmentez progressivement votre activité physique quotidienne");
+        recommendations.push("Commencez par 15-30 minutes de marche par jour");
+    }
+    
+    // Recommandations générales
+    recommendations.push("Buvez au moins 2L d'eau par jour");
+    recommendations.push("Visez 7-8 heures de sommeil par nuit");
+    
+    return recommendations;
+}
+
+// Mettre à jour l'analyse du profil au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.endsWith('dashboard.html')) {
+        updateProfileAnalysis();
+    }
+}); 
