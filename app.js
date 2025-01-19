@@ -868,7 +868,10 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Ajouter toutes les vidéos de la section
             Array.from(exerciseDetails).forEach(step => {
-                const stepName = step.querySelector('.step-name').textContent;
+                const stepNameElement = step.querySelector('.step-name');
+                if (!stepNameElement) return; // Skip if element doesn't exist
+                
+                const stepName = stepNameElement.textContent;
                 const stepId = convertToId(stepName);
                 let videoUrl;
                 
@@ -1051,7 +1054,10 @@ function generateNextWorkout() {
                 
                 // Ajouter toutes les vidéos de la section
                 Array.from(exerciseDetails).forEach(step => {
-                    const stepName = step.querySelector('.step-name').textContent;
+                    const stepNameElement = step.querySelector('.step-name');
+                    if (!stepNameElement) return; // Skip if element doesn't exist
+                    
+                    const stepName = stepNameElement.textContent;
                     const stepId = convertToId(stepName);
                     let videoUrl;
                     
