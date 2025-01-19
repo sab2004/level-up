@@ -877,9 +877,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Sélectionner la bonne catégorie de vidéos selon l'exercice
                 if (exerciseName === 'échauffement dynamique' || exerciseName === 'echauffement-dynamique') {
-                    console.log('Exercice trouvé:', stepId);
+                    console.log('Exercice trouvé:', exerciseName);
+                    console.log('Step ID:', stepId);
                     videoUrl = exerciseVideos.warmup[stepId];
-                    console.log('URL vidéo:', videoUrl);
+                    console.log('Video URL:', videoUrl);
+                    console.log('Videos disponibles:', exerciseVideos.warmup);
+                } else if (exerciseName === 'circuit hiit #1') {
+                    videoUrl = exerciseVideos.hiit1[stepId];
+                } else if (exerciseName === 'circuit hiit #2') {
+                    videoUrl = exerciseVideos.hiit2[stepId];
+                } else if (exerciseName === 'retour au calme') {
+                    videoUrl = exerciseVideos.cooldown[stepId];
                 }
                 
                 if (videoUrl) {
@@ -1063,7 +1071,11 @@ function generateNextWorkout() {
                     
                     // Sélectionner la bonne catégorie de vidéos selon l'exercice
                     if (exerciseName === 'échauffement dynamique' || exerciseName === 'echauffement-dynamique') {
+                        console.log('Exercice trouvé:', exerciseName);
+                        console.log('Step ID:', stepId);
                         videoUrl = exerciseVideos.warmup[stepId];
+                        console.log('Video URL:', videoUrl);
+                        console.log('Videos disponibles:', exerciseVideos.warmup);
                     } else if (exerciseName === 'circuit hiit #1') {
                         videoUrl = exerciseVideos.hiit1[stepId];
                     } else if (exerciseName === 'circuit hiit #2') {
@@ -1101,9 +1113,10 @@ function generateNextWorkout() {
 // Base de données des vidéos de démonstration
 const exerciseVideos = {
     warmup: {
-        'marche-rapide': 'https://www.youtube.com/embed/HiruV6NOxZw',
+        'marche-rapide-sur-place': 'https://www.youtube.com/embed/HiruV6NOxZw',
         'rotations-des-bras': 'https://www.youtube.com/embed/139pHqVn5xk',
-        'jumping-jacks': 'https://www.youtube.com/embed/c4DAnQ6DtF8',
+        'jumping-jacks-legers': 'https://www.youtube.com/embed/c4DAnQ6DtF8',
+        'rotations-du-bassin': 'https://www.youtube.com/embed/139pHqVn5xk',
         'montees-de-genoux': 'https://www.youtube.com/embed/8opcm4D0QJc',
         'etirements-dynamiques': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
     },
