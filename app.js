@@ -801,8 +801,9 @@ const exerciseVideos = {
     },
     'cardio': {
         'echauffement-cardio': 'https://www.youtube.com/embed/HiruV6NOxZw',
-        'course-intervalles': 'https://www.youtube.com/embed/8opcm4D0QJc',
-        'velo-stationnaire': 'https://www.youtube.com/embed/fqx4-SoXNUQ',
+        'circuit-cardio': 'https://www.youtube.com/embed/TU8QYVW0gDU',
+        'cardio-place': 'https://www.youtube.com/embed/72BSZupb-1I',
+        'cardio-explosif': 'https://www.youtube.com/embed/ZZZoCNMU48U',
         'retour-calme': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
     },
     'renforcement': {
@@ -914,10 +915,36 @@ function generateNextWorkout() {
             category: 'cardio',
             duration: 45,
             exercises: [
-                { name: 'Échauffement cardio', id: 'echauffement-cardio', duration: 10 },
-                { name: 'Course/Marche par intervalles', id: 'course-intervalles', duration: 20 },
-                { name: 'Vélo stationnaire', id: 'velo-stationnaire', duration: 10 },
-                { name: 'Retour au calme', id: 'retour-calme', duration: 5 }
+                { 
+                    name: 'Échauffement cardio', 
+                    id: 'echauffement-cardio', 
+                    duration: 8,
+                    details: 'Marche rapide (2min), Jumping Jacks (2min), Montées de genoux (2min), Talons-fesses (2min)'
+                },
+                { 
+                    name: 'Circuit cardio intense', 
+                    id: 'circuit-cardio', 
+                    duration: 15,
+                    details: '3 tours de : Burpees (30s), Mountain Climbers (30s), Jumping Jacks (30s), High Knees (30s), Récupération (30s)'
+                },
+                { 
+                    name: 'Cardio sur place', 
+                    id: 'cardio-place', 
+                    duration: 12,
+                    details: 'Jumping Squats (30s/30s repos), Jumping Lunges (30s/30s repos), Step-Ups (30s/30s repos), Skipping (30s/30s repos)'
+                },
+                { 
+                    name: 'Cardio explosif', 
+                    id: 'cardio-explosif', 
+                    duration: 5,
+                    details: 'Sprint sur place (20s), repos (10s) - Répéter 10 fois'
+                },
+                { 
+                    name: 'Retour au calme', 
+                    id: 'retour-calme', 
+                    duration: 5,
+                    details: 'Marche sur place, étirements dynamiques légers, respiration profonde'
+                }
             ]
         },
         {
@@ -961,6 +988,7 @@ function generateNextWorkout() {
         <li class="exercise-item" data-exercise="${exercise.id}" data-category="${nextWorkout.category}">
             <div class="exercise-details">
                 <h3>${exercise.name} - ${exercise.duration} min</h3>
+                <p class="exercise-description">${exercise.details || ''}</p>
                 <button class="btn-secondary show-video">
                     <i class="fas fa-play-circle"></i> Voir la démonstration
                 </button>
@@ -968,6 +996,7 @@ function generateNextWorkout() {
             <div class="exercise-header">
                 <span class="exercise-name">${exercise.name}</span>
                 <span class="exercise-duration">${exercise.duration} min</span>
+                <i class="fas fa-chevron-down"></i>
             </div>
         </li>
     `).join('');
