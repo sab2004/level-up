@@ -2070,39 +2070,36 @@ footer {
 }
 
 .exercise-steps {
-    margin: 0;
-    padding: 0;
+    margin: 1rem 0;
+    padding: 1rem;
     list-style: none;
+    background: white;
 }
 
 .exercise-steps li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.8rem 0;
-    border-bottom: 1px solid #eee;
-}
-
-.exercise-steps li:last-child {
-    border-bottom: none;
+    padding: 1rem 0;
 }
 
 .step-name {
-    font-weight: 500;
+    font-weight: normal;
     color: var(--dark-color);
 }
 
 .step-duration {
-    color: var(--primary-color);
-    font-size: 0.9rem;
-    padding: 0.25rem 0.75rem;
-    background-color: var(--light-color);
-    border-radius: 15px;
+    color: var(--dark-color);
+    font-size: 1rem;
 }
 
 @media (max-width: 768px) {
+    .exercise-steps {
+        padding: 0.8rem;
+    }
+    
     .exercise-steps li {
-        padding: 0.6rem 0;
+        padding: 0.8rem 0;
     }
 }
 
