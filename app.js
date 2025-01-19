@@ -1022,12 +1022,15 @@ function generateNextWorkout() {
                 <span class="exercise-duration">${exercise.duration} min</span>
             </div>
             <div class="exercise-details">
-                <h3>${exercise.name} - ${exercise.duration} min</h3>
+                <h3>${exercise.name}</h3>
+                <div class="exercise-description">
+                    <p>Durée : ${exercise.duration} minutes</p>
+                </div>
                 <ul class="exercise-steps">
                     ${exercise.details.map(step => `
                         <li>
-                            <span>${step.name}</span>
-                            <span>${step.duration}</span>
+                            <div class="step-name">${step.name}</div>
+                            <div class="step-duration">${step.duration}</div>
                         </li>
                     `).join('')}
                 </ul>
