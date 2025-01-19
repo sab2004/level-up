@@ -837,30 +837,35 @@ document.querySelectorAll('.show-video').forEach(button => {
     button.addEventListener('click', (e) => {
         e.stopPropagation();
         const exerciseType = button.closest('.exercise-item').dataset.exercise;
-        const videos = exerciseVideos[exerciseType];
-        const videoList = videoModal.querySelector('.video-list');
+        const exerciseDetails = button.closest('.exercise-item').querySelector('.exercise-steps').children;
         
-        // Vide la liste des vidéos précédentes
+        const videoList = videoModal.querySelector('.video-list');
         videoList.innerHTML = '';
         
-        // Ajoute les vidéos pour cet exercice
-        Object.entries(videos).forEach(([name, url]) => {
-            const videoWrapper = document.createElement('div');
-            videoWrapper.className = 'video-item';
-            videoWrapper.innerHTML = `
-                <h4>${formatExerciseName(name)}</h4>
-                <div class="video-frame">
-                    <iframe 
-                        width="100%" 
-                        height="200" 
-                        src="${url}" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen>
-                    </iframe>
-                </div>
-            `;
-            videoList.appendChild(videoWrapper);
+        // Ajouter toutes les vidéos de la section
+        Array.from(exerciseDetails).forEach(step => {
+            const stepName = step.querySelector('.step-name').textContent;
+            const stepId = convertToId(stepName);
+            const videoUrl = exerciseVideos[exerciseType][stepId];
+            
+            if (videoUrl) {
+                const videoWrapper = document.createElement('div');
+                videoWrapper.className = 'video-item';
+                videoWrapper.innerHTML = `
+                    <h4>${stepName}</h4>
+                    <div class="video-frame">
+                        <iframe 
+                            width="100%" 
+                            height="200" 
+                            src="${videoUrl}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                `;
+                videoList.appendChild(videoWrapper);
+            }
         });
         
         videoModal.classList.add('visible');
@@ -989,12 +994,12 @@ function generateNextWorkout() {
                         <div class="exercise-step">
                             <span class="step-name">${step.name}</span>
                             <span class="step-duration">${step.duration}</span>
-                            <button class="btn-secondary show-video" data-exercise="${step.id}">
-                                <i class="fas fa-play-circle"></i> Voir la démonstration
-                            </button>
                         </div>
                     `).join('')}
                 </div>
+                <button class="btn-secondary show-video" data-exercise="${exercise.id}">
+                    <i class="fas fa-play-circle"></i> Voir la démonstration
+                </button>
             </div>
             <div class="exercise-header">
                 <span class="exercise-name">${exercise.name}</span>
@@ -1008,32 +1013,55 @@ function generateNextWorkout() {
     exerciseList.querySelectorAll('.show-video').forEach(button => {
         button.addEventListener('click', (e) => {
             e.stopPropagation();
-            const exerciseId = button.dataset.exercise;
             const exerciseType = button.closest('.exercise-item').dataset.exercise;
-            const videoUrl = exerciseVideos[exerciseType][exerciseId];
+            const exerciseDetails = button.closest('.exercise-item').querySelector('.exercise-steps').children;
             
             const videoList = videoModal.querySelector('.video-list');
             videoList.innerHTML = '';
             
-            const videoWrapper = document.createElement('div');
-            videoWrapper.className = 'video-item';
-            videoWrapper.innerHTML = `
-                <h4>${formatExerciseName(exerciseId)}</h4>
-                <div class="video-frame">
-                    <iframe 
-                        width="100%" 
-                        height="200" 
-                        src="${videoUrl}" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen>
-                    </iframe>
-                </div>
-            `;
-            videoList.appendChild(videoWrapper);
+            // Ajouter toutes les vidéos de la section
+            Array.from(exerciseDetails).forEach(step => {
+                const stepName = step.querySelector('.step-name').textContent;
+                const stepId = convertToId(stepName);
+                const videoUrl = exerciseVideos[exerciseType][stepId];
+                
+                if (videoUrl) {
+                    const videoWrapper = document.createElement('div');
+                    videoWrapper.className = 'video-item';
+                    videoWrapper.innerHTML = `
+                        <h4>${stepName}</h4>
+                        <div class="video-frame">
+                            <iframe 
+                                width="100%" 
+                                height="200" 
+                                src="${videoUrl}" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    `;
+                    videoList.appendChild(videoWrapper);
+                }
+            });
+            
             videoModal.classList.add('visible');
         });
     });
+
+    // Fonction pour convertir un nom d'exercice en ID
+    function convertToId(name) {
+        return name.toLowerCase()
+            .replace(/[éèê]/g, 'e')
+            .replace(/[àâ]/g, 'a')
+            .replace(/[ïî]/g, 'i')
+            .replace(/[ôö]/g, 'o')
+            .replace(/[ûü]/g, 'u')
+            .replace(/[ç]/g, 'c')
+            .replace(/[^a-z0-9]/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
+    }
 
     // Ajouter les gestionnaires d'événements pour les en-têtes d'exercices
     exerciseList.querySelectorAll('.exercise-header').forEach(header => {
