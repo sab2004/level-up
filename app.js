@@ -856,16 +856,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Gestionnaire pour les boutons de vidéo
-    const videoButtons = document.querySelectorAll('.show-video');
-    videoButtons.forEach(button => {
+    document.querySelectorAll('.show-video').forEach(button => {
         button.addEventListener('click', (e) => {
             e.stopPropagation();
             const exerciseItem = button.closest('.exercise-item');
-            const exerciseType = exerciseItem.dataset.exercise;
-            console.log('Type d\'exercice:', exerciseType);
-            
+            const exerciseName = exerciseItem.dataset.exercise;
             const exerciseDetails = exerciseItem.querySelector('.exercise-steps').children;
-            console.log('Détails des exercices:', exerciseDetails);
             
             const videoList = videoModal.querySelector('.video-list');
             videoList.innerHTML = '';
@@ -874,12 +870,14 @@ document.addEventListener('DOMContentLoaded', function() {
             Array.from(exerciseDetails).forEach(step => {
                 const stepName = step.querySelector('.step-name').textContent;
                 const stepId = convertToId(stepName);
-                console.log('Recherche de vidéo pour:', stepId, 'dans la catégorie:', exerciseType);
+                let videoUrl;
                 
-                if (exerciseVideos[exerciseType] && exerciseVideos[exerciseType][stepId]) {
-                    const videoUrl = exerciseVideos[exerciseType][stepId];
-                    console.log('URL de la vidéo trouvée:', videoUrl);
-                    
+                // Sélectionner la bonne catégorie de vidéos selon l'exercice
+                if (exerciseName === 'échauffement dynamique') {
+                    videoUrl = exerciseVideos.warmup[stepId];
+                }
+                
+                if (videoUrl) {
                     const videoWrapper = document.createElement('div');
                     videoWrapper.className = 'video-item';
                     videoWrapper.innerHTML = `
@@ -896,8 +894,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     `;
                     videoList.appendChild(videoWrapper);
-                } else {
-                    console.log(`Pas de vidéo trouvée pour l'exercice: ${stepName} (ID: ${stepId})`);
                 }
             });
             
@@ -911,14 +907,12 @@ function convertToId(name) {
     return name.toLowerCase()
         .replace(/[éèê]/g, 'e')
         .replace(/[àâ]/g, 'a')
-        .replace(/[ïî]/g, 'i')
+        .replace(/[ùû]/g, 'u')
+        .replace(/[îï]/g, 'i')
         .replace(/[ôö]/g, 'o')
-        .replace(/[ûü]/g, 'u')
-        .replace(/[ç]/g, 'c')
-        .replace(/\s+/g, '-')  // Remplace les espaces par des tirets
-        .replace(/[^a-z0-9-]/g, '')  // Supprime tous les caractères non alphanumériques sauf les tirets
-        .replace(/-+/g, '-')  // Remplace les séquences de tirets par un seul tiret
-        .replace(/^-|-$/g, '');  // Supprime les tirets au début et à la fin
+        .replace(/[^a-z0-9]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
 }
 
 // Fonction pour formater le nom de l'exercice
