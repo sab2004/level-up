@@ -785,75 +785,45 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Variable globale pour la modale vidéo
+let videoModal;
+
 // Configuration de la modale vidéo
-const videoModal = document.createElement('div');
-videoModal.className = 'modal video-modal';
-
-// Base de données des vidéos de démonstration
-const exerciseVideos = {
-    warmup: {
-        'marche-rapide': 'https://www.youtube.com/embed/HiruV6NOxZw',
-        'rotations-des-bras': 'https://www.youtube.com/embed/139pHqVn5xk',
-        'jumping-jacks': 'https://www.youtube.com/embed/c4DAnQ6DtF8',
-        'montees-de-genoux': 'https://www.youtube.com/embed/8opcm4D0QJc',
-        'etirements-dynamiques': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
-    },
-    hiit1: {
-        'burpees': 'https://www.youtube.com/embed/TU8QYVW0gDU',
-        'mountain-climbers': 'https://www.youtube.com/embed/nmwgirgXLYM',
-        'squats-sautes': 'https://www.youtube.com/embed/72BSZupb-1I',
-        'jumping-jacks': 'https://www.youtube.com/embed/c4DAnQ6DtF8',
-        'planche': 'https://www.youtube.com/embed/ASdvN_XEl_c'
-    },
-    hiit2: {
-        'fentes-sautees': 'https://www.youtube.com/embed/ZZZoCNMU48U',
-        'high-knees': 'https://www.youtube.com/embed/ZxJR4ygUJ8A',
-        'jump-rope': 'https://www.youtube.com/embed/u3zgHI8QnqE',
-        'dips': 'https://www.youtube.com/embed/v9LABVJzv8A',
-        'superman': 'https://www.youtube.com/embed/z6PJMT2y8GQ'
-    },
-    cooldown: {
-        'marche-lente': 'https://www.youtube.com/embed/HiruV6NOxZw',
-        'etirements-quadriceps': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
-        'etirements-ischio-jambiers': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
-        'etirements-epaules': 'https://www.youtube.com/embed/139pHqVn5xk',
-        'relaxation': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
-    }
-};
-
-videoModal.innerHTML = `
-    <div class="modal-content">
-        <h3>Démonstrations des exercices</h3>
-        <div class="video-container">
-            <div class="video-list"></div>
-        </div>
-        <button class="btn-primary close-video">Fermer</button>
-    </div>
-`;
-document.body.appendChild(videoModal);
-
-// Fonction pour convertir un nom d'exercice en ID
-function convertToId(name) {
-    return name.toLowerCase()
-        .replace(/[éèê]/g, 'e')
-        .replace(/[àâ]/g, 'a')
-        .replace(/[ïî]/g, 'i')
-        .replace(/[ôö]/g, 'o')
-        .replace(/[ûü]/g, 'u')
-        .replace(/[ç]/g, 'c')
-        .replace(/\s+/g, '-')  // Remplace les espaces par des tirets
-        .replace(/[^a-z0-9-]/g, '')  // Supprime tous les caractères non alphanumériques sauf les tirets
-        .replace(/-+/g, '-')  // Remplace les séquences de tirets par un seul tiret
-        .replace(/^-|-$/g, '');  // Supprime les tirets au début et à la fin
-}
-
-// Gestionnaire pour les boutons de vidéo
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.show-video').forEach(button => {
+    videoModal = document.createElement('div');
+    videoModal.className = 'modal video-modal';
+    videoModal.innerHTML = `
+        <div class="modal-content">
+            <h3>Démonstrations des exercices</h3>
+            <div class="video-container">
+                <div class="video-list"></div>
+            </div>
+            <button class="btn-primary close-video">Fermer</button>
+        </div>
+    `;
+    document.body.appendChild(videoModal);
+
+    // Fermeture de la modale vidéo
+    const closeVideoBtn = videoModal.querySelector('.close-video');
+    closeVideoBtn.addEventListener('click', () => {
+        videoModal.classList.remove('visible');
+        // Arrête toutes les vidéos en cours
+        videoModal.querySelectorAll('iframe').forEach(iframe => {
+            iframe.src = iframe.src;
+        });
+    });
+
+    // Gestionnaire pour les boutons de vidéo
+    const videoButtons = document.querySelectorAll('.show-video');
+    videoButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             e.stopPropagation();
-            const exerciseType = button.closest('.exercise-item').dataset.exercise;
-            const exerciseDetails = button.closest('.exercise-item').querySelector('.exercise-steps').children;
+            const exerciseItem = button.closest('.exercise-item');
+            const exerciseType = exerciseItem.dataset.exercise;
+            console.log('Type d\'exercice:', exerciseType);
+            
+            const exerciseDetails = exerciseItem.querySelector('.exercise-steps').children;
+            console.log('Détails des exercices:', exerciseDetails);
             
             const videoList = videoModal.querySelector('.video-list');
             videoList.innerHTML = '';
@@ -863,9 +833,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const stepName = step.querySelector('.step-name').textContent;
                 const stepId = convertToId(stepName);
                 console.log('Recherche de vidéo pour:', stepId, 'dans la catégorie:', exerciseType);
-                const videoUrl = exerciseVideos[exerciseType] ? exerciseVideos[exerciseType][stepId] : null;
                 
-                if (videoUrl) {
+                if (exerciseVideos[exerciseType] && exerciseVideos[exerciseType][stepId]) {
+                    const videoUrl = exerciseVideos[exerciseType][stepId];
+                    console.log('URL de la vidéo trouvée:', videoUrl);
+                    
                     const videoWrapper = document.createElement('div');
                     videoWrapper.className = 'video-item';
                     videoWrapper.innerHTML = `
@@ -892,6 +864,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Fonction pour convertir un nom d'exercice en ID
+function convertToId(name) {
+    return name.toLowerCase()
+        .replace(/[éèê]/g, 'e')
+        .replace(/[àâ]/g, 'a')
+        .replace(/[ïî]/g, 'i')
+        .replace(/[ôö]/g, 'o')
+        .replace(/[ûü]/g, 'u')
+        .replace(/[ç]/g, 'c')
+        .replace(/\s+/g, '-')  // Remplace les espaces par des tirets
+        .replace(/[^a-z0-9-]/g, '')  // Supprime tous les caractères non alphanumériques sauf les tirets
+        .replace(/-+/g, '-')  // Remplace les séquences de tirets par un seul tiret
+        .replace(/^-|-$/g, '');  // Supprime les tirets au début et à la fin
+}
+
 // Fonction pour formater le nom de l'exercice
 function formatExerciseName(name) {
     return name
@@ -899,16 +886,6 @@ function formatExerciseName(name) {
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
 }
-
-// Fermeture de la modale vidéo
-const closeVideoBtn = videoModal.querySelector('.close-video');
-closeVideoBtn.addEventListener('click', () => {
-    videoModal.classList.remove('visible');
-    // Arrête toutes les vidéos en cours
-    videoModal.querySelectorAll('iframe').forEach(iframe => {
-        iframe.src = iframe.src;
-    });
-}); 
 
 // Fonction pour générer une nouvelle séance
 function generateNextWorkout() {
@@ -1010,14 +987,14 @@ function generateNextWorkout() {
             <div class="exercise-details">
                 <h3>${exercise.name} - ${exercise.duration} min</h3>
                 <div class="exercise-steps">
-                    ${exercise.details.map(step => `
+                    ${exercise.details ? exercise.details.map(step => `
                         <div class="exercise-step">
                             <span class="step-name">${step.name}</span>
                             <span class="step-duration">${step.duration}</span>
                         </div>
-                    `).join('')}
+                    `).join('') : ''}
                 </div>
-                <button class="btn-secondary show-video" data-exercise="${exercise.id}">
+                <button class="btn-secondary show-video">
                     <i class="fas fa-play-circle"></i> Voir la démonstration
                 </button>
             </div>
@@ -1030,11 +1007,13 @@ function generateNextWorkout() {
     `).join('');
 
     // Ajouter les gestionnaires d'événements pour les boutons vidéo
-    exerciseList.querySelectorAll('.show-video').forEach(button => {
+    const videoButtons = exerciseList.querySelectorAll('.show-video');
+    videoButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             e.stopPropagation();
-            const exerciseType = button.closest('.exercise-item').dataset.exercise;
-            const exerciseDetails = button.closest('.exercise-item').querySelector('.exercise-steps').children;
+            const exerciseItem = button.closest('.exercise-item');
+            const exerciseType = exerciseItem.dataset.exercise;
+            const exerciseDetails = exerciseItem.querySelector('.exercise-steps').children;
             
             const videoList = videoModal.querySelector('.video-list');
             videoList.innerHTML = '';
@@ -1043,7 +1022,8 @@ function generateNextWorkout() {
             Array.from(exerciseDetails).forEach(step => {
                 const stepName = step.querySelector('.step-name').textContent;
                 const stepId = convertToId(stepName);
-                const videoUrl = exerciseVideos[exerciseType][stepId];
+                console.log('Recherche de vidéo pour:', stepId, 'dans la catégorie:', exerciseType);
+                const videoUrl = exerciseVideos[exerciseType] ? exerciseVideos[exerciseType][stepId] : null;
                 
                 if (videoUrl) {
                     const videoWrapper = document.createElement('div');
@@ -1152,3 +1132,35 @@ Cela validera votre séance et mettra à jour vos statistiques.`;
         });
     }
 }); 
+
+// Base de données des vidéos de démonstration
+const exerciseVideos = {
+    warmup: {
+        'marche-rapide': 'https://www.youtube.com/embed/HiruV6NOxZw',
+        'rotations-des-bras': 'https://www.youtube.com/embed/139pHqVn5xk',
+        'jumping-jacks': 'https://www.youtube.com/embed/c4DAnQ6DtF8',
+        'montees-de-genoux': 'https://www.youtube.com/embed/8opcm4D0QJc',
+        'etirements-dynamiques': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
+    },
+    hiit1: {
+        'burpees': 'https://www.youtube.com/embed/TU8QYVW0gDU',
+        'mountain-climbers': 'https://www.youtube.com/embed/nmwgirgXLYM',
+        'squats-sautes': 'https://www.youtube.com/embed/72BSZupb-1I',
+        'jumping-jacks': 'https://www.youtube.com/embed/c4DAnQ6DtF8',
+        'planche': 'https://www.youtube.com/embed/ASdvN_XEl_c'
+    },
+    hiit2: {
+        'fentes-sautees': 'https://www.youtube.com/embed/ZZZoCNMU48U',
+        'high-knees': 'https://www.youtube.com/embed/ZxJR4ygUJ8A',
+        'jump-rope': 'https://www.youtube.com/embed/u3zgHI8QnqE',
+        'dips': 'https://www.youtube.com/embed/v9LABVJzv8A',
+        'superman': 'https://www.youtube.com/embed/z6PJMT2y8GQ'
+    },
+    cooldown: {
+        'marche-lente': 'https://www.youtube.com/embed/HiruV6NOxZw',
+        'etirements-quadriceps': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
+        'etirements-ischio-jambiers': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
+        'etirements-epaules': 'https://www.youtube.com/embed/139pHqVn5xk',
+        'relaxation': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
+    }
+}; 
