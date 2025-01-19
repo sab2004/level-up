@@ -888,7 +888,71 @@ closeVideoBtn.addEventListener('click', () => {
     });
 }); 
 
-// Gestion du bouton "Séance terminée"
+// Fonction pour générer une nouvelle séance
+function generateNextWorkout() {
+    const workoutTypes = [
+        {
+            type: 'Cardio',
+            duration: 45,
+            exercises: [
+                { name: 'Échauffement cardio', duration: 10 },
+                { name: 'Course/Marche par intervalles', duration: 20 },
+                { name: 'Vélo stationnaire', duration: 10 },
+                { name: 'Retour au calme', duration: 5 }
+            ]
+        },
+        {
+            type: 'Renforcement',
+            duration: 45,
+            exercises: [
+                { name: 'Échauffement dynamique', duration: 10 },
+                { name: 'Circuit haut du corps', duration: 15 },
+                { name: 'Circuit bas du corps', duration: 15 },
+                { name: 'Étirements', duration: 5 }
+            ]
+        },
+        {
+            type: 'Yoga Fitness',
+            duration: 45,
+            exercises: [
+                { name: 'Respiration et centrage', duration: 5 },
+                { name: 'Salutations au soleil', duration: 10 },
+                { name: 'Postures de force', duration: 20 },
+                { name: 'Relaxation guidée', duration: 10 }
+            ]
+        }
+    ];
+
+    // Exclure le type de séance actuel
+    const currentWorkout = document.querySelector('.workout-type span').textContent.split(' - ')[0];
+    const availableWorkouts = workoutTypes.filter(workout => workout.type !== currentWorkout);
+    
+    // Sélectionner aléatoirement une nouvelle séance
+    const nextWorkout = availableWorkouts[Math.floor(Math.random() * availableWorkouts.length)];
+    
+    // Mettre à jour l'affichage
+    const workoutTypeElement = document.querySelector('.workout-type span');
+    workoutTypeElement.textContent = `${nextWorkout.type} - ${nextWorkout.duration} minutes`;
+    
+    // Mettre à jour la liste des exercices
+    const exerciseList = document.querySelector('.exercise-list');
+    exerciseList.innerHTML = nextWorkout.exercises.map(exercise => `
+        <li class="exercise-item" data-exercise="${exercise.name.toLowerCase().replace(/\s+/g, '-')}">
+            <div class="exercise-details">
+                <h3>${exercise.name} - ${exercise.duration} min</h3>
+                <button class="btn-secondary show-video">
+                    <i class="fas fa-play-circle"></i> Voir la démonstration
+                </button>
+            </div>
+            <div class="exercise-header">
+                <span class="exercise-name">${exercise.name}</span>
+                <span class="exercise-duration">${exercise.duration} min</span>
+            </div>
+        </li>
+    `).join('');
+}
+
+// Modification de la fonction completeWorkout pour générer une nouvelle séance
 document.addEventListener('DOMContentLoaded', function() {
     const completeWorkoutButton = document.querySelector('.workout-list + .btn-primary');
     if (completeWorkoutButton) {
@@ -915,7 +979,7 @@ Cela validera votre séance et mettra à jour vos statistiques.`;
                 const caloriesElement = document.querySelector('.progress-stats .stat:last-child .stat-value');
                 if (caloriesElement) {
                     const currentCalories = parseInt(caloriesElement.textContent.replace(',', ''));
-                    const newCalories = currentCalories + 400; // 400 calories estimées pour la séance HIIT
+                    const newCalories = currentCalories + 400;
                     caloriesElement.textContent = newCalories.toLocaleString();
                 }
 
@@ -940,13 +1004,17 @@ Cela validera votre séance et mettra à jour vos statistiques.`;
                     activityList.insertBefore(newActivity, activityList.firstChild);
                 }
 
-                // Désactivation du bouton
-                completeWorkoutButton.disabled = true;
-                completeWorkoutButton.style.opacity = '0.5';
-                completeWorkoutButton.innerHTML = '<i class="fas fa-check"></i> Séance terminée !';
+                // Générer une nouvelle séance
+                generateNextWorkout();
 
-                // Message de félicitations
-                alert('Félicitations ! Vous avez terminé votre séance d\'entraînement. 💪');
+                // Réactiver le bouton et mettre à jour son apparence
+                completeWorkoutButton.disabled = false;
+                completeWorkoutButton.style.opacity = '1';
+                completeWorkoutButton.innerHTML = '<i class="fas fa-check-circle"></i> Séance terminée';
+
+                // Message de félicitations avec information sur la prochaine séance
+                const workoutType = document.querySelector('.workout-type span').textContent;
+                alert(`Félicitations ! Vous avez terminé votre séance d'entraînement. 💪\n\nVotre prochaine séance sera : ${workoutType}`);
             }
         });
     }
