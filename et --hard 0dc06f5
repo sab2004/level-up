@@ -1,0 +1,68 @@
+[33m559925e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m style: suppression de la duplication des titres d'exercices
+[33mc8278a5[m style: suppression de la duplication du titre des exercices
+[33m90cf539[m style: correction de l'affichage des exercices pour correspondre au format souhaité
+[33m14161f9[m style: modification de l'affichage des exercices en format liste
+[33m85d079f[m fix: affichage horizontal des exercices dans les séances
+[33mfe2c198[m Fix: uniformisation de l'affichage des exercices de yoga avec le style HIIT
+[33md24a505[m Feat: ajout d'une séance de yoga fitness alternant avec HIIT et cardio
+[33mf431a9e[m Fix: uniformisation de la présentation des exercices de cardio avec le style HIIT
+[33m39c7484[m Fix: uniformisation de la présentation des exercices de cardio avec le style HIIT
+[33m77f7229[m Feat: ajout d'une séance de cardio alternant avec la séance HIIT
+[33m213433f[m Fix: suppression des boutons 'Voir la démonstration' du HTML
+[33m0deb618[m Fix: suppression de la fonctionnalité des vidéos de démonstration
+[33m3a94e0b[m Fix: mise à jour des IDs des vidéos d'échauffement pour correspondre aux noms exacts
+[33m9c82376[m Fix: ajout d'une vérification de sécurité pour les éléments step-name
+[33m5e673b0[m Fix: ajout des vidéos pour tous les types d'exercices
+[33m7a513fd[m Fix: correction de la condition pour l'affichage des vidéos d'échauffement
+[33mebecb85[m Feat: activation du bouton 'voir la démonstration' pour l'échauffement dynamique
+[33m0dc06f5[m Feat: conservation uniquement de la séance HIIT 45 min
+[33md202461[m Fix: correction de l'affichage des exercices dans le style HIIT
+[33m9e38920[m feat: ajout des vidéos de démonstration pour la séance de renforcement
+[33m3cae6fe[m feat: modification de la structure HTML pour afficher les exercices en une seule colonne
+[33mea57339[m fix: correction du sélecteur pour le bouton Séance terminée
+[33m7203380[m feat: standardisation de la structure des séances avec échauffement détaillé
+[33m9b2768c[m fix: correction de l'affichage des vidéos de démonstration avec la modale
+[33mbabe4d6[m fix: correction de l'affichage des vidéos de démonstration
+[33m78c71a7[m feat: ajout de la fonction convertToId pour la gestion des vidéos de démonstration
+[33mbca9a11[m feat: modification de l'affichage des vidéos de démonstration avec un seul bouton par section
+[33m81a0d6a[m feat: retour au format HIIT avec vidéos de démonstration pour chaque exercice
+[33md60eafa[m feat: ajout d'exercices détaillés pour la séance de cardio avec descriptions précises
+[33m7f20233[m feat: ajout des vidéos de démonstration pour les nouveaux types de séances (Cardio, Renforcement, Yoga)
+[33m7c7fdc4[m feat: ajout de la génération automatique d'une nouvelle séance après avoir terminé la séance actuelle
+[33mdce752f[m feat: ajout de l'attribut data-stat-type pour cibler le poids perdu
+[33mdea3847[m feat: mise à jour du poids perdu dans la section Progression
+[33md0f1422[m fix: correction du sélecteur pour la mise à jour des séances complétées
+[33m879a73d[m fix: correction de la mise à jour des calories brûlées dans la section Progression
+[33mbcac1ff[m feat: réinitialisation des statistiques de progression à zéro
+[33m43cce51[m feat: amélioration du message de confirmation pour la séance terminée
+[33mdea0aa1[m feat: ajout du bouton Séance terminée
+[33m6407b43[m feat: ajout du graphique d'évolution du poids avec mise à jour automatique
+[33m6cb06d9[m feat: déplacement de la section Suivi du Poids sous le Programme de Perte de Poids
+[33m9e62650[m feat: déplacement de la section Programme de Perte de Poids en haut du dashboard
+[33mbed9057[m feat: modification de l'affichage des pas quotidiens en attente de connexion de la montre
+[33m890a661[m feat: modification de l'affichage de la distance parcourue en attente de connexion de la montre
+[33m82168b4[m feat: modification de l'affichage des calories brûlées en attente de connexion de la montre
+[33mecb5205[m feat: modification de l'affichage de la fréquence cardiaque en attente de connexion de la montre
+[33m2c931d4[m feat: ajout de l'attribut data-type='weight' à la carte de résumé du poids
+[33md85025c[m fix: correction de l'affichage du poids dans la bonne carte de résumé
+[33mcb9ca22[m feat: suppression du bouton démarrer la séance et de la modale d'entraînement
+[33m4eb59e9[m feat: amélioration de la structure des exercices avec une meilleure présentation des détails et des durées
+[33m83a48f9[m feat: amélioration de l'interface des exercices avec disparition du titre lors de l'affichage des détails
+[33m8ef6946[m fix: correction de l'affichage des détails des exercices et du bouton de démonstration au clic
+[33m788c9d3[m fix: correction de la mise en page des exercices pour un affichage plus compact et équilibré
+[33me958474[m style: amélioration de la mise en page des exercices avec une meilleure présentation des titres et détails
+[33mae95db5[m style: amélioration du design des exercices et des boutons de démonstration
+[33ma6c3c4e[m fix: correction de l'affichage des détails des exercices et de la modale d'entraînement
+[33m1c1b281[m fix: amélioration de l'interaction avec les détails des exercices et la modale vidéo
+[33m0eb3f52[m fix: correction de l'affichage des détails des exercices et ajout de la gestion des vidéos de démonstration
+[33m3006eb5[m fix: correction des styles pour l'affichage des détails des exercices et du bouton de démonstration
+[33m5895497[m feat: ajout des vidéos de démonstration pour chaque exercice du programme HIIT
+[33m3d9b047[m feat: ajout des détails et démonstrations pour chaque exercice du programme HIIT
+[33m1d5e441[m fix: correction de l'affichage de la modale d'entraînement avec styles et positionnement
+[33mad1b0ab[m feat: ajout du programme de perte de poids dans le dashboard avec séances HIIT, plan nutritionnel et suivi de progression
+[33m811f623[m feat: ajout de la redirection vers le dashboard pour les utilisateurs connectés sur la page perte de poids
+[33md8cc2e3[m style: amélioration du menu mobile sans affecter la version desktop
+[33m2330ae5[m fix: amélioration de la détection de la page index.html et ajout de logs pour déboguer l'ajout de l'onglet Tableau de bord
+[33m8260f14[m feat: ajout dynamique de l'onglet Tableau de bord dans la navigation quand l'utilisateur est connecté
+[33m72cf5a1[m fix: suppression de la redirection automatique vers dashboard.html
+[33m13ce04b[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m feat: initialisation du projet FitCoach

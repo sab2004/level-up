@@ -2187,3 +2187,144 @@ footer {
         transform: translateY(0);
     }
 } 
+
+/* Styles pour la séance d'aujourd'hui */
+.seance-aujourdhui {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.seance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.seance-header h2 {
+    color: var(--dark-color);
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.seance-type {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.seance-content {
+    margin-bottom: 2rem;
+}
+
+.exercise-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.exercise-item {
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.exercise-item:hover {
+    transform: translateX(5px);
+}
+
+.exercise-details {
+    padding: 1.5rem;
+}
+
+.exercise-details h3 {
+    color: var(--dark-color);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.exercise-steps {
+    margin: 0;
+    padding: 0;
+}
+
+.exercise-steps li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s ease;
+}
+
+.exercise-steps li:hover {
+    background-color: #fff;
+}
+
+.step-name {
+    color: var(--dark-color);
+    font-weight: 500;
+}
+
+.step-duration {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.seance-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.start-workout {
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.start-workout:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(252, 4, 4, 0.3);
+}
+
+@media (max-width: 768px) {
+    .seance-aujourdhui {
+        padding: 1.5rem;
+    }
+
+    .seance-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .exercise-steps li {
+        padding: 0.8rem;
+    }
+
+    .step-duration {
+        padding: 0.4rem 0.8rem;
+    }
+} 
