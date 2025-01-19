@@ -791,55 +791,33 @@ videoModal.className = 'modal video-modal';
 
 // Base de données des vidéos de démonstration
 const exerciseVideos = {
-    'warmup': {
+    warmup: {
         'marche-rapide': 'https://www.youtube.com/embed/HiruV6NOxZw',
-        'rotations-bras': 'https://www.youtube.com/embed/139pV9pXqqk',
+        'rotations-bras': 'https://www.youtube.com/embed/139pHqVn5xk',
         'jumping-jacks': 'https://www.youtube.com/embed/c4DAnQ6DtF8',
-        'rotations-bassin': 'https://www.youtube.com/embed/66RJz0PXwVk',
         'montees-genoux': 'https://www.youtube.com/embed/8opcm4D0QJc',
         'etirements-dynamiques': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
     },
-    'cardio': {
-        'echauffement-cardio': 'https://www.youtube.com/embed/HiruV6NOxZw',
-        'circuit-cardio': 'https://www.youtube.com/embed/TU8QYVW0gDU',
-        'cardio-place': 'https://www.youtube.com/embed/72BSZupb-1I',
-        'cardio-explosif': 'https://www.youtube.com/embed/ZZZoCNMU48U',
-        'retour-calme': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
-    },
-    'renforcement': {
-        'echauffement-dynamique': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
-        'circuit-haut-corps': 'https://www.youtube.com/embed/IODxDxX7oi4',
-        'circuit-bas-corps': 'https://www.youtube.com/embed/72BSZupb-1I',
-        'etirements': 'https://www.youtube.com/embed/FDwpEdxZ4H4'
-    },
-    'yoga': {
-        'respiration-centrage': 'https://www.youtube.com/embed/0H2L4KNGRqI',
-        'salutations-soleil': 'https://www.youtube.com/embed/73sjOu0g58M',
-        'postures-force': 'https://www.youtube.com/embed/b1H3xO3x_Js',
-        'relaxation-guidee': 'https://www.youtube.com/embed/0H2L4KNGRqI'
-    },
-    'hiit1': {
+    hiit1: {
         'burpees': 'https://www.youtube.com/embed/TU8QYVW0gDU',
         'mountain-climbers': 'https://www.youtube.com/embed/nmwgirgXLYM',
         'squats-sautes': 'https://www.youtube.com/embed/72BSZupb-1I',
-        'pompes': 'https://www.youtube.com/embed/IODxDxX7oi4',
         'jumping-jacks': 'https://www.youtube.com/embed/c4DAnQ6DtF8',
         'planche': 'https://www.youtube.com/embed/ASdvN_XEl_c'
     },
-    'hiit2': {
-        'fentes-sautees': 'https://www.youtube.com/embed/DrI8CfEO4H0',
-        'crunchs': 'https://www.youtube.com/embed/Xyd_fa5zoEU',
-        'high-knees': 'https://www.youtube.com/embed/ZZZoCNMU48U',
-        'dips': 'https://www.youtube.com/embed/2z8JmcrW-As',
+    hiit2: {
+        'fentes-sautees': 'https://www.youtube.com/embed/ZZZoCNMU48U',
+        'high-knees': 'https://www.youtube.com/embed/ZxJR4ygUJ8A',
         'jump-rope': 'https://www.youtube.com/embed/u3zgHI8QnqE',
+        'dips': 'https://www.youtube.com/embed/v9LABVJzv8A',
         'superman': 'https://www.youtube.com/embed/z6PJMT2y8GQ'
     },
-    'cooldown': {
+    cooldown: {
         'marche-lente': 'https://www.youtube.com/embed/HiruV6NOxZw',
-        'etirements-quadriceps': 'https://www.youtube.com/embed/6jVJi7qwpfY',
-        'etirements-ischio': 'https://www.youtube.com/embed/FDwpEdxZ4H4',
-        'etirements-epaules': 'https://www.youtube.com/embed/bP2XL6ebUeM',
-        'relaxation': 'https://www.youtube.com/embed/0H2L4KNGRqI'
+        'etirements-quadriceps': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
+        'etirements-ischio': 'https://www.youtube.com/embed/nPHfEnZD1Wk',
+        'etirements-epaules': 'https://www.youtube.com/embed/139pHqVn5xk',
+        'relaxation': 'https://www.youtube.com/embed/nPHfEnZD1Wk'
     }
 };
 
@@ -916,34 +894,52 @@ function generateNextWorkout() {
             duration: 45,
             exercises: [
                 { 
-                    name: 'Échauffement cardio', 
-                    id: 'echauffement-cardio', 
-                    duration: 8,
-                    details: 'Marche rapide (2min), Jumping Jacks (2min), Montées de genoux (2min), Talons-fesses (2min)'
+                    name: 'Échauffement dynamique', 
+                    id: 'warmup',
+                    duration: 10,
+                    details: [
+                        { name: 'Marche rapide', id: 'marche-rapide', duration: '2 min' },
+                        { name: 'Rotations des bras', id: 'rotations-bras', duration: '2 min' },
+                        { name: 'Jumping Jacks', id: 'jumping-jacks', duration: '2 min' },
+                        { name: 'Montées de genoux', id: 'montees-genoux', duration: '2 min' },
+                        { name: 'Étirements dynamiques', id: 'etirements-dynamiques', duration: '2 min' }
+                    ]
                 },
                 { 
-                    name: 'Circuit cardio intense', 
-                    id: 'circuit-cardio', 
+                    name: 'Circuit HIIT #1', 
+                    id: 'hiit1',
                     duration: 15,
-                    details: '3 tours de : Burpees (30s), Mountain Climbers (30s), Jumping Jacks (30s), High Knees (30s), Récupération (30s)'
+                    details: [
+                        { name: 'Burpees', id: 'burpees', duration: '30s/30s repos' },
+                        { name: 'Mountain Climbers', id: 'mountain-climbers', duration: '30s/30s repos' },
+                        { name: 'Squats sautés', id: 'squats-sautes', duration: '30s/30s repos' },
+                        { name: 'Jumping Jacks', id: 'jumping-jacks', duration: '30s/30s repos' },
+                        { name: 'Planche', id: 'planche', duration: '30s/30s repos' }
+                    ]
                 },
                 { 
-                    name: 'Cardio sur place', 
-                    id: 'cardio-place', 
-                    duration: 12,
-                    details: 'Jumping Squats (30s/30s repos), Jumping Lunges (30s/30s repos), Step-Ups (30s/30s repos), Skipping (30s/30s repos)'
-                },
-                { 
-                    name: 'Cardio explosif', 
-                    id: 'cardio-explosif', 
-                    duration: 5,
-                    details: 'Sprint sur place (20s), repos (10s) - Répéter 10 fois'
+                    name: 'Circuit HIIT #2', 
+                    id: 'hiit2',
+                    duration: 15,
+                    details: [
+                        { name: 'Fentes sautées', id: 'fentes-sautees', duration: '30s/30s repos' },
+                        { name: 'High Knees', id: 'high-knees', duration: '30s/30s repos' },
+                        { name: 'Jump Rope', id: 'jump-rope', duration: '30s/30s repos' },
+                        { name: 'Dips', id: 'dips', duration: '30s/30s repos' },
+                        { name: 'Superman', id: 'superman', duration: '30s/30s repos' }
+                    ]
                 },
                 { 
                     name: 'Retour au calme', 
-                    id: 'retour-calme', 
+                    id: 'cooldown',
                     duration: 5,
-                    details: 'Marche sur place, étirements dynamiques légers, respiration profonde'
+                    details: [
+                        { name: 'Marche lente', id: 'marche-lente', duration: '1 min' },
+                        { name: 'Étirements quadriceps', id: 'etirements-quadriceps', duration: '1 min' },
+                        { name: 'Étirements ischio-jambiers', id: 'etirements-ischio', duration: '1 min' },
+                        { name: 'Étirements épaules', id: 'etirements-epaules', duration: '1 min' },
+                        { name: 'Relaxation', id: 'relaxation', duration: '1 min' }
+                    ]
                 }
             ]
         },
@@ -985,13 +981,20 @@ function generateNextWorkout() {
     // Mettre à jour la liste des exercices
     const exerciseList = document.querySelector('.exercise-list');
     exerciseList.innerHTML = nextWorkout.exercises.map(exercise => `
-        <li class="exercise-item" data-exercise="${exercise.id}" data-category="${nextWorkout.category}">
+        <li class="exercise-item" data-exercise="${exercise.id}">
             <div class="exercise-details">
                 <h3>${exercise.name} - ${exercise.duration} min</h3>
-                <p class="exercise-description">${exercise.details || ''}</p>
-                <button class="btn-secondary show-video">
-                    <i class="fas fa-play-circle"></i> Voir la démonstration
-                </button>
+                <div class="exercise-steps">
+                    ${exercise.details.map(step => `
+                        <div class="exercise-step">
+                            <span class="step-name">${step.name}</span>
+                            <span class="step-duration">${step.duration}</span>
+                            <button class="btn-secondary show-video" data-exercise="${step.id}">
+                                <i class="fas fa-play-circle"></i> Voir la démonstration
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
             <div class="exercise-header">
                 <span class="exercise-name">${exercise.name}</span>
@@ -1001,14 +1004,13 @@ function generateNextWorkout() {
         </li>
     `).join('');
 
-    // Ajouter les gestionnaires d'événements pour les nouveaux boutons vidéo
+    // Ajouter les gestionnaires d'événements pour les boutons vidéo
     exerciseList.querySelectorAll('.show-video').forEach(button => {
         button.addEventListener('click', (e) => {
             e.stopPropagation();
-            const exerciseItem = button.closest('.exercise-item');
-            const category = exerciseItem.dataset.category;
-            const exerciseId = exerciseItem.dataset.exercise;
-            const videoUrl = exerciseVideos[category][exerciseId];
+            const exerciseId = button.dataset.exercise;
+            const exerciseType = button.closest('.exercise-item').dataset.exercise;
+            const videoUrl = exerciseVideos[exerciseType][exerciseId];
             
             const videoList = videoModal.querySelector('.video-list');
             videoList.innerHTML = '';
