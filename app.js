@@ -1488,4 +1488,318 @@ document.addEventListener('DOMContentLoaded', function() {
         // Redirection vers le tableau de bord
         window.location.href = 'dashboard.html';
     });
-}); 
+});
+
+function genererExercicesPersonnalises(objectifs, experience, typesEntrainement) {
+    const exercices = {
+        debutant: {
+            musculation: [
+                { nom: 'Pompes sur genoux', series: '3', repetitions: '10-12' },
+                { nom: 'Squats simples', series: '3', repetitions: '12-15' },
+                { nom: 'Fentes statiques', series: '2', repetitions: '10 par jambe' },
+                { nom: 'Crunchs', series: '3', repetitions: '15' }
+            ],
+            cardio: [
+                { nom: 'Marche rapide', duree: '20-30 minutes', intensite: 'modérée' },
+                { nom: 'Vélo stationnaire', duree: '15-20 minutes', intensite: 'faible à modérée' }
+            ],
+            hiit: [
+                { nom: 'Jumping jacks', duree: '30 secondes', repos: '30 secondes' },
+                { nom: 'Mountain climbers', duree: '30 secondes', repos: '30 secondes' }
+            ]
+        },
+        intermediaire: {
+            musculation: [
+                { nom: 'Pompes classiques', series: '4', repetitions: '12-15' },
+                { nom: 'Squats avec haltères', series: '4', repetitions: '10-12' },
+                { nom: 'Soulevé de terre roumain', series: '3', repetitions: '12' },
+                { nom: 'Développé épaules', series: '3', repetitions: '12' }
+            ],
+            cardio: [
+                { nom: 'Course à pied', duree: '30-40 minutes', intensite: 'modérée à élevée' },
+                { nom: 'Rameur', duree: '20-25 minutes', intensite: 'modérée' }
+            ],
+            hiit: [
+                { nom: 'Burpees', duree: '40 secondes', repos: '20 secondes' },
+                { nom: 'Sprint sur place', duree: '40 secondes', repos: '20 secondes' }
+            ]
+        },
+        avance: {
+            musculation: [
+                { nom: 'Pompes diamant', series: '4', repetitions: '15-20' },
+                { nom: 'Squats sautés', series: '4', repetitions: '15' },
+                { nom: 'Tractions', series: '4', repetitions: '8-10' },
+                { nom: 'Dips', series: '4', repetitions: '12-15' }
+            ],
+            cardio: [
+                { nom: 'Intervals sprint', duree: '30-40 minutes', intensite: 'élevée' },
+                { nom: 'Circuit training', duree: '45 minutes', intensite: 'très élevée' }
+            ],
+            hiit: [
+                { nom: 'Burpees avec pompe', duree: '45 secondes', repos: '15 secondes' },
+                { nom: 'Box jumps', duree: '45 secondes', repos: '15 secondes' }
+            ]
+        }
+    };
+
+    const planExercices = [];
+    const niveau = experience;
+    
+    if (objectifs.includes('gain_muscle')) {
+        planExercices.push(...exercices[niveau].musculation);
+        if (typesEntrainement.includes('cardio')) {
+            planExercices.push(exercices[niveau].cardio[0]);
+        }
+    } else if (objectifs.includes('perte_poids')) {
+        if (typesEntrainement.includes('hiit')) {
+            planExercices.push(...exercices[niveau].hiit);
+        }
+        planExercices.push(...exercices[niveau].cardio.slice(0, 2));
+        planExercices.push(...exercices[niveau].musculation.slice(0, 2));
+    } else {
+        // Pour l'amélioration de la condition physique générale
+        planExercices.push(...exercices[niveau].musculation.slice(0, 2));
+        planExercices.push(exercices[niveau].cardio[0]);
+        if (typesEntrainement.includes('hiit')) {
+            planExercices.push(exercices[niveau].hiit[0]);
+        }
+    }
+
+    return planExercices;
+}
+
+// Mise à jour de la fonction genererPlanPersonnalise
+function genererPlanPersonnalise(formData) {
+    const plan = {
+        sportif: {
+            frequence: '',
+            typesEntrainement: [],
+            exercices: [],
+            dureeSeances: '',
+            intensite: '',
+            recommandations: []
+        },
+        nutritionnel: {
+            nombreRepas: '',
+            repartitionMacros: {},
+            alimentsRecommandes: [],
+            alimentsAEviter: [],
+            apportCalorique: '',
+            recommandations: []
+        }
+    };
+
+    // Analyse de l'objectif principal
+    const objectifs = formData.objectifsFitness.objectifsPrincipaux;
+    const experience = formData.objectifsFitness.experience;
+    const niveauActivite = formData.habitudesVie.niveauActivite;
+    
+    // Détermination de la fréquence d'entraînement
+    switch(formData.objectifsFitness.frequenceEntrainement) {
+        case '1-2':
+            plan.sportif.frequence = 'Programme adapté pour 2 séances par semaine';
+            plan.sportif.dureeSeances = '45-60 minutes';
+            break;
+        case '3-4':
+            plan.sportif.frequence = 'Programme optimisé pour 3-4 séances par semaine';
+            plan.sportif.dureeSeances = '60-75 minutes';
+            break;
+        case '5-6':
+            plan.sportif.frequence = 'Programme intensif sur 5-6 jours';
+            plan.sportif.dureeSeances = '45-60 minutes';
+            break;
+        case '7':
+            plan.sportif.frequence = 'Programme quotidien avec alternance intensité';
+            plan.sportif.dureeSeances = '30-45 minutes';
+            break;
+    }
+
+    // Adaptation de l'intensité selon l'expérience
+    if (experience === 'debutant') {
+        plan.sportif.intensite = 'Faible à modérée';
+        plan.sportif.recommandations.push('Commencer progressivement', 'Focus sur la technique');
+    } else if (experience === 'intermediaire') {
+        plan.sportif.intensite = 'Modérée à élevée';
+        plan.sportif.recommandations.push('Augmentation progressive des charges', 'Variation des exercices');
+    } else {
+        plan.sportif.intensite = 'Élevée à très élevée';
+        plan.sportif.recommandations.push('Périodisation avancée', 'Techniques d\'intensification');
+    }
+
+    // Calcul des besoins caloriques
+    const poids = parseFloat(formData.informationsGenerales.poids);
+    const taille = parseFloat(formData.informationsGenerales.taille) / 100;
+    const age = parseInt(formData.informationsGenerales.age);
+    const sexe = formData.informationsGenerales.sexe;
+    
+    // Calcul du métabolisme de base (formule de Mifflin-St Jeor)
+    let MB = sexe === 'homme' 
+        ? (10 * poids) + (6.25 * taille * 100) - (5 * age) + 5
+        : (10 * poids) + (6.25 * taille * 100) - (5 * age) - 161;
+
+    // Facteur d'activité
+    let facteurActivite = niveauActivite === 'sedentaire' ? 1.2 
+        : niveauActivite === 'actif' ? 1.5 
+        : 1.7;
+
+    let caloriesJournalieres = Math.round(MB * facteurActivite);
+
+    // Ajustement selon l'objectif
+    if (objectifs.includes('perte_poids')) {
+        caloriesJournalieres = Math.round(caloriesJournalieres * 0.8);
+        plan.nutritionnel.repartitionMacros = {
+            proteines: '30%',
+            glucides: '40%',
+            lipides: '30%'
+        };
+    } else if (objectifs.includes('gain_muscle')) {
+        caloriesJournalieres = Math.round(caloriesJournalieres * 1.1);
+        plan.nutritionnel.repartitionMacros = {
+            proteines: '25%',
+            glucides: '55%',
+            lipides: '20%'
+        };
+    } else {
+        plan.nutritionnel.repartitionMacros = {
+            proteines: '20%',
+            glucides: '50%',
+            lipides: '30%'
+        };
+    }
+
+    plan.nutritionnel.apportCalorique = `${caloriesJournalieres} kcal/jour`;
+
+    // Recommandations nutritionnelles selon le régime
+    const regime = formData.regimeAlimentaire.type;
+    if (regime === 'vegetarien') {
+        plan.nutritionnel.alimentsRecommandes = [
+            'Légumineuses', 'Œufs', 'Produits laitiers', 
+            'Tofu', 'Quinoa', 'Fruits secs'
+        ];
+    } else if (regime === 'vegan') {
+        plan.nutritionnel.alimentsRecommandes = [
+            'Légumineuses', 'Tofu', 'Seitan', 
+            'Graines de chia', 'Quinoa', 'Fruits secs'
+        ];
+    } else {
+        plan.nutritionnel.alimentsRecommandes = [
+            'Viandes maigres', 'Poissons', 'Œufs',
+            'Légumineuses', 'Fruits et légumes', 'Céréales complètes'
+        ];
+    }
+
+    // Génération des exercices personnalisés
+    plan.sportif.exercices = genererExercicesPersonnalises(
+        objectifs,
+        experience,
+        formData.objectifsFitness.typesEntrainement
+    );
+
+    // Ajout des recommandations nutritionnelles détaillées
+    plan.nutritionnel.recommandations = genererRecommandationsNutritionnelles(formData, caloriesJournalieres);
+
+    return plan;
+}
+
+function genererRecommandationsNutritionnelles(formData, caloriesJournalieres) {
+    const recommandations = [];
+    const objectifs = formData.objectifsFitness.objectifsPrincipaux;
+    const regime = formData.regimeAlimentaire.type;
+    const nbRepas = formData.regimeAlimentaire.nombreRepas;
+
+    // Répartition des calories par repas
+    const repartitionCalories = {
+        '1-2': [
+            { repas: 'Repas 1', pourcentage: 60 },
+            { repas: 'Repas 2', pourcentage: 40 }
+        ],
+        '3': [
+            { repas: 'Petit-déjeuner', pourcentage: 30 },
+            { repas: 'Déjeuner', pourcentage: 40 },
+            { repas: 'Dîner', pourcentage: 30 }
+        ],
+        '4-5': [
+            { repas: 'Petit-déjeuner', pourcentage: 25 },
+            { repas: 'Collation matin', pourcentage: 15 },
+            { repas: 'Déjeuner', pourcentage: 30 },
+            { repas: 'Collation après-midi', pourcentage: 10 },
+            { repas: 'Dîner', pourcentage: 20 }
+        ]
+    };
+
+    // Calcul des calories par repas
+    const caloriesParRepas = repartitionCalories[nbRepas].map(repas => ({
+        ...repas,
+        calories: Math.round((caloriesJournalieres * repas.pourcentage) / 100)
+    }));
+
+    recommandations.push({
+        titre: 'Répartition des calories',
+        details: caloriesParRepas
+    });
+
+    // Recommandations spécifiques selon l'objectif
+    if (objectifs.includes('perte_poids')) {
+        recommandations.push({
+            titre: 'Conseils pour la perte de poids',
+            points: [
+                'Privilégier les aliments à faible densité calorique',
+                'Éviter les sucres raffinés et les graisses saturées',
+                'Boire beaucoup d\'eau (2L minimum par jour)',
+                'Manger lentement et mastiquer longuement',
+                'Éviter de manger 3h avant le coucher'
+            ]
+        });
+    } else if (objectifs.includes('gain_muscle')) {
+        recommandations.push({
+            titre: 'Conseils pour la prise de masse',
+            points: [
+                'Augmenter progressivement l\'apport calorique',
+                'Consommer des protéines à chaque repas',
+                'Privilégier les glucides complexes',
+                'Manger dans l\'heure qui suit l\'entraînement',
+                'Ne pas négliger les bonnes graisses'
+            ]
+        });
+    }
+
+    // Recommandations selon le régime alimentaire
+    const recommandationsRegime = {
+        vegetarien: {
+            titre: 'Conseils pour régime végétarien',
+            points: [
+                'Combiner les sources de protéines végétales',
+                'Surveiller l\'apport en vitamine B12',
+                'Consommer des légumineuses quotidiennement',
+                'Inclure des œufs et produits laitiers pour les protéines'
+            ]
+        },
+        vegan: {
+            titre: 'Conseils pour régime vegan',
+            points: [
+                'Supplémenter en vitamine B12',
+                'Varier les sources de protéines végétales',
+                'Consommer des aliments enrichis en calcium',
+                'Inclure des graines de chia et de lin pour les oméga-3'
+            ]
+        }
+    };
+
+    if (recommandationsRegime[regime]) {
+        recommandations.push(recommandationsRegime[regime]);
+    }
+
+    // Timing des repas selon l'activité
+    const timingRepas = {
+        titre: 'Timing des repas',
+        points: [
+            'Petit-déjeuner : Dans l\'heure suivant le réveil',
+            'Pré-entraînement : 2-3h avant la séance',
+            'Post-entraînement : Dans les 30-60 minutes après',
+            'Dernier repas : 2-3h avant le coucher'
+        ]
+    };
+    recommandations.push(timingRepas);
+
+    return recommandations;
+} 
