@@ -246,37 +246,59 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Récupération des valeurs du formulaire
             const formData = {
-                prenom: document.getElementById('prenom').value,
+                informationsGenerales: {
                 nom: document.getElementById('nom').value,
-                email: document.getElementById('email').value,
+                    prenom: document.getElementById('prenom').value,
                 age: parseInt(document.getElementById('age').value),
-                taille: parseInt(document.getElementById('taille').value),
+                    sexe: document.querySelector('input[name="sexe"]:checked').value,
                 poids: parseFloat(document.getElementById('poids').value),
-                sexe: document.querySelector('input[name="genre"]:checked').value,
-                niveau_activite: document.getElementById('niveau-activite').value,
-                objectif_principal: document.getElementById('objectif-principal').value,
-                experience_musculation: document.getElementById('experience-musculation').value,
-                frequence_entrainement: parseInt(document.getElementById('frequence-entrainement').value),
-                limitations_physiques: document.getElementById('limitations-physiques').value,
-                preferences_exercices: Array.from(document.querySelectorAll('input[name="preferences-exercices"]:checked')).map(cb => cb.value),
-                horaires_disponibles: document.getElementById('horaires-disponibles').value,
-                materiel_disponible: Array.from(document.querySelectorAll('input[name="materiel-disponible"]:checked')).map(cb => cb.value),
-                mesures_corporelles: {
-                    tour_poitrine: parseFloat(document.getElementById('tour-poitrine').value) || null,
-                    tour_bras: parseFloat(document.getElementById('tour-bras').value) || null,
-                    tour_taille: parseFloat(document.getElementById('tour-taille').value) || null,
-                    tour_hanches: parseFloat(document.getElementById('tour-hanches').value) || null,
-                    tour_cuisses: parseFloat(document.getElementById('tour-cuisses').value) || null
+                    taille: parseInt(document.getElementById('taille').value),
+                    antecedentsMedicaux: {
+                        present: document.querySelector('input[name="antecedents"]:checked').value === 'oui',
+                        details: document.getElementById('antecedents-details').value
+                    }
                 },
-                habitudes: {
-                    sommeil: parseInt(document.getElementById('heures-sommeil').value),
-                    stress: document.getElementById('niveau-stress').value,
-                    alimentation: document.getElementById('regime-alimentaire').value
+                objectifsFitness: {
+                    objectifsPrincipaux: Array.from(document.querySelectorAll('input[name="objectifs"]:checked')).map(cb => cb.value),
+                    autreObjectif: document.getElementById('autre-objectif').value,
+                    experience: document.querySelector('input[name="experience"]:checked').value,
+                    frequenceEntrainement: document.querySelector('input[name="frequence"]:checked').value,
+                    typesEntrainement: Array.from(document.querySelectorAll('input[name="type-entrainement"]:checked')).map(cb => cb.value),
+                    autreTypeEntrainement: document.getElementById('autre-type').value,
+                    exercicesNonAimes: document.getElementById('exercices-non-aimes').value
                 },
-                objectifs_specifiques: {
-                    poids_cible: parseFloat(document.getElementById('poids-cible').value) || null,
-                    delai_objectif: parseInt(document.getElementById('delai-objectif').value) || null,
-                    zones_prioritaires: Array.from(document.querySelectorAll('input[name="zones-prioritaires"]:checked')).map(cb => cb.value)
+                regimeAlimentaire: {
+                    type: document.querySelector('input[name="regime"]:checked').value,
+                    autreRegime: document.getElementById('autre-regime').value,
+                    allergies: {
+                        present: document.querySelector('input[name="allergies"]:checked').value === 'oui',
+                        details: document.getElementById('allergies-details').value
+                    },
+                    nombreRepas: document.querySelector('input[name="nb-repas"]:checked').value,
+                    autreNombreRepas: document.getElementById('autre-nb-repas').value,
+                    preferencesAlimentaires: document.getElementById('preferences-alimentaires').value,
+                    objectifNutritionnel: document.querySelector('input[name="objectif-nutritionnel"]:checked').value,
+                    autreObjectifNutritionnel: document.getElementById('autre-obj-nutri').value
+                },
+                habitudesVie: {
+                    niveauActivite: document.querySelector('input[name="niveau-activite"]:checked').value,
+                    horairesFlexibles: document.querySelector('input[name="horaires-flexibles"]:checked').value === 'oui',
+                    contraintesHoraires: document.getElementById('contraintes-horaires').value
+                },
+                motivationSuivi: {
+                    raisonInscription: document.querySelector('input[name="motivation"]:checked').value,
+                    autreMotivation: document.getElementById('autre-motivation').value,
+                    suiviProgres: {
+                        souhaite: document.querySelector('input[name="suivi"]:checked').value === 'oui',
+                        frequence: document.getElementById('frequence-suivi').value
+                    },
+                    conseilsSupplementaires: document.querySelector('input[name="conseils-supplementaires"]:checked').value === 'oui'
+                },
+                commentaires: {
+                    attentes: document.getElementById('attentes').value
+                },
+                preferences: {
+                    newsletter: document.getElementById('newsletter').checked
                 },
                 lastLogin: new Date().toISOString()
             };

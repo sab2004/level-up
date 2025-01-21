@@ -32,212 +32,256 @@
     <!-- Section Inscription -->
     <section class="inscription-section">
         <div class="inscription-container">
-            <h1>Créez votre profil FitCoach</h1>
-            <p class="inscription-intro">Pour créer un programme parfaitement adapté à vos besoins, nous avons besoin de quelques informations détaillées.</p>
+            <h1>Questionnaire d'Inscription</h1>
+            <p class="inscription-intro">Bienvenue ! Afin de mieux comprendre vos besoins et de vous proposer un programme adapté à vos objectifs, nous vous prions de bien vouloir répondre aux questions suivantes.</p>
             
             <form class="inscription-form" id="inscription-form" autocomplete="on">
-                <!-- Informations personnelles -->
+                <!-- Informations Générales -->
                 <div class="form-section">
-                    <h2>Informations personnelles</h2>
-                    <div class="form-group">
-                        <label for="prenom">Prénom</label>
-                        <input type="text" id="prenom" name="prenom" required autocomplete="given-name">
-                    </div>
+                    <h2>Informations Générales</h2>
                     <div class="form-group">
                         <label for="nom">Nom</label>
                         <input type="text" id="nom" name="nom" required autocomplete="family-name">
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required autocomplete="email">
+                        <label for="prenom">Prénom</label>
+                        <input type="text" id="prenom" name="prenom" required autocomplete="given-name">
                     </div>
                     <div class="form-group">
                         <label for="age">Âge</label>
                         <input type="number" id="age" name="age" min="16" max="100" required>
                     </div>
                     <div class="form-group">
-                        <label>Genre</label>
+                        <label>Sexe</label>
                         <div class="radio-group">
-                            <input type="radio" id="homme" name="genre" value="homme" required>
+                            <input type="radio" id="homme" name="sexe" value="homme" required>
                             <label for="homme">Homme</label>
-                            <input type="radio" id="femme" name="genre" value="femme">
+                            <input type="radio" id="femme" name="sexe" value="femme">
                             <label for="femme">Femme</label>
-                            <input type="radio" id="autre" name="genre" value="autre">
-                            <label for="autre">Autre</label>
                         </div>
                     </div>
-                </div>
-
-                <!-- Mensurations -->
-                <div class="form-section">
-                    <h2>Mensurations</h2>
                     <div class="form-group">
-                        <label for="taille">Taille (cm)</label>
-                        <input type="number" id="taille" name="taille" min="140" max="220" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="poids">Poids (kg)</label>
+                        <label for="poids">Poids actuel (en kg)</label>
                         <input type="number" id="poids" name="poids" step="0.1" min="40" max="200" required>
                     </div>
                     <div class="form-group">
-                        <label for="tour-poitrine">Tour de poitrine (cm)</label>
-                        <input type="number" id="tour-poitrine" name="tour-poitrine" step="0.1">
+                        <label for="taille">Taille (en cm)</label>
+                        <input type="number" id="taille" name="taille" min="140" max="220" required>
                     </div>
                     <div class="form-group">
-                        <label for="tour-bras">Tour de bras (cm)</label>
-                        <input type="number" id="tour-bras" name="tour-bras" step="0.1">
-                    </div>
-                    <div class="form-group">
-                        <label for="tour-taille">Tour de taille (cm)</label>
-                        <input type="number" id="tour-taille" name="tour-taille" step="0.1">
-                    </div>
-                    <div class="form-group">
-                        <label for="tour-hanches">Tour de hanches (cm)</label>
-                        <input type="number" id="tour-hanches" name="tour-hanches" step="0.1">
-                    </div>
-                    <div class="form-group">
-                        <label for="tour-cuisses">Tour de cuisses (cm)</label>
-                        <input type="number" id="tour-cuisses" name="tour-cuisses" step="0.1">
+                        <label>Avez-vous des antécédents médicaux ou des conditions de santé qui pourraient influencer votre activité physique ou votre régime alimentaire ?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="antecedents-oui" name="antecedents" value="oui">
+                            <label for="antecedents-oui">Oui</label>
+                            <input type="radio" id="antecedents-non" name="antecedents" value="non">
+                            <label for="antecedents-non">Non</label>
+                        </div>
+                        <textarea id="antecedents-details" name="antecedents-details" rows="3" placeholder="Si oui, veuillez préciser"></textarea>
                     </div>
                 </div>
 
-                <!-- Objectifs et expérience -->
+                <!-- Objectifs de Santé et de Fitness -->
                 <div class="form-section">
-                    <h2>Objectifs et expérience</h2>
+                    <h2>Objectifs de Santé et de Fitness</h2>
                     <div class="form-group">
-                        <label for="objectif-principal">Objectif principal</label>
-                        <select id="objectif-principal" name="objectif-principal" required>
-                            <option value="">Sélectionnez votre objectif</option>
-                            <option value="perte_de_poids">Perte de poids</option>
-                            <option value="prise_de_muscle">Prise de muscle</option>
-                            <option value="maintien">Maintien de la forme</option>
-                            <option value="endurance">Amélioration de l'endurance</option>
+                        <label>Quel est votre objectif principal ?</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="obj-perte-poids" name="objectifs" value="perte_poids">
+                            <label for="obj-perte-poids">Perte de poids</label>
+                            <input type="checkbox" id="obj-muscle" name="objectifs" value="gain_muscle">
+                            <label for="obj-muscle">Gain de muscle</label>
+                            <input type="checkbox" id="obj-condition" name="objectifs" value="condition_physique">
+                            <label for="obj-condition">Amélioration de la condition physique générale</label>
+                            <input type="checkbox" id="obj-endurance" name="objectifs" value="endurance">
+                            <label for="obj-endurance">Augmenter l'endurance</label>
+                            <input type="checkbox" id="obj-competition" name="objectifs" value="competition">
+                            <label for="obj-competition">Préparation à une compétition spécifique</label>
+                        </div>
+                        <input type="text" id="autre-objectif" name="autre-objectif" placeholder="Autre objectif (préciser)">
+                    </div>
+                    <div class="form-group">
+                        <label>Quelle est votre expérience en matière d'exercice physique ?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="exp-debutant" name="experience" value="debutant" required>
+                            <label for="exp-debutant">Débutant</label>
+                            <input type="radio" id="exp-intermediaire" name="experience" value="intermediaire">
+                            <label for="exp-intermediaire">Intermédiaire</label>
+                            <input type="radio" id="exp-avance" name="experience" value="avance">
+                            <label for="exp-avance">Avancé</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Combien de fois par semaine souhaitez-vous vous entraîner ?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="freq-1-2" name="frequence" value="1-2" required>
+                            <label for="freq-1-2">1 à 2 fois</label>
+                            <input type="radio" id="freq-3-4" name="frequence" value="3-4">
+                            <label for="freq-3-4">3 à 4 fois</label>
+                            <input type="radio" id="freq-5-6" name="frequence" value="5-6">
+                            <label for="freq-5-6">5 à 6 fois</label>
+                            <input type="radio" id="freq-7" name="frequence" value="7">
+                            <label for="freq-7">7 fois</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Quel type d'entraînement préférez-vous ?</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="type-musculation" name="type-entrainement" value="musculation">
+                            <label for="type-musculation">Musculation</label>
+                            <input type="checkbox" id="type-cardio" name="type-entrainement" value="cardio">
+                            <label for="type-cardio">Cardio</label>
+                            <input type="checkbox" id="type-yoga" name="type-entrainement" value="yoga">
+                            <label for="type-yoga">Yoga/Pilates</label>
+                            <input type="checkbox" id="type-hiit" name="type-entrainement" value="hiit">
+                            <label for="type-hiit">HIIT</label>
+                            <input type="checkbox" id="type-sports" name="type-entrainement" value="sports">
+                            <label for="type-sports">Sports collectifs</label>
+                        </div>
+                        <input type="text" id="autre-type" name="autre-type" placeholder="Autre type d'entraînement (préciser)">
+                    </div>
+                    <div class="form-group">
+                        <label for="exercices-non-aimes">Avez-vous un type d'exercice que vous n'aimez pas ou que vous ne pouvez pas faire ?</label>
+                        <textarea id="exercices-non-aimes" name="exercices-non-aimes" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <!-- Régime Alimentaire et Habitudes Nutritionnelles -->
+                <div class="form-section">
+                    <h2>Régime Alimentaire et Habitudes Nutritionnelles</h2>
+                    <div class="form-group">
+                        <label>Quel est votre type de régime alimentaire actuel ?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="regime-omnivore" name="regime" value="omnivore" required>
+                            <label for="regime-omnivore">Omnivore</label>
+                            <input type="radio" id="regime-vegetarien" name="regime" value="vegetarien">
+                            <label for="regime-vegetarien">Végétarien</label>
+                            <input type="radio" id="regime-vegan" name="regime" value="vegan">
+                            <label for="regime-vegan">Végétalien</label>
+                            <input type="radio" id="regime-sans-gluten" name="regime" value="sans-gluten">
+                            <label for="regime-sans-gluten">Sans gluten</label>
+                            <input type="radio" id="regime-sans-lactose" name="regime" value="sans-lactose">
+                            <label for="regime-sans-lactose">Sans lactose</label>
+                        </div>
+                        <input type="text" id="autre-regime" name="autre-regime" placeholder="Autre régime (préciser)">
+                    </div>
+                    <div class="form-group">
+                        <label>Avez-vous des allergies ou intolérances alimentaires ?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="allergies-oui" name="allergies" value="oui">
+                            <label for="allergies-oui">Oui</label>
+                            <input type="radio" id="allergies-non" name="allergies" value="non">
+                            <label for="allergies-non">Non</label>
+                        </div>
+                        <textarea id="allergies-details" name="allergies-details" rows="3" placeholder="Si oui, veuillez préciser"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Combien de repas par jour consommez-vous en moyenne ?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="repas-1-2" name="nb-repas" value="1-2" required>
+                            <label for="repas-1-2">1 à 2 repas</label>
+                            <input type="radio" id="repas-3" name="nb-repas" value="3">
+                            <label for="repas-3">3 repas</label>
+                            <input type="radio" id="repas-4-5" name="nb-repas" value="4-5">
+                            <label for="repas-4-5">4 à 5 repas</label>
+                        </div>
+                        <input type="text" id="autre-nb-repas" name="autre-nb-repas" placeholder="Autre fréquence (préciser)">
+                    </div>
+                    <div class="form-group">
+                        <label for="preferences-alimentaires">Avez-vous des préférences alimentaires spécifiques ?</label>
+                        <textarea id="preferences-alimentaires" name="preferences-alimentaires" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Votre objectif nutritionnel principal est-il :</label>
+                        <div class="radio-group">
+                            <input type="radio" id="obj-nutri-perte" name="objectif-nutritionnel" value="perte" required>
+                            <label for="obj-nutri-perte">Perdre du poids</label>
+                            <input type="radio" id="obj-nutri-maintien" name="objectif-nutritionnel" value="maintien">
+                            <label for="obj-nutri-maintien">Maintenir le poids</label>
+                            <input type="radio" id="obj-nutri-prise" name="objectif-nutritionnel" value="prise">
+                            <label for="obj-nutri-prise">Prendre du poids (muscle)</label>
+                            <input type="radio" id="obj-nutri-digestion" name="objectif-nutritionnel" value="digestion">
+                            <label for="obj-nutri-digestion">Améliorer la santé digestive</label>
+                        </div>
+                        <input type="text" id="autre-obj-nutri" name="autre-obj-nutri" placeholder="Autre objectif (préciser)">
+                    </div>
+                </div>
+
+                <!-- Habitudes de Vie et Activités Quotidiennes -->
+                <div class="form-section">
+                    <h2>Habitudes de Vie et Activités Quotidiennes</h2>
+                    <div class="form-group">
+                        <label>Quel est votre niveau d'activité au quotidien ?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="activite-sedentaire" name="niveau-activite" value="sedentaire" required>
+                            <label for="activite-sedentaire">Sédentaire (travail de bureau, peu d'activité physique)</label>
+                            <input type="radio" id="activite-actif" name="niveau-activite" value="actif">
+                            <label for="activite-actif">Actif (activité physique modérée régulière)</label>
+                            <input type="radio" id="activite-tres-actif" name="niveau-activite" value="tres-actif">
+                            <label for="activite-tres-actif">Très actif (travail manuel ou entraînements intenses)</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Est-ce que vous avez un emploi du temps flexible pour vos entraînements et repas ?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="horaires-oui" name="horaires-flexibles" value="oui" required>
+                            <label for="horaires-oui">Oui</label>
+                            <input type="radio" id="horaires-non" name="horaires-flexibles" value="non">
+                            <label for="horaires-non">Non</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contraintes-horaires">Y a-t-il des horaires ou des contraintes particulières pour vos entraînements ou repas ?</label>
+                        <textarea id="contraintes-horaires" name="contraintes-horaires" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <!-- Motivation et Suivi -->
+                <div class="form-section">
+                    <h2>Motivation et Suivi</h2>
+                    <div class="form-group">
+                        <label>Pourquoi avez-vous décidé de rejoindre cette application ?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="motiv-objectif" name="motivation" value="objectif" required>
+                            <label for="motiv-objectif">Pour atteindre un objectif spécifique</label>
+                            <input type="radio" id="motiv-programme" name="motivation" value="programme">
+                            <label for="motiv-programme">Pour obtenir un programme personnalisé</label>
+                            <input type="radio" id="motiv-sante" name="motivation" value="sante">
+                            <label for="motiv-sante">Pour améliorer ma santé générale</label>
+                        </div>
+                        <input type="text" id="autre-motivation" name="autre-motivation" placeholder="Autre motivation (préciser)">
+                    </div>
+                    <div class="form-group">
+                        <label>Souhaitez-vous un suivi régulier de vos progrès ?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="suivi-oui" name="suivi" value="oui" required>
+                            <label for="suivi-oui">Oui</label>
+                            <input type="radio" id="suivi-non" name="suivi" value="non">
+                            <label for="suivi-non">Non</label>
+                        </div>
+                        <select id="frequence-suivi" name="frequence-suivi">
+                            <option value="">Sélectionnez la fréquence de suivi</option>
+                            <option value="hebdomadaire">Hebdomadaire</option>
+                            <option value="mensuel">Mensuel</option>
+                            <option value="trimestriel">Trimestriel</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="poids-cible">Poids cible (kg)</label>
-                        <input type="number" id="poids-cible" name="poids-cible" step="0.1">
-                    </div>
-                    <div class="form-group">
-                        <label for="delai-objectif">Délai pour atteindre l'objectif (mois)</label>
-                        <input type="number" id="delai-objectif" name="delai-objectif" min="1" max="24">
-                    </div>
-                    <div class="form-group">
-                        <label>Zones prioritaires</label>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="zone-poitrine" name="zones-prioritaires" value="poitrine">
-                            <label for="zone-poitrine">Poitrine</label>
-                            <input type="checkbox" id="zone-bras" name="zones-prioritaires" value="bras">
-                            <label for="zone-bras">Bras</label>
-                            <input type="checkbox" id="zone-jambes" name="zones-prioritaires" value="jambes">
-                            <label for="zone-jambes">Jambes</label>
-                            <input type="checkbox" id="zone-abdos" name="zones-prioritaires" value="abdos">
-                            <label for="zone-abdos">Abdominaux</label>
-                            <input type="checkbox" id="zone-dos" name="zones-prioritaires" value="dos">
-                            <label for="zone-dos">Dos</label>
-                            <input type="checkbox" id="zone-fessiers" name="zones-prioritaires" value="fessiers">
-                            <label for="zone-fessiers">Fessiers</label>
+                        <label>Seriez-vous intéressé(e) par des conseils supplémentaires sur la gestion du stress, le sommeil ou d'autres aspects de la santé globale ?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="conseils-oui" name="conseils-supplementaires" value="oui" required>
+                            <label for="conseils-oui">Oui</label>
+                            <input type="radio" id="conseils-non" name="conseils-supplementaires" value="non">
+                            <label for="conseils-non">Non</label>
                         </div>
                     </div>
                 </div>
 
-                <!-- Niveau et disponibilité -->
+                <!-- Commentaires et Suggestions -->
                 <div class="form-section">
-                    <h2>Niveau et disponibilité</h2>
+                    <h2>Commentaires et Suggestions</h2>
                     <div class="form-group">
-                        <label for="niveau-activite">Niveau d'activité actuel</label>
-                        <select id="niveau-activite" name="niveau-activite" required>
-                            <option value="sedentaire">Sédentaire (peu ou pas d'exercice)</option>
-                            <option value="leger">Légèrement actif (1-2 fois/semaine)</option>
-                            <option value="modere">Modérément actif (3-4 fois/semaine)</option>
-                            <option value="actif">Très actif (5-6 fois/semaine)</option>
-                            <option value="tres_actif">Extrêmement actif (athlète)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="experience-musculation">Expérience en musculation</label>
-                        <select id="experience-musculation" name="experience-musculation" required>
-                            <option value="debutant">Débutant (moins de 6 mois)</option>
-                            <option value="intermediaire">Intermédiaire (6 mois à 2 ans)</option>
-                            <option value="avance">Avancé (plus de 2 ans)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="frequence-entrainement">Fréquence d'entraînement souhaitée (séances/semaine)</label>
-                        <input type="number" id="frequence-entrainement" name="frequence-entrainement" min="1" max="7" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="horaires-disponibles">Horaires disponibles</label>
-                        <select id="horaires-disponibles" name="horaires-disponibles" required>
-                            <option value="matin">Matin (6h-12h)</option>
-                            <option value="midi">Midi (12h-14h)</option>
-                            <option value="apres_midi">Après-midi (14h-18h)</option>
-                            <option value="soir">Soir (18h-22h)</option>
-                            <option value="flexible">Horaires flexibles</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Équipement et préférences -->
-                <div class="form-section">
-                    <h2>Équipement et préférences</h2>
-                    <div class="form-group">
-                        <label>Matériel disponible</label>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="materiel-halteres" name="materiel-disponible" value="halteres">
-                            <label for="materiel-halteres">Haltères</label>
-                            <input type="checkbox" id="materiel-banc" name="materiel-disponible" value="banc">
-                            <label for="materiel-banc">Banc de musculation</label>
-                            <input type="checkbox" id="materiel-barre" name="materiel-disponible" value="barre">
-                            <label for="materiel-barre">Barre de traction</label>
-                            <input type="checkbox" id="materiel-elastiques" name="materiel-disponible" value="elastiques">
-                            <label for="materiel-elastiques">Élastiques</label>
-                            <input type="checkbox" id="materiel-salle" name="materiel-disponible" value="salle">
-                            <label for="materiel-salle">Accès à une salle de sport</label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Types d'exercices préférés</label>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="pref-cardio" name="preferences-exercices" value="cardio">
-                            <label for="pref-cardio">Cardio</label>
-                            <input type="checkbox" id="pref-poids" name="preferences-exercices" value="poids">
-                            <label for="pref-poids">Poids libres</label>
-                            <input type="checkbox" id="pref-machines" name="preferences-exercices" value="machines">
-                            <label for="pref-machines">Machines</label>
-                            <input type="checkbox" id="pref-bodyweight" name="preferences-exercices" value="bodyweight">
-                            <label for="pref-bodyweight">Poids du corps</label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Santé et mode de vie -->
-                <div class="form-section">
-                    <h2>Santé et mode de vie</h2>
-                    <div class="form-group">
-                        <label for="limitations-physiques">Limitations physiques ou blessures</label>
-                        <textarea id="limitations-physiques" name="limitations-physiques" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="heures-sommeil">Heures de sommeil moyennes par nuit</label>
-                        <input type="number" id="heures-sommeil" name="heures-sommeil" min="4" max="12" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="niveau-stress">Niveau de stress quotidien</label>
-                        <select id="niveau-stress" name="niveau-stress" required>
-                            <option value="faible">Faible</option>
-                            <option value="modere">Modéré</option>
-                            <option value="eleve">Élevé</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="regime-alimentaire">Régime alimentaire</label>
-                        <select id="regime-alimentaire" name="regime-alimentaire" required>
-                            <option value="omnivore">Omnivore</option>
-                            <option value="vegetarien">Végétarien</option>
-                            <option value="vegan">Végan</option>
-                            <option value="flexitarien">Flexitarien</option>
-                        </select>
+                        <label for="attentes">Avez-vous des attentes ou des suggestions spécifiques concernant les programmes de sport et de nutrition ?</label>
+                        <textarea id="attentes" name="attentes" rows="4"></textarea>
                     </div>
                 </div>
 
