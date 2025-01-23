@@ -241,11 +241,22 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Formulaire soumis');
 
         try {
+            // Vérification des mots de passe
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                alert('Les mots de passe ne correspondent pas.');
+                return;
+            }
+
             // Collecte des données du formulaire
             const formData = {
                 informationsGenerales: {
                 nom: document.getElementById('nom').value,
                     prenom: document.getElementById('prenom').value,
+                    email: document.getElementById('email').value,
+                    password: password, // Stockage sécurisé à implémenter
                 age: parseInt(document.getElementById('age').value),
                     sexe: document.querySelector('input[name="sexe"]:checked').value,
                 poids: parseFloat(document.getElementById('poids').value),
@@ -1438,6 +1449,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 informationsGenerales: {
             nom: document.getElementById('nom').value,
                     prenom: document.getElementById('prenom').value,
+            email: document.getElementById('email').value,
+                    password: document.getElementById('password').value, // Stockage sécurisé à implémenter
             age: parseInt(document.getElementById('age').value),
                     sexe: document.querySelector('input[name="sexe"]:checked').value,
             poids: parseFloat(document.getElementById('poids').value),
