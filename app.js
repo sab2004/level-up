@@ -233,18 +233,15 @@ cards.forEach(card => {
 
 // Gestion du formulaire d'inscription
 document.addEventListener('DOMContentLoaded', function() {
-    const inscriptionForm = document.getElementById('inscription-form');
-    if (inscriptionForm) {
-        inscriptionForm.addEventListener('submit', async function(e) {
+    const form = document.getElementById('inscription-form');
+    if (!form) return;
+
+    form.addEventListener('submit', async function(e) {
             e.preventDefault();
-            console.log('Début du processus d\'inscription');
-            
-            // Désactiver le bouton pendant le traitement
-            const submitBtn = inscriptionForm.querySelector('.btn-submit');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Inscription en cours...';
-            
-            // Récupération des valeurs du formulaire
+        console.log('Formulaire soumis');
+
+        try {
+            // Collecte des données du formulaire
             const formData = {
                 informationsGenerales: {
                 nom: document.getElementById('nom').value,
@@ -299,24 +296,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 preferences: {
                     newsletter: document.getElementById('newsletter').checked
-                },
-                lastLogin: new Date().toISOString()
+                }
             };
-            
-            // Stocker les informations du profil
+
+            console.log('Données du formulaire collectées:', formData);
+
+            // Générer le plan personnalisé
+            const planPersonnalise = genererPlanPersonnalise(formData);
+            console.log('Plan personnalisé généré:', planPersonnalise);
+
+            // Stocker les données dans le localStorage
             localStorage.setItem('levelup_profile', JSON.stringify(formData));
-            
-            // Générer un programme personnalisé basé sur l'IA
-            const programme = await genererProgrammePersonnalise(formData);
-            localStorage.setItem('levelup_programme', JSON.stringify(programme));
-            
-            // Afficher un message de succès
-            alert('Inscription réussie ! Votre programme personnalisé a été créé.');
+            localStorage.setItem('levelup_plan', JSON.stringify(planPersonnalise));
             
             // Rediriger vers le tableau de bord
             window.location.href = 'dashboard.html';
-        });
+        } catch (error) {
+            console.error('Erreur lors du traitement du formulaire:', error);
+            alert('Une erreur est survenue lors de l\'inscription. Veuillez vérifier tous les champs obligatoires.');
     }
+    });
 });
 
 // Fonction pour générer un programme personnalisé basé sur l'IA
@@ -1429,64 +1428,85 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('inscription-form');
     if (!form) return;
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
+        console.log('Formulaire soumis');
 
+        try {
         // Collecte des données du formulaire
-        const donnees = {
-            prenom: document.getElementById('prenom').value,
+            const formData = {
+                informationsGenerales: {
             nom: document.getElementById('nom').value,
-            email: document.getElementById('email').value,
+                    prenom: document.getElementById('prenom').value,
             age: parseInt(document.getElementById('age').value),
-            genre: document.querySelector('input[name="genre"]:checked').value,
-            taille: parseInt(document.getElementById('taille').value),
+                    sexe: document.querySelector('input[name="sexe"]:checked').value,
             poids: parseFloat(document.getElementById('poids').value),
-            tourPoitrine: document.getElementById('tour-poitrine').value,
-            tourBras: document.getElementById('tour-bras').value,
-            tourTaille: document.getElementById('tour-taille').value,
-            tourHanches: document.getElementById('tour-hanches').value,
-            tourCuisses: document.getElementById('tour-cuisses').value,
-            objectifPrincipal: document.getElementById('objectif-principal').value,
-            poidsCible: document.getElementById('poids-cible').value,
-            delaiObjectif: document.getElementById('delai-objectif').value,
-            zonesPrioritaires: Array.from(document.querySelectorAll('input[name="zones-prioritaires"]:checked')).map(input => input.value),
-            niveauActivite: document.getElementById('niveau-activite').value,
-            experienceMusculation: document.getElementById('experience-musculation').value,
-            frequenceEntrainement: document.getElementById('frequence-entrainement').value,
-            horairesDisponibles: document.getElementById('horaires-disponibles').value,
-            materielDisponible: Array.from(document.querySelectorAll('input[name="materiel-disponible"]:checked')).map(input => input.value),
-            preferencesExercices: Array.from(document.querySelectorAll('input[name="preferences-exercices"]:checked')).map(input => input.value),
-            limitationsPhysiques: document.getElementById('limitations-physiques').value,
-            heuresSommeil: document.getElementById('heures-sommeil').value,
-            niveauStress: document.getElementById('niveau-stress').value,
-            regimeAlimentaire: document.getElementById('regime-alimentaire').value
-        };
+                    taille: parseInt(document.getElementById('taille').value),
+                    antecedentsMedicaux: {
+                        present: document.querySelector('input[name="antecedents"]:checked').value === 'oui',
+                        details: document.getElementById('antecedents-details').value
+                    }
+                },
+                objectifsFitness: {
+                    objectifsPrincipaux: Array.from(document.querySelectorAll('input[name="objectifs"]:checked')).map(cb => cb.value),
+                    autreObjectif: document.getElementById('autre-objectif').value,
+                    experience: document.querySelector('input[name="experience"]:checked').value,
+                    frequenceEntrainement: document.querySelector('input[name="frequence"]:checked').value,
+                    typesEntrainement: Array.from(document.querySelectorAll('input[name="type-entrainement"]:checked')).map(cb => cb.value),
+                    autreTypeEntrainement: document.getElementById('autre-type').value,
+                    exercicesNonAimes: document.getElementById('exercices-non-aimes').value
+                },
+                regimeAlimentaire: {
+                    type: document.querySelector('input[name="regime"]:checked').value,
+                    autreRegime: document.getElementById('autre-regime').value,
+                    allergies: {
+                        present: document.querySelector('input[name="allergies"]:checked').value === 'oui',
+                        details: document.getElementById('allergies-details').value
+                    },
+                    nombreRepas: document.querySelector('input[name="nb-repas"]:checked').value,
+                    autreNombreRepas: document.getElementById('autre-nb-repas').value,
+                    preferencesAlimentaires: document.getElementById('preferences-alimentaires').value,
+                    objectifNutritionnel: document.querySelector('input[name="objectif-nutritionnel"]:checked').value,
+                    autreObjectifNutritionnel: document.getElementById('autre-obj-nutri').value
+                },
+                habitudesVie: {
+                    niveauActivite: document.querySelector('input[name="niveau-activite"]:checked').value,
+                    horairesFlexibles: document.querySelector('input[name="horaires-flexibles"]:checked').value === 'oui',
+                    contraintesHoraires: document.getElementById('contraintes-horaires').value
+                },
+                motivationSuivi: {
+                    raisonInscription: document.querySelector('input[name="motivation"]:checked').value,
+                    autreMotivation: document.getElementById('autre-motivation').value,
+                    suiviProgres: {
+                        souhaite: document.querySelector('input[name="suivi"]:checked').value === 'oui',
+                        frequence: document.getElementById('frequence-suivi').value
+                    },
+                    conseilsSupplementaires: document.querySelector('input[name="conseils-supplementaires"]:checked').value === 'oui'
+                },
+                commentaires: {
+                    attentes: document.getElementById('attentes').value
+                },
+                preferences: {
+                    newsletter: document.getElementById('newsletter').checked
+                }
+            };
 
-        // Calculs des métriques
-        const imc = calculerIMC(donnees.poids, donnees.taille);
-        const metabolismeBase = calculerMetabolismeBase(donnees.poids, donnees.taille, donnees.age, donnees.genre);
-        const besoinsCaloriques = calculerBesoinsCaloriques(metabolismeBase, donnees.niveauActivite);
-        const objectifPoids = calculerObjectifPoids(donnees.taille, donnees.poids, donnees.objectifPrincipal);
-        const recommandations = genererRecommandations(donnees);
+            console.log('Données du formulaire collectées:', formData);
 
-        // Stockage des données et des calculs
-        const profilComplet = {
-            ...donnees,
-            metriques: {
-                imc: imc,
-                interpretationIMC: interpreterIMC(imc),
-                metabolismeBase: metabolismeBase,
-                besoinsCaloriques: besoinsCaloriques,
-                objectifPoids: objectifPoids,
-                recommandations: recommandations
-            }
-        };
+            // Générer le plan personnalisé
+            const planPersonnalise = genererPlanPersonnalise(formData);
+            console.log('Plan personnalisé généré:', planPersonnalise);
 
-        // Stockage dans le localStorage
-        localStorage.setItem('profilUtilisateur', JSON.stringify(profilComplet));
+            // Stocker les données dans le localStorage
+            localStorage.setItem('levelup_profile', JSON.stringify(formData));
+            localStorage.setItem('levelup_plan', JSON.stringify(planPersonnalise));
 
-        // Redirection vers le tableau de bord
+            // Rediriger vers le tableau de bord
         window.location.href = 'dashboard.html';
+        } catch (error) {
+            console.error('Erreur lors du traitement du formulaire:', error);
+            alert('Une erreur est survenue lors de l\'inscription. Veuillez vérifier tous les champs obligatoires.');
+        }
     });
 });
 
