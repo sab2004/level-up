@@ -1207,9 +1207,47 @@ function updateProfileAnalysis() {
     const imc = calculateBMI(poids, taille);
     document.getElementById('bmi-value').textContent = imc.toFixed(1);
     
-    // Interpréter l'IMC
+    // Interpréter l'IMC et générer les recommandations
     const interpretation = interpretBMI(imc);
     document.getElementById('bmi-interpretation').textContent = interpretation;
+
+    // Générer les recommandations basées sur l'IMC
+    const recommendationsList = document.getElementById('recommendations-list');
+    if (recommendationsList) {
+        const recommendations = [];
+        
+        // Analyse du poids et recommandations
+        if (imc < 18.5) {
+            recommendations.push("Votre IMC indique que vous êtes en sous-poids. Voici nos recommandations :");
+            recommendations.push("• Augmentez progressivement votre apport calorique quotidien");
+            recommendations.push("• Privilégiez les repas riches en protéines et en nutriments");
+            recommendations.push("• Consultez un professionnel de santé pour un suivi personnalisé");
+        } else if (imc >= 18.5 && imc < 25) {
+            recommendations.push("Votre IMC indique que vous avez un poids normal. Voici nos recommandations :");
+            recommendations.push("• Maintenez vos bonnes habitudes alimentaires");
+            recommendations.push("• Pratiquez une activité physique régulière");
+            recommendations.push("• Surveillez votre poids régulièrement");
+        } else if (imc >= 25 && imc < 30) {
+            recommendations.push("Votre IMC indique que vous êtes en surpoids. Voici nos recommandations :");
+            recommendations.push("• Adoptez une alimentation équilibrée et surveillez vos portions");
+            recommendations.push("• Augmentez votre activité physique quotidienne");
+            recommendations.push("• Fixez-vous des objectifs réalistes de perte de poids");
+        } else {
+            recommendations.push("Votre IMC indique une obésité. Voici nos recommandations :");
+            recommendations.push("• Consultez un professionnel de santé pour un suivi adapté");
+            recommendations.push("• Adoptez progressivement de nouvelles habitudes alimentaires");
+            recommendations.push("• Commencez une activité physique adaptée à votre condition");
+        }
+
+        // Ajouter des recommandations spécifiques basées sur l'âge
+        if (age > 50) {
+            recommendations.push("• Privilégiez les exercices à faible impact");
+            recommendations.push("• Maintenez une bonne densité osseuse avec des exercices appropriés");
+        }
+
+        // Afficher les recommandations
+        recommendationsList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
+    }
     
     // Calculer le métabolisme de base
     const bmr = calculateBMR(poids, taille, age, sexe);
@@ -1219,32 +1257,32 @@ function updateProfileAnalysis() {
     const tdee = calculateTDEE(bmr, profile.habitudesVie.niveauActivite);
     document.getElementById('tdee-value').textContent = Math.round(tdee);
     
-    // Calculer l'objectif de poids
-    let objectifPoids = poids;
-    let message = "";
-
-    if (profile.objectifsFitness.objectifsPrincipaux.includes('gain_muscle')) {
-        const imcCible = 23.5;
-        objectifPoids = Math.round((imcCible * (taille/100) * (taille/100)) * 10) / 10;
-        message = "Poids à gagner";
-    } else if (profile.objectifsFitness.objectifsPrincipaux.includes('perte_poids')) {
-        if (imc > 25) {
-            objectifPoids = Math.round((24 * (taille/100) * (taille/100)) * 10) / 10;
-            message = "Poids à perdre";
-        }
-    }
-
-    // Afficher l'objectif de poids
-    document.getElementById('target-weight').textContent = objectifPoids;
-    const difference = Math.abs(poids - objectifPoids);
-    document.getElementById('weight-to-lose').innerHTML = 
-        `<span>${message} : ${difference.toFixed(1)} kg</span>`;
+    // Mettre à jour l'affichage du poids actuel
+    document.getElementById('target-weight').textContent = poids;
     
-    // Générer et afficher les recommandations
-    const recommendations = generateRecommendations(profile, imc, tdee);
-    const recommendationsList = document.getElementById('recommendations-list');
-    if (recommendationsList) {
-    recommendationsList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
+    // Calculer la différence de poids si nécessaire
+    let poidsIdeal = calculateIdealWeight(taille, sexe);
+    let difference = Math.abs(poids - poidsIdeal);
+    let message = "";
+    
+    if (imc < 18.5) {
+        message = `Poids à gagner : ${difference.toFixed(1)} kg`;
+    } else if (imc > 25) {
+        message = `Poids à perdre : ${difference.toFixed(1)} kg`;
+    } else {
+        message = "Poids dans la normale";
+    }
+    
+    document.getElementById('weight-to-lose').innerHTML = `<span>${message}</span>`;
+}
+
+// Fonction pour calculer le poids idéal (formule de Lorentz)
+function calculateIdealWeight(taille, sexe) {
+    taille = taille / 100; // convertir en mètres
+    if (sexe === 'homme') {
+        return (taille * 100 - 100) - ((taille * 100 - 150) / 4);
+    } else {
+        return (taille * 100 - 100) - ((taille * 100 - 150) / 2.5);
     }
 }
 
@@ -1316,11 +1354,16 @@ function generateRecommendations(profile, imc, tdee) {
 
     // Recommandations basées sur le niveau d'activité
     if (habitudesVie.niveauActivite === 'sedentaire') {
-        recommendations.push("Augmentez progressivement votre activité physique en commençant par 3 séances par semaine.");
-    } else if (habitudesVie.niveauActivite === 'tres_actif') {
-        recommendations.push("Assurez-vous d'avoir une récupération adéquate entre les séances et une alimentation adaptée à votre niveau d'activité.");
+        recommendations.push("Augmentez progressivement votre niveau d'activité");
+        recommendations.push("Commencez par des exercices de faible intensité");
     }
-    
+
+    // Recommandations basées sur l'expérience
+    if (objectifsFitness.experience === 'debutant') {
+        recommendations.push("Concentrez-vous sur la technique avant la charge");
+        recommendations.push("Commencez par des exercices basiques composés");
+    }
+
     return recommendations;
 }
 
@@ -1372,7 +1415,7 @@ function calculerBesoinsCaloriques(metabolismeBase, niveauActivite) {
 function calculerObjectifPoids(taille, poids, objectifPrincipal) {
     const imc = calculerIMC(poids, taille);
     let poidsIdeal = 0;
-    let message = '';
+    let message = "";
 
     if (objectifPrincipal === 'prise_de_muscle') {
         // Pour la prise de muscle, on vise un IMC de 23.5 comme minimum
