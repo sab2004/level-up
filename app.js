@@ -1180,7 +1180,84 @@ function generateNextWorkout() {
     });
 }
 
-// Calcul et affichage des analyses du profil
+// Fonction pour analyser le poids de manière détaillée
+function analyzeWeight(poids, taille, sexe, age) {
+    const imc = calculateBMI(poids, taille);
+    const poidsIdeal = calculateIdealWeight(taille, sexe);
+    const muscleIndex = calculateMuscleIndex(poids, taille, sexe, age);
+    
+    let analysis = {
+        status: '',
+        details: '',
+        recommendations: []
+    };
+
+    // Calcul des limites de poids santé selon la taille et le sexe
+    const minHealthyWeight = (18.5 * (taille/100) * (taille/100));
+    const maxHealthyWeight = (25 * (taille/100) * (taille/100));
+    
+    // Analyse détaillée
+    if (imc < 18.5) {
+        analysis.status = "sous-poids";
+        analysis.details = `Avec une taille de ${taille}cm et un poids de ${poids}kg, votre IMC de ${imc.toFixed(1)} indique un sous-poids.`;
+        if (sexe === 'homme') {
+            if (age < 35) {
+                analysis.details += " Pour un homme de votre âge, il est particulièrement important d'avoir une masse musculaire suffisante.";
+            }
+            analysis.recommendations.push(`Pour atteindre un poids santé, vous devriez viser au moins ${Math.round(minHealthyWeight)}kg.`);
+        } else {
+            analysis.recommendations.push(`Pour atteindre un poids santé, vous devriez viser au moins ${Math.round(minHealthyWeight)}kg.`);
+        }
+    } else if (imc >= 18.5 && imc < 25) {
+        if (poids < poidsIdeal - 5) {
+            analysis.status = "poids normal bas";
+            analysis.details = `Bien que votre IMC de ${imc.toFixed(1)} soit dans la normale, vous êtes dans la fourchette basse pour votre morphologie.`;
+            analysis.recommendations.push(`Votre poids idéal théorique serait autour de ${Math.round(poidsIdeal)}kg.`);
+        } else if (poids > poidsIdeal + 5) {
+            analysis.status = "poids normal haut";
+            analysis.details = `Votre IMC de ${imc.toFixed(1)} est normal, mais vous êtes dans la fourchette haute pour votre morphologie.`;
+        } else {
+            analysis.status = "poids optimal";
+            analysis.details = `Votre poids de ${poids}kg est optimal pour votre taille de ${taille}cm.`;
+        }
+    } else if (imc >= 25 && imc < 30) {
+        analysis.status = "surpoids";
+        analysis.details = `Avec un IMC de ${imc.toFixed(1)}, vous êtes en surpoids.`;
+        if (sexe === 'homme' && muscleIndex > 23) {
+            analysis.details += " Cependant, si vous pratiquez régulièrement la musculation, ce surpoids pourrait être dû à une masse musculaire importante.";
+        }
+        analysis.recommendations.push(`Un poids santé pour votre taille serait entre ${Math.round(minHealthyWeight)}kg et ${Math.round(maxHealthyWeight)}kg.`);
+    } else {
+        analysis.status = "obésité";
+        analysis.details = `Votre IMC de ${imc.toFixed(1)} indique une obésité.`;
+        analysis.recommendations.push(`Un poids santé pour votre taille serait entre ${Math.round(minHealthyWeight)}kg et ${Math.round(maxHealthyWeight)}kg.`);
+    }
+
+    // Ajout de recommandations spécifiques selon l'âge
+    if (age < 25) {
+        analysis.recommendations.push("À votre âge, il est important de développer de bonnes habitudes alimentaires et d'activité physique pour maintenir un poids santé à long terme.");
+    } else if (age > 50) {
+        analysis.recommendations.push("Après 50 ans, il est important de maintenir une masse musculaire suffisante tout en gardant un poids santé.");
+    }
+
+    return analysis;
+}
+
+// Fonction pour calculer un indice de masse musculaire approximatif
+function calculateMuscleIndex(poids, taille, sexe, age) {
+    const imc = calculateBMI(poids, taille);
+    let muscleIndex = imc;
+    
+    if (sexe === 'homme') {
+        muscleIndex *= 1.1; // Les hommes ont naturellement plus de masse musculaire
+    }
+    if (age < 30) {
+        muscleIndex *= 1.05; // Les jeunes ont généralement plus de masse musculaire
+    }
+    
+    return muscleIndex;
+}
+
 function updateProfileAnalysis() {
     // Récupérer les données du profil
     const profile = JSON.parse(localStorage.getItem('levelup_profile') || '{}');
@@ -1207,67 +1284,61 @@ function updateProfileAnalysis() {
     const imc = calculateBMI(poids, taille);
     document.getElementById('bmi-value').textContent = imc.toFixed(1);
     
-    // Interpréter l'IMC et générer les recommandations
-    const interpretation = interpretBMI(imc);
-    document.getElementById('bmi-interpretation').textContent = interpretation;
+    // Obtenir l'analyse détaillée du poids
+    const weightAnalysis = analyzeWeight(poids, taille, sexe, age);
+    
+    // Mettre à jour l'interprétation de l'IMC
+    document.getElementById('bmi-interpretation').textContent = weightAnalysis.details;
 
-    // Générer les recommandations basées sur l'IMC
+    // Générer les recommandations
     const recommendationsList = document.getElementById('recommendations-list');
     if (recommendationsList) {
-        const recommendations = [];
-        
-        // Analyse du poids et recommandations
-        if (imc < 18.5) {
-            recommendations.push("Votre IMC indique que vous êtes en sous-poids. Voici nos recommandations :");
-            recommendations.push("• Augmentez progressivement votre apport calorique quotidien");
-            recommendations.push("• Privilégiez les repas riches en protéines et en nutriments");
-            recommendations.push("• Consultez un professionnel de santé pour un suivi personnalisé");
-        } else if (imc >= 18.5 && imc < 25) {
-            recommendations.push("Votre IMC indique que vous avez un poids normal. Voici nos recommandations :");
-            recommendations.push("• Maintenez vos bonnes habitudes alimentaires");
-            recommendations.push("• Pratiquez une activité physique régulière");
-            recommendations.push("• Surveillez votre poids régulièrement");
-        } else if (imc >= 25 && imc < 30) {
-            recommendations.push("Votre IMC indique que vous êtes en surpoids. Voici nos recommandations :");
-            recommendations.push("• Adoptez une alimentation équilibrée et surveillez vos portions");
-            recommendations.push("• Augmentez votre activité physique quotidienne");
-            recommendations.push("• Fixez-vous des objectifs réalistes de perte de poids");
-        } else {
-            recommendations.push("Votre IMC indique une obésité. Voici nos recommandations :");
-            recommendations.push("• Consultez un professionnel de santé pour un suivi adapté");
-            recommendations.push("• Adoptez progressivement de nouvelles habitudes alimentaires");
-            recommendations.push("• Commencez une activité physique adaptée à votre condition");
-        }
+        const recommendations = [weightAnalysis.details];
+        recommendations.push(...weightAnalysis.recommendations);
 
-        // Ajouter des recommandations spécifiques basées sur l'âge
-        if (age > 50) {
-            recommendations.push("• Privilégiez les exercices à faible impact");
-            recommendations.push("• Maintenez une bonne densité osseuse avec des exercices appropriés");
+        // Ajouter des recommandations spécifiques basées sur le statut
+        switch (weightAnalysis.status) {
+            case "sous-poids":
+                recommendations.push("• Augmentez progressivement votre apport calorique quotidien");
+                recommendations.push("• Privilégiez les repas riches en protéines et en nutriments");
+                recommendations.push("• Consultez un professionnel de santé pour un suivi personnalisé");
+                break;
+            case "poids normal bas":
+            case "poids optimal":
+            case "poids normal haut":
+                recommendations.push("• Maintenez vos bonnes habitudes alimentaires");
+                recommendations.push("• Pratiquez une activité physique régulière");
+                recommendations.push("• Surveillez votre poids régulièrement");
+                break;
+            case "surpoids":
+                recommendations.push("• Adoptez une alimentation équilibrée et surveillez vos portions");
+                recommendations.push("• Augmentez votre activité physique quotidienne");
+                recommendations.push("• Fixez-vous des objectifs réalistes de perte de poids");
+                break;
+            case "obésité":
+                recommendations.push("• Consultez un professionnel de santé pour un suivi adapté");
+                recommendations.push("• Adoptez progressivement de nouvelles habitudes alimentaires");
+                recommendations.push("• Commencez une activité physique adaptée à votre condition");
+                break;
         }
 
         // Afficher les recommandations
         recommendationsList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
     }
     
-    // Calculer le métabolisme de base
-    const bmr = calculateBMR(poids, taille, age, sexe);
-    document.getElementById('bmr-value').textContent = Math.round(bmr);
-    
-    // Calculer les besoins caloriques journaliers
-    const tdee = calculateTDEE(bmr, profile.habitudesVie.niveauActivite);
-    document.getElementById('tdee-value').textContent = Math.round(tdee);
-    
-    // Mettre à jour l'affichage du poids actuel
+    // Mettre à jour les autres valeurs
     document.getElementById('target-weight').textContent = poids;
+    document.getElementById('bmr-value').textContent = Math.round(calculateBMR(poids, taille, age, sexe));
+    document.getElementById('tdee-value').textContent = Math.round(calculateTDEE(calculateBMR(poids, taille, age, sexe), profile.habitudesVie.niveauActivite));
     
-    // Calculer la différence de poids si nécessaire
-    let poidsIdeal = calculateIdealWeight(taille, sexe);
-    let difference = Math.abs(poids - poidsIdeal);
+    // Mettre à jour le message de différence de poids
+    const poidsIdeal = calculateIdealWeight(taille, sexe);
+    const difference = Math.abs(poids - poidsIdeal);
     let message = "";
     
-    if (imc < 18.5) {
+    if (weightAnalysis.status === "sous-poids" || weightAnalysis.status === "poids normal bas") {
         message = `Poids à gagner : ${difference.toFixed(1)} kg`;
-    } else if (imc > 25) {
+    } else if (weightAnalysis.status === "surpoids" || weightAnalysis.status === "obésité") {
         message = `Poids à perdre : ${difference.toFixed(1)} kg`;
     } else {
         message = "Poids dans la normale";
