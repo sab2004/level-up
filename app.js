@@ -2269,6 +2269,37 @@ function updateNutritionPlan() {
                 .join('');
         }
     }
+
+    // Générer et afficher les suggestions de menus
+    const suggestionsMenus = genererSuggestionsMenus(profile, caloriesJournalieres);
+    
+    // Afficher le menu type
+    const menuSuggestionsElement = document.getElementById('menu-suggestions');
+    if (menuSuggestionsElement && suggestionsMenus.menuType) {
+        menuSuggestionsElement.innerHTML = Object.entries(suggestionsMenus.menuType)
+            .map(([repas, details]) => `
+                <li class="menu-repas">
+                    <div class="menu-repas-titre">${repas}</div>
+                    <div class="menu-repas-details">${details.base}</div>
+                    <div class="menu-repas-details">${details.details}</div>
+                    <div class="menu-repas-macros">${details.macros}</div>
+                </li>
+            `).join('');
+    }
+
+    // Afficher les alternatives
+    const menuAlternativesElement = document.getElementById('menu-alternatives');
+    if (menuAlternativesElement && suggestionsMenus.alternatives) {
+        menuAlternativesElement.innerHTML = Object.entries(suggestionsMenus.alternatives)
+            .map(([repas, details]) => `
+                <li class="menu-repas">
+                    <div class="menu-repas-titre">${repas}</div>
+                    <div class="menu-repas-details">${details.base}</div>
+                    <div class="menu-repas-details">${details.details}</div>
+                    <div class="menu-repas-macros">${details.macros}</div>
+                </li>
+            `).join('');
+    }
 }
 
 // Modifier l'initialisation du tableau de bord pour utiliser la nouvelle fonction
@@ -2293,3 +2324,93 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+function genererSuggestionsMenus(profile, caloriesJournalieres) {
+    const objectifs = profile.objectifsFitness.objectifsPrincipaux;
+    const regime = profile.regimeAlimentaire.type;
+    
+    // Menus de base selon l'objectif
+    const menus = {
+        perte_poids: {
+            "Petit-déjeuner": {
+                base: "Porridge d'avoine aux fruits rouges",
+                details: "50g de flocons d'avoine, 150ml de lait écrémé, fruits rouges, 1 cuillère de miel",
+                macros: "Calories: 300, Protéines: 12g, Glucides: 45g, Lipides: 5g"
+            },
+            "Collation": {
+                base: "Yaourt grec et fruits secs",
+                details: "150g de yaourt grec 0%, 30g d'amandes",
+                macros: "Calories: 200, Protéines: 15g, Glucides: 10g, Lipides: 12g"
+            },
+            "Déjeuner": {
+                base: "Salade de poulet grillé",
+                details: "150g de blanc de poulet, quinoa, légumes variés, vinaigrette légère",
+                macros: "Calories: 400, Protéines: 35g, Glucides: 35g, Lipides: 15g"
+            },
+            "Dîner": {
+                base: "Poisson et légumes vapeur",
+                details: "180g de cabillaud, brocolis, carottes, courgettes",
+                macros: "Calories: 300, Protéines: 35g, Glucides: 20g, Lipides: 8g"
+            }
+        },
+        gain_muscle: {
+            "Petit-déjeuner": {
+                base: "Omelette protéinée",
+                details: "4 œufs entiers, 50g d'avoine, 1 banane, 30g de beurre de cacahuète",
+                macros: "Calories: 650, Protéines: 35g, Glucides: 55g, Lipides: 35g"
+            },
+            "Collation": {
+                base: "Shake protéiné et fruits secs",
+                details: "30g de whey, 1 banane, 40g d'amandes, lait demi-écrémé",
+                macros: "Calories: 400, Protéines: 30g, Glucides: 35g, Lipides: 20g"
+            },
+            "Déjeuner": {
+                base: "Bol de riz et poulet",
+                details: "200g de poulet, 100g de riz complet, légumes grillés, huile d'olive",
+                macros: "Calories: 700, Protéines: 50g, Glucides: 70g, Lipides: 25g"
+            },
+            "Dîner": {
+                base: "Steak et patates douces",
+                details: "200g de bœuf, 200g de patates douces, légumes verts",
+                macros: "Calories: 600, Protéines: 45g, Glucides: 50g, Lipides: 25g"
+            }
+        }
+    };
+
+    // Alternatives végétariennes/vegans
+    const alternatives = {
+        vegetarien: {
+            "Petit-déjeuner": {
+                base: "Bowl protéiné végétarien",
+                details: "Yaourt grec, granola, graines de chia, fruits frais",
+                macros: "Calories: 400, Protéines: 20g, Glucides: 45g, Lipides: 15g"
+            },
+            "Déjeuner": {
+                base: "Buddha bowl aux légumineuses",
+                details: "Quinoa, lentilles, pois chiches, avocat, légumes grillés",
+                macros: "Calories: 550, Protéines: 25g, Glucides: 65g, Lipides: 20g"
+            }
+        },
+        vegan: {
+            "Petit-déjeuner": {
+                base: "Smoothie bowl protéiné vegan",
+                details: "Protéine de pois, banane, fruits rouges, graines, lait d'amande",
+                macros: "Calories: 350, Protéines: 20g, Glucides: 45g, Lipides: 12g"
+            },
+            "Déjeuner": {
+                base: "Tofu grillé et quinoa",
+                details: "200g de tofu, quinoa, légumes, sauce tahini",
+                macros: "Calories: 500, Protéines: 25g, Glucides: 55g, Lipides: 22g"
+            }
+        }
+    };
+
+    // Sélectionner le menu approprié
+    let menuType = objectifs.includes('perte_poids') ? menus.perte_poids : menus.gain_muscle;
+    let menuAlternatif = alternatives[regime] || null;
+
+    return {
+        menuType: menuType,
+        alternatives: menuAlternatif
+    };
+}
