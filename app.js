@@ -1299,24 +1299,79 @@ function updateProfileAnalysis() {
         // Ajouter des recommandations spécifiques basées sur le statut
         switch (weightAnalysis.status) {
             case "sous-poids":
-                recommendations.push("• Augmentez progressivement votre apport calorique quotidien");
-                recommendations.push("• Privilégiez les repas riches en protéines et en nutriments");
+                recommendations.push("• Augmentez progressivement votre apport calorique quotidien de 300-500 calories");
+                recommendations.push("• Objectif protéines : 2g par kg de poids corporel");
+                recommendations.push("• Répartition nutritionnelle recommandée :");
+                recommendations.push("  - 25-30% de protéines (viandes maigres, œufs, produits laitiers, légumineuses)");
+                recommendations.push("  - 50-55% de glucides complexes (riz complet, pâtes complètes, patates douces)");
+                recommendations.push("  - 20-25% de bonnes graisses (avocat, huile d'olive, noix)");
+                recommendations.push("• Prenez 3 repas principaux et 2-3 collations riches en protéines");
+                recommendations.push("• Privilégiez les shakes protéinés après l'entraînement");
                 recommendations.push("• Consultez un professionnel de santé pour un suivi personnalisé");
                 break;
             case "poids normal bas":
             case "poids optimal":
             case "poids normal haut":
+                if (profile.objectifsFitness && profile.objectifsFitness.objectifsPrincipaux.includes('gain_muscle')) {
+                    recommendations.push("• Plan nutritionnel pour la prise de masse musculaire :");
+                    recommendations.push("• Augmentez votre apport calorique de 10-20% au-dessus de votre maintien");
+                    recommendations.push("• Objectif protéines : 1.8-2.2g par kg de poids corporel");
+                    recommendations.push("• Répartition des macronutriments :");
+                    recommendations.push("  - 30% de protéines (poulet, poisson, œufs, whey)");
+                    recommendations.push("  - 50% de glucides (riz, pâtes, avoine, patates douces)");
+                    recommendations.push("  - 20% de lipides (huiles, noix, avocat)");
+                    recommendations.push("• Timing des repas :");
+                    recommendations.push("  - Petit-déjeuner riche en protéines et glucides");
+                    recommendations.push("  - Repas pré-entraînement : 2-3h avant, riche en glucides");
+                    recommendations.push("  - Post-entraînement : shake protéiné + glucides rapides");
+                    recommendations.push("  - 3-4 autres repas équilibrés dans la journée");
+                }
                 break;
             case "surpoids":
-                recommendations.push("• Adoptez une alimentation équilibrée et surveillez vos portions");
+                recommendations.push("• Créez un déficit calorique modéré de 300-500 calories");
+                recommendations.push("• Objectif protéines : 2-2.2g par kg de poids idéal");
+                recommendations.push("• Répartition nutritionnelle recommandée :");
+                recommendations.push("  - 30-35% de protéines (viandes maigres, poisson, blanc d'œuf)");
+                recommendations.push("  - 40-45% de glucides complexes (légumes, céréales complètes)");
+                recommendations.push("  - 20-25% de graisses saines (poisson gras, huile d'olive)");
+                recommendations.push("• Privilégiez les aliments riches en fibres pour la satiété");
                 recommendations.push("• Augmentez votre activité physique quotidienne");
                 recommendations.push("• Fixez-vous des objectifs réalistes de perte de poids");
                 break;
             case "obésité":
                 recommendations.push("• Consultez un professionnel de santé pour un suivi adapté");
-                recommendations.push("• Adoptez progressivement de nouvelles habitudes alimentaires");
+                recommendations.push("• Plan nutritionnel de base :");
+                recommendations.push("  - Réduisez progressivement les portions");
+                recommendations.push("  - Privilégiez les protéines maigres et légumes");
+                recommendations.push("  - Évitez les aliments transformés et sucrés");
                 recommendations.push("• Commencez une activité physique adaptée à votre condition");
                 break;
+        }
+
+        // Ajout de recommandations spécifiques selon l'expérience
+        if (profile.objectifsFitness && profile.objectifsFitness.experience === 'debutant') {
+            recommendations.push("• Conseils pour débutants :");
+            recommendations.push("  - Commencez par 3-4 repas équilibrés par jour");
+            recommendations.push("  - Utilisez une application de suivi nutritionnel");
+            recommendations.push("  - Préparez vos repas à l'avance");
+            recommendations.push("  - Hydratez-vous bien (2-3L d'eau par jour)");
+        }
+
+        // Ajout de recommandations selon les restrictions alimentaires
+        if (profile.regimeAlimentaire && profile.regimeAlimentaire.restrictions) {
+            if (profile.regimeAlimentaire.restrictions.includes('vegetarien')) {
+                recommendations.push("• Sources de protéines végétariennes :");
+                recommendations.push("  - Œufs et produits laitiers");
+                recommendations.push("  - Légumineuses et quinoa");
+                recommendations.push("  - Protéines de soja et seitan");
+            }
+            if (profile.regimeAlimentaire.restrictions.includes('vegan')) {
+                recommendations.push("• Sources de protéines végétales :");
+                recommendations.push("  - Tofu, tempeh et seitan");
+                recommendations.push("  - Légumineuses et quinoa");
+                recommendations.push("  - Suppléments en protéines végétales");
+                recommendations.push("• Supplémentez en vitamine B12 et D");
+            }
         }
 
         // Afficher les recommandations
@@ -1914,7 +1969,7 @@ function genererRecommandationsNutritionnelles(formData, caloriesJournalieres) {
             points: [
                 'Privilégier les aliments à faible densité calorique',
                 'Éviter les sucres raffinés et les graisses saturées',
-                'Boire beaucoup d\'eau (2L minimum par jour)',
+                'Boire beaucoup d'eau (2L minimum par jour)',
                 'Manger lentement et mastiquer longuement',
                 'Éviter de manger 3h avant le coucher'
             ]
