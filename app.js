@@ -237,95 +237,125 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!form) return;
 
     form.addEventListener('submit', async function(e) {
-            e.preventDefault();
+        e.preventDefault();
         console.log('Formulaire soumis');
 
         try {
             // Vérification des mots de passe
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
-
+            
             if (password !== confirmPassword) {
                 alert('Les mots de passe ne correspondent pas.');
+                return;
+            }
+
+            if (password.length < 8) {
+                alert('Le mot de passe doit contenir au moins 8 caractères.');
                 return;
             }
 
             // Collecte des données du formulaire
             const formData = {
                 informationsGenerales: {
-                nom: document.getElementById('nom').value,
+                    nom: document.getElementById('nom').value,
                     prenom: document.getElementById('prenom').value,
-                email: document.getElementById('email').value,
-                    password: password, // Stockage sécurisé à implémenter
-                age: parseInt(document.getElementById('age').value),
-                    sexe: document.querySelector('input[name="sexe"]:checked').value,
-                poids: parseFloat(document.getElementById('poids').value),
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value,
+                    age: parseInt(document.getElementById('age').value),
+                    sexe: document.querySelector('input[name="sexe"]:checked')?.value,
+                    poids: parseFloat(document.getElementById('poids').value),
                     taille: parseInt(document.getElementById('taille').value),
                     antecedentsMedicaux: {
-                        present: document.querySelector('input[name="antecedents"]:checked').value === 'oui',
+                        present: document.querySelector('input[name="antecedents"]:checked')?.value === 'oui',
                         details: document.getElementById('antecedents-details').value
                     }
                 },
                 objectifsFitness: {
                     objectifsPrincipaux: Array.from(document.querySelectorAll('input[name="objectifs"]:checked')).map(cb => cb.value),
                     autreObjectif: document.getElementById('autre-objectif').value,
-                    experience: document.querySelector('input[name="experience"]:checked').value,
-                    frequenceEntrainement: document.querySelector('input[name="frequence"]:checked').value,
+                    experience: document.querySelector('input[name="experience"]:checked')?.value,
+                    frequenceEntrainement: document.querySelector('input[name="frequence"]:checked')?.value,
                     typesEntrainement: Array.from(document.querySelectorAll('input[name="type-entrainement"]:checked')).map(cb => cb.value),
                     autreTypeEntrainement: document.getElementById('autre-type').value,
                     exercicesNonAimes: document.getElementById('exercices-non-aimes').value
                 },
                 regimeAlimentaire: {
-                    type: document.querySelector('input[name="regime"]:checked').value,
+                    type: document.querySelector('input[name="regime"]:checked')?.value,
                     autreRegime: document.getElementById('autre-regime').value,
                     allergies: {
-                        present: document.querySelector('input[name="allergies"]:checked').value === 'oui',
+                        present: document.querySelector('input[name="allergies"]:checked')?.value === 'oui',
                         details: document.getElementById('allergies-details').value
                     },
-                    nombreRepas: document.querySelector('input[name="nb-repas"]:checked').value,
+                    nombreRepas: document.querySelector('input[name="nb-repas"]:checked')?.value,
                     autreNombreRepas: document.getElementById('autre-nb-repas').value,
                     preferencesAlimentaires: document.getElementById('preferences-alimentaires').value,
-                    objectifNutritionnel: document.querySelector('input[name="objectif-nutritionnel"]:checked').value,
+                    objectifNutritionnel: document.querySelector('input[name="objectif-nutritionnel"]:checked')?.value,
                     autreObjectifNutritionnel: document.getElementById('autre-obj-nutri').value
                 },
                 habitudesVie: {
-                    niveauActivite: document.querySelector('input[name="niveau-activite"]:checked').value,
-                    horairesFlexibles: document.querySelector('input[name="horaires-flexibles"]:checked').value === 'oui',
+                    niveauActivite: document.querySelector('input[name="niveau-activite"]:checked')?.value,
+                    horairesFlexibles: document.querySelector('input[name="horaires-flexibles"]:checked')?.value === 'oui',
                     contraintesHoraires: document.getElementById('contraintes-horaires').value
                 },
                 motivationSuivi: {
-                    raisonInscription: document.querySelector('input[name="motivation"]:checked').value,
+                    raisonInscription: document.querySelector('input[name="motivation"]:checked')?.value,
                     autreMotivation: document.getElementById('autre-motivation').value,
                     suiviProgres: {
-                        souhaite: document.querySelector('input[name="suivi"]:checked').value === 'oui',
+                        souhaite: document.querySelector('input[name="suivi"]:checked')?.value === 'oui',
                         frequence: document.getElementById('frequence-suivi').value
                     },
-                    conseilsSupplementaires: document.querySelector('input[name="conseils-supplementaires"]:checked').value === 'oui'
+                    conseilsSupplementaires: document.querySelector('input[name="conseils-supplementaires"]:checked')?.value === 'oui'
                 },
                 commentaires: {
                     attentes: document.getElementById('attentes').value
                 },
                 preferences: {
-                newsletter: document.getElementById('newsletter').checked
+                    newsletter: document.getElementById('newsletter').checked
                 }
             };
 
+            // Vérification des champs requis
+            if (!formData.informationsGenerales.sexe || 
+                !formData.objectifsFitness.experience || 
+                !formData.objectifsFitness.frequenceEntrainement || 
+                !formData.regimeAlimentaire.type || 
+                !formData.regimeAlimentaire.nombreRepas || 
+                !formData.regimeAlimentaire.objectifNutritionnel || 
+                !formData.habitudesVie.niveauActivite) {
+                alert('Veuillez remplir tous les champs obligatoires.');
+                return;
+            }
+
             console.log('Données du formulaire collectées:', formData);
 
-            // Générer le plan personnalisé
-            const planPersonnalise = genererPlanPersonnalise(formData);
-            console.log('Plan personnalisé généré:', planPersonnalise);
+            try {
+                // Générer le plan personnalisé
+                const planPersonnalise = genererPlanPersonnalise(formData);
+                console.log('Plan personnalisé généré:', planPersonnalise);
 
-            // Stocker les données dans le localStorage
-            localStorage.setItem('levelup_profile', JSON.stringify(formData));
-            localStorage.setItem('levelup_plan', JSON.stringify(planPersonnalise));
-            
-            // Rediriger vers le tableau de bord
-            window.location.href = 'dashboard.html';
+                // Stocker les données dans le localStorage
+                localStorage.setItem('levelup_profile', JSON.stringify(formData));
+                localStorage.setItem('levelup_plan', JSON.stringify(planPersonnalise));
+                
+                console.log('Données stockées dans le localStorage');
+                console.log('Profile:', localStorage.getItem('levelup_profile'));
+                console.log('Plan:', localStorage.getItem('levelup_plan'));
+                
+                // Rediriger vers le tableau de bord avec un petit délai pour s'assurer que les données sont bien enregistrées
+                console.log('Redirection vers le tableau de bord...');
+                setTimeout(() => {
+                    console.log('Tentative de redirection...');
+                    window.location.href = 'dashboard.html';
+                }, 100);
+            } catch (error) {
+                console.error('Erreur lors de la génération du plan:', error);
+                alert('Une erreur est survenue lors de la génération de votre plan personnalisé. Veuillez réessayer.');
+            }
         } catch (error) {
             console.error('Erreur lors du traitement du formulaire:', error);
             alert('Une erreur est survenue lors de l\'inscription. Veuillez vérifier tous les champs obligatoires.');
-    }
+        }
     });
 });
 
@@ -1635,57 +1665,71 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Formulaire soumis');
 
         try {
-        // Collecte des données du formulaire
+            // Vérification des mots de passe
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                alert('Les mots de passe ne correspondent pas.');
+                return;
+            }
+
+            if (password.length < 8) {
+                alert('Le mot de passe doit contenir au moins 8 caractères.');
+                return;
+            }
+
+            // Collecte des données du formulaire
             const formData = {
                 informationsGenerales: {
-            nom: document.getElementById('nom').value,
+                    nom: document.getElementById('nom').value,
                     prenom: document.getElementById('prenom').value,
-            email: document.getElementById('email').value,
-                    password: document.getElementById('password').value, // Stockage sécurisé à implémenter
-            age: parseInt(document.getElementById('age').value),
-                    sexe: document.querySelector('input[name="sexe"]:checked').value,
-            poids: parseFloat(document.getElementById('poids').value),
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value,
+                    age: parseInt(document.getElementById('age').value),
+                    sexe: document.querySelector('input[name="sexe"]:checked')?.value,
+                    poids: parseFloat(document.getElementById('poids').value),
                     taille: parseInt(document.getElementById('taille').value),
                     antecedentsMedicaux: {
-                        present: document.querySelector('input[name="antecedents"]:checked').value === 'oui',
+                        present: document.querySelector('input[name="antecedents"]:checked')?.value === 'oui',
                         details: document.getElementById('antecedents-details').value
                     }
                 },
                 objectifsFitness: {
                     objectifsPrincipaux: Array.from(document.querySelectorAll('input[name="objectifs"]:checked')).map(cb => cb.value),
                     autreObjectif: document.getElementById('autre-objectif').value,
-                    experience: document.querySelector('input[name="experience"]:checked').value,
-                    frequenceEntrainement: document.querySelector('input[name="frequence"]:checked').value,
+                    experience: document.querySelector('input[name="experience"]:checked')?.value,
+                    frequenceEntrainement: document.querySelector('input[name="frequence"]:checked')?.value,
                     typesEntrainement: Array.from(document.querySelectorAll('input[name="type-entrainement"]:checked')).map(cb => cb.value),
                     autreTypeEntrainement: document.getElementById('autre-type').value,
                     exercicesNonAimes: document.getElementById('exercices-non-aimes').value
                 },
                 regimeAlimentaire: {
-                    type: document.querySelector('input[name="regime"]:checked').value,
+                    type: document.querySelector('input[name="regime"]:checked')?.value,
                     autreRegime: document.getElementById('autre-regime').value,
                     allergies: {
-                        present: document.querySelector('input[name="allergies"]:checked').value === 'oui',
+                        present: document.querySelector('input[name="allergies"]:checked')?.value === 'oui',
                         details: document.getElementById('allergies-details').value
                     },
-                    nombreRepas: document.querySelector('input[name="nb-repas"]:checked').value,
+                    nombreRepas: document.querySelector('input[name="nb-repas"]:checked')?.value,
                     autreNombreRepas: document.getElementById('autre-nb-repas').value,
                     preferencesAlimentaires: document.getElementById('preferences-alimentaires').value,
-                    objectifNutritionnel: document.querySelector('input[name="objectif-nutritionnel"]:checked').value,
+                    objectifNutritionnel: document.querySelector('input[name="objectif-nutritionnel"]:checked')?.value,
                     autreObjectifNutritionnel: document.getElementById('autre-obj-nutri').value
                 },
                 habitudesVie: {
-                    niveauActivite: document.querySelector('input[name="niveau-activite"]:checked').value,
-                    horairesFlexibles: document.querySelector('input[name="horaires-flexibles"]:checked').value === 'oui',
+                    niveauActivite: document.querySelector('input[name="niveau-activite"]:checked')?.value,
+                    horairesFlexibles: document.querySelector('input[name="horaires-flexibles"]:checked')?.value === 'oui',
                     contraintesHoraires: document.getElementById('contraintes-horaires').value
                 },
                 motivationSuivi: {
-                    raisonInscription: document.querySelector('input[name="motivation"]:checked').value,
+                    raisonInscription: document.querySelector('input[name="motivation"]:checked')?.value,
                     autreMotivation: document.getElementById('autre-motivation').value,
                     suiviProgres: {
-                        souhaite: document.querySelector('input[name="suivi"]:checked').value === 'oui',
+                        souhaite: document.querySelector('input[name="suivi"]:checked')?.value === 'oui',
                         frequence: document.getElementById('frequence-suivi').value
                     },
-                    conseilsSupplementaires: document.querySelector('input[name="conseils-supplementaires"]:checked').value === 'oui'
+                    conseilsSupplementaires: document.querySelector('input[name="conseils-supplementaires"]:checked')?.value === 'oui'
                 },
                 commentaires: {
                     attentes: document.getElementById('attentes').value
@@ -1695,18 +1739,43 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             };
 
+            // Vérification des champs requis
+            if (!formData.informationsGenerales.sexe || 
+                !formData.objectifsFitness.experience || 
+                !formData.objectifsFitness.frequenceEntrainement || 
+                !formData.regimeAlimentaire.type || 
+                !formData.regimeAlimentaire.nombreRepas || 
+                !formData.regimeAlimentaire.objectifNutritionnel || 
+                !formData.habitudesVie.niveauActivite) {
+                alert('Veuillez remplir tous les champs obligatoires.');
+                return;
+            }
+
             console.log('Données du formulaire collectées:', formData);
 
-            // Générer le plan personnalisé
-            const planPersonnalise = genererPlanPersonnalise(formData);
-            console.log('Plan personnalisé généré:', planPersonnalise);
+            try {
+                // Générer le plan personnalisé
+                const planPersonnalise = genererPlanPersonnalise(formData);
+                console.log('Plan personnalisé généré:', planPersonnalise);
 
-            // Stocker les données dans le localStorage
-            localStorage.setItem('levelup_profile', JSON.stringify(formData));
-            localStorage.setItem('levelup_plan', JSON.stringify(planPersonnalise));
-
-            // Rediriger vers le tableau de bord
-        window.location.href = 'dashboard.html';
+                // Stocker les données dans le localStorage
+                localStorage.setItem('levelup_profile', JSON.stringify(formData));
+                localStorage.setItem('levelup_plan', JSON.stringify(planPersonnalise));
+                
+                console.log('Données stockées dans le localStorage');
+                console.log('Profile:', localStorage.getItem('levelup_profile'));
+                console.log('Plan:', localStorage.getItem('levelup_plan'));
+                
+                // Rediriger vers le tableau de bord avec un petit délai pour s'assurer que les données sont bien enregistrées
+                console.log('Redirection vers le tableau de bord...');
+                setTimeout(() => {
+                    console.log('Tentative de redirection...');
+                    window.location.href = 'dashboard.html';
+                }, 100);
+            } catch (error) {
+                console.error('Erreur lors de la génération du plan:', error);
+                alert('Une erreur est survenue lors de la génération de votre plan personnalisé. Veuillez réessayer.');
+            }
         } catch (error) {
             console.error('Erreur lors du traitement du formulaire:', error);
             alert('Une erreur est survenue lors de l\'inscription. Veuillez vérifier tous les champs obligatoires.');
@@ -2027,3 +2096,29 @@ function genererRecommandationsNutritionnelles(formData, caloriesJournalieres) {
 
     return recommandations;
 } 
+
+// Initialisation du tableau de bord
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initialisation du tableau de bord...');
+    
+    // Vérifier si nous sommes sur la page du tableau de bord
+    if (document.querySelector('.dashboard-content')) {
+        console.log('Page du tableau de bord détectée');
+        
+        // Vérifier si les données du profil existent
+        const profileData = localStorage.getItem('levelup_profile');
+        const planData = localStorage.getItem('levelup_plan');
+        
+        console.log('Données du profil:', profileData);
+        console.log('Données du plan:', planData);
+        
+        if (profileData && planData) {
+            console.log('Données trouvées, mise à jour du tableau de bord');
+            updateProfileAnalysis();
+        } else {
+            console.log('Aucune donnée trouvée');
+            // Rediriger vers la page d'inscription si aucune donnée n'est trouvée
+            window.location.href = 'inscription.html';
+        }
+    }
+});
