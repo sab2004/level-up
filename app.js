@@ -2168,3 +2168,31 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+// Gestionnaire du bouton "Créer mon profil"
+document.addEventListener('DOMContentLoaded', function() {
+    const btnCreerProfil = document.getElementById('creer-profil-btn');
+    if (btnCreerProfil) {
+        btnCreerProfil.addEventListener('click', function(e) {
+            e.preventDefault(); // Empêcher la soumission par défaut
+            console.log('Clic sur le bouton Créer mon profil');
+            
+            // Vérifier si le formulaire est valide
+            const form = document.getElementById('inscription-form');
+            if (form && form.checkValidity()) {
+                // Simuler la soumission du formulaire
+                form.dispatchEvent(new Event('submit'));
+                
+                // Redirection directe après un court délai
+                setTimeout(() => {
+                    const dashboardUrl = new URL('dashboard.html', window.location.href).href;
+                    console.log('Redirection forcée vers:', dashboardUrl);
+                    window.location.href = dashboardUrl;
+                }, 500);
+            } else {
+                console.log('Formulaire invalide');
+                form.reportValidity();
+            }
+        });
+    }
+});
