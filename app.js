@@ -1306,9 +1306,6 @@ function updateProfileAnalysis() {
             case "poids normal bas":
             case "poids optimal":
             case "poids normal haut":
-                recommendations.push("• Maintenez vos bonnes habitudes alimentaires");
-                recommendations.push("• Pratiquez une activité physique régulière");
-                recommendations.push("• Surveillez votre poids régulièrement");
                 break;
             case "surpoids":
                 recommendations.push("• Adoptez une alimentation équilibrée et surveillez vos portions");
