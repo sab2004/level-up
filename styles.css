@@ -2338,4 +2338,67 @@ textarea::-webkit-scrollbar-thumb {
 .recommendation-content li {
     margin-bottom: 0.5rem;
     line-height: 1.5;
+}
+
+/* Styles pour le plan nutritionnel */
+#plan-nutritionnel {
+    padding: 20px;
+}
+
+.nutrition-section {
+    margin-bottom: 30px;
+}
+
+.nutrition-section h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.nutrition-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.nutrition-section li {
+    margin-bottom: 10px;
+    padding: 8px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.recommandation-groupe {
+    margin-bottom: 20px;
+}
+
+.recommandation-groupe h4 {
+    color: #3498db;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.recommandation-groupe ul {
+    padding-left: 20px;
+}
+
+.recommandation-groupe ul li {
+    background: none;
+    padding: 4px 0;
+    position: relative;
+}
+
+.recommandation-groupe ul li:before {
+    content: "•";
+    color: #3498db;
+    font-weight: bold;
+    position: absolute;
+    left: -15px;
+}
+
+#repartition-calories li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: #e8f4f8;
+    border-left: 4px solid #3498db;
 } 

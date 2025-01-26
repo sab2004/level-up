@@ -2196,3 +2196,100 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+function updateDashboard() {
+    console.log('Mise à jour du tableau de bord...');
+    updateProfileAnalysis();
+    updateNutritionPlan();
+}
+
+function updateNutritionPlan() {
+    const profile = JSON.parse(localStorage.getItem('levelup_profile') || '{}');
+    if (!profile.informationsGenerales) {
+        console.log('Aucun profil trouvé');
+        return;
+    }
+
+    const {
+        poids,
+        taille,
+        age,
+        sexe
+    } = profile.informationsGenerales;
+
+    // Calcul des besoins caloriques
+    const bmr = calculateBMR(poids, taille, age, sexe);
+    const tdee = calculateTDEE(bmr, profile.habitudesVie.niveauActivite);
+    
+    // Ajustement des calories selon l'objectif
+    let caloriesJournalieres = tdee;
+    if (profile.objectifsFitness.objectifsPrincipaux.includes('perte_poids')) {
+        caloriesJournalieres = tdee - 500; // Déficit calorique pour la perte de poids
+    } else if (profile.objectifsFitness.objectifsPrincipaux.includes('gain_muscle')) {
+        caloriesJournalieres = tdee + 300; // Surplus calorique pour la prise de masse
+    }
+
+    // Générer les recommandations nutritionnelles
+    const recommandations = genererRecommandationsNutritionnelles(profile, caloriesJournalieres);
+
+    // Afficher la répartition des calories
+    const repartitionCaloriesElement = document.getElementById('repartition-calories');
+    if (repartitionCaloriesElement) {
+        const repartitionHtml = recommandations
+            .find(r => r.titre === 'Répartition des calories')
+            ?.details.map(repas => 
+                `<li>${repas.repas}: ${repas.calories} calories (${repas.pourcentage}%)</li>`
+            ).join('') || '';
+        repartitionCaloriesElement.innerHTML = repartitionHtml;
+    }
+
+    // Afficher les recommandations nutritionnelles
+    const recommandationsElement = document.getElementById('recommandations-nutrition');
+    if (recommandationsElement) {
+        const recommandationsHtml = recommandations
+            .filter(r => r.titre !== 'Répartition des calories')
+            .map(rec => 
+                `<li class="recommandation-groupe">
+                    <h4>${rec.titre}</h4>
+                    <ul>
+                        ${rec.points.map(point => `<li>${point}</li>`).join('')}
+                    </ul>
+                </li>`
+            ).join('');
+        recommandationsElement.innerHTML = recommandationsHtml;
+    }
+
+    // Afficher le planning des repas
+    const planningRepasElement = document.getElementById('planning-repas');
+    if (planningRepasElement) {
+        const timingRepas = recommandations.find(r => r.titre === 'Timing des repas');
+        if (timingRepas) {
+            planningRepasElement.innerHTML = timingRepas.points
+                .map(point => `<li>${point}</li>`)
+                .join('');
+        }
+    }
+}
+
+// Modifier l'initialisation du tableau de bord pour utiliser la nouvelle fonction
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initialisation du tableau de bord...');
+    
+    if (document.querySelector('.dashboard-content')) {
+        console.log('Page du tableau de bord détectée');
+        
+        const profileData = localStorage.getItem('levelup_profile');
+        const planData = localStorage.getItem('levelup_plan');
+        
+        console.log('Données du profil:', profileData);
+        console.log('Données du plan:', planData);
+        
+        if (profileData && planData) {
+            console.log('Données trouvées, mise à jour du tableau de bord');
+            updateDashboard();
+        } else {
+            console.log('Aucune donnée trouvée');
+            window.location.href = 'inscription.html';
+        }
+    }
+});
