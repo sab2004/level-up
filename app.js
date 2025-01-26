@@ -335,19 +335,42 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Plan personnalisé généré:', planPersonnalise);
 
                 // Stocker les données dans le localStorage
-                localStorage.setItem('levelup_profile', JSON.stringify(formData));
-                localStorage.setItem('levelup_plan', JSON.stringify(planPersonnalise));
-                
-                console.log('Données stockées dans le localStorage');
-                console.log('Profile:', localStorage.getItem('levelup_profile'));
-                console.log('Plan:', localStorage.getItem('levelup_plan'));
-                
-                // Rediriger vers le tableau de bord avec un petit délai pour s'assurer que les données sont bien enregistrées
-                console.log('Redirection vers le tableau de bord...');
-                setTimeout(() => {
-                    console.log('Tentative de redirection...');
-                    window.location.href = 'dashboard.html';
-                }, 100);
+                try {
+                    localStorage.setItem('levelup_profile', JSON.stringify(formData));
+                    localStorage.setItem('levelup_plan', JSON.stringify(planPersonnalise));
+                    
+                    console.log('Données stockées avec succès dans le localStorage');
+                    console.log('Profile:', localStorage.getItem('levelup_profile'));
+                    console.log('Plan:', localStorage.getItem('levelup_plan'));
+                    
+                    // Vérifier que les données sont bien stockées
+                    if (!localStorage.getItem('levelup_profile') || !localStorage.getItem('levelup_plan')) {
+                        throw new Error('Les données n\'ont pas été correctement stockées dans le localStorage');
+                    }
+                    
+                    // Redirection vers le tableau de bord
+                    console.log('Tentative de redirection vers le tableau de bord...');
+                    const dashboardUrl = new URL('dashboard.html', window.location.href).href;
+                    console.log('URL de redirection:', dashboardUrl);
+                    
+                    // Utiliser une promesse pour la redirection
+                    new Promise((resolve, reject) => {
+                        try {
+                            window.location.href = dashboardUrl;
+                            console.log('Redirection initiée');
+                            setTimeout(resolve, 100);
+                        } catch (error) {
+                            reject(error);
+                        }
+                    }).catch(error => {
+                        console.error('Erreur lors de la redirection:', error);
+                        alert('Erreur lors de la redirection. Veuillez réessayer ou cliquer sur le lien du tableau de bord manuellement.');
+                    });
+                    
+                } catch (error) {
+                    console.error('Erreur lors du stockage des données:', error);
+                    alert('Une erreur est survenue lors de la sauvegarde de vos données. Veuillez réessayer.');
+                }
             } catch (error) {
                 console.error('Erreur lors de la génération du plan:', error);
                 alert('Une erreur est survenue lors de la génération de votre plan personnalisé. Veuillez réessayer.');
@@ -1759,19 +1782,42 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Plan personnalisé généré:', planPersonnalise);
 
                 // Stocker les données dans le localStorage
-                localStorage.setItem('levelup_profile', JSON.stringify(formData));
-                localStorage.setItem('levelup_plan', JSON.stringify(planPersonnalise));
-                
-                console.log('Données stockées dans le localStorage');
-                console.log('Profile:', localStorage.getItem('levelup_profile'));
-                console.log('Plan:', localStorage.getItem('levelup_plan'));
-                
-                // Rediriger vers le tableau de bord avec un petit délai pour s'assurer que les données sont bien enregistrées
-                console.log('Redirection vers le tableau de bord...');
-                setTimeout(() => {
-                    console.log('Tentative de redirection...');
-                    window.location.href = 'dashboard.html';
-                }, 100);
+                try {
+                    localStorage.setItem('levelup_profile', JSON.stringify(formData));
+                    localStorage.setItem('levelup_plan', JSON.stringify(planPersonnalise));
+                    
+                    console.log('Données stockées avec succès dans le localStorage');
+                    console.log('Profile:', localStorage.getItem('levelup_profile'));
+                    console.log('Plan:', localStorage.getItem('levelup_plan'));
+                    
+                    // Vérifier que les données sont bien stockées
+                    if (!localStorage.getItem('levelup_profile') || !localStorage.getItem('levelup_plan')) {
+                        throw new Error('Les données n\'ont pas été correctement stockées dans le localStorage');
+                    }
+                    
+                    // Redirection vers le tableau de bord
+                    console.log('Tentative de redirection vers le tableau de bord...');
+                    const dashboardUrl = new URL('dashboard.html', window.location.href).href;
+                    console.log('URL de redirection:', dashboardUrl);
+                    
+                    // Utiliser une promesse pour la redirection
+                    new Promise((resolve, reject) => {
+                        try {
+                            window.location.href = dashboardUrl;
+                            console.log('Redirection initiée');
+                            setTimeout(resolve, 100);
+                        } catch (error) {
+                            reject(error);
+                        }
+                    }).catch(error => {
+                        console.error('Erreur lors de la redirection:', error);
+                        alert('Erreur lors de la redirection. Veuillez réessayer ou cliquer sur le lien du tableau de bord manuellement.');
+                    });
+                    
+                } catch (error) {
+                    console.error('Erreur lors du stockage des données:', error);
+                    alert('Une erreur est survenue lors de la sauvegarde de vos données. Veuillez réessayer.');
+                }
             } catch (error) {
                 console.error('Erreur lors de la génération du plan:', error);
                 alert('Une erreur est survenue lors de la génération de votre plan personnalisé. Veuillez réessayer.');
