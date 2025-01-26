@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 informationsGenerales: {
                 nom: document.getElementById('nom').value,
                     prenom: document.getElementById('prenom').value,
-                    email: document.getElementById('email').value,
+                email: document.getElementById('email').value,
                     password: password, // Stockage sécurisé à implémenter
                 age: parseInt(document.getElementById('age').value),
                     sexe: document.querySelector('input[name="sexe"]:checked').value,
@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     attentes: document.getElementById('attentes').value
                 },
                 preferences: {
-                    newsletter: document.getElementById('newsletter').checked
+                newsletter: document.getElementById('newsletter').checked
                 }
             };
 
@@ -1185,57 +1185,67 @@ function updateProfileAnalysis() {
     // Récupérer les données du profil
     const profile = JSON.parse(localStorage.getItem('levelup_profile') || '{}');
     
-    if (!profile.poids || !profile.taille) {
-        return; // Sortir si les données essentielles ne sont pas disponibles
+    if (!profile.informationsGenerales) {
+        console.log('Aucun profil trouvé');
+        return;
+    }
+
+    // Extraire les informations du profil
+    const {
+        poids,
+        taille,
+        age,
+        sexe
+    } = profile.informationsGenerales;
+
+    if (!poids || !taille) {
+        console.log('Données essentielles manquantes');
+        return;
     }
 
     // Calculer l'IMC
-    const imc = calculateBMI(profile.poids, profile.taille);
+    const imc = calculateBMI(poids, taille);
     document.getElementById('bmi-value').textContent = imc.toFixed(1);
     
     // Interpréter l'IMC
     const interpretation = interpretBMI(imc);
     document.getElementById('bmi-interpretation').textContent = interpretation;
     
-    // Calculer le métabolisme de base (formule de Mifflin-St Jeor)
-    const bmr = calculateBMR(profile.poids, profile.taille, profile.age, profile.sexe);
+    // Calculer le métabolisme de base
+    const bmr = calculateBMR(poids, taille, age, sexe);
     document.getElementById('bmr-value').textContent = Math.round(bmr);
     
     // Calculer les besoins caloriques journaliers
-    const tdee = calculateTDEE(bmr, profile.niveau_activite);
+    const tdee = calculateTDEE(bmr, profile.habitudesVie.niveauActivite);
     document.getElementById('tdee-value').textContent = Math.round(tdee);
     
-    // Calculer l'objectif de poids en fonction de l'IMC et de l'objectif
-    let objectifPoids = profile.poids; // Par défaut, maintien du poids actuel
+    // Calculer l'objectif de poids
+    let objectifPoids = poids;
     let message = "";
 
-    if (profile.objectif_principal === 'prise_de_muscle') {
-        // Pour la prise de muscle, on vise un IMC entre 22 et 25 selon la taille
-        const imcCible = 23.5; // IMC idéal pour un physique athlétique
-        objectifPoids = Math.round((imcCible * (profile.taille/100) * (profile.taille/100)) * 10) / 10;
+    if (profile.objectifsFitness.objectifsPrincipaux.includes('gain_muscle')) {
+        const imcCible = 23.5;
+        objectifPoids = Math.round((imcCible * (taille/100) * (taille/100)) * 10) / 10;
         message = "Poids à gagner";
-    } else if (profile.objectif_principal === 'perte_de_poids') {
+    } else if (profile.objectifsFitness.objectifsPrincipaux.includes('perte_poids')) {
         if (imc > 25) {
-            // Pour les personnes en surpoids, viser un IMC de 24
-            objectifPoids = Math.round((24 * (profile.taille/100) * (profile.taille/100)) * 10) / 10;
-            message = "Poids à perdre";
-        } else if (imc > 18.5) {
-            // Pour les personnes de poids normal, viser -2kg
-            objectifPoids = Math.round((profile.poids - 2) * 10) / 10;
+            objectifPoids = Math.round((24 * (taille/100) * (taille/100)) * 10) / 10;
             message = "Poids à perdre";
         }
     }
 
     // Afficher l'objectif de poids
     document.getElementById('target-weight').textContent = objectifPoids;
-    const difference = Math.abs(profile.poids - objectifPoids);
+    const difference = Math.abs(poids - objectifPoids);
     document.getElementById('weight-to-lose').innerHTML = 
         `<span>${message} : ${difference.toFixed(1)} kg</span>`;
     
-    // Générer les recommandations
+    // Générer et afficher les recommandations
     const recommendations = generateRecommendations(profile, imc, tdee);
     const recommendationsList = document.getElementById('recommendations-list');
+    if (recommendationsList) {
     recommendationsList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
+    }
 }
 
 // Calcul de l'IMC
@@ -1276,25 +1286,40 @@ function calculateTDEE(bmr, activityLevel) {
 // Génération des recommandations personnalisées
 function generateRecommendations(profile, imc, tdee) {
     const recommendations = [];
+    const { objectifsFitness, habitudesVie, regimeAlimentaire } = profile;
     
     // Recommandations basées sur l'IMC
     if (imc < 18.5) {
-        recommendations.push("Augmentez progressivement votre apport calorique quotidien");
-        recommendations.push("Concentrez-vous sur des aliments riches en protéines et en nutriments");
-    } else if (imc >= 25) {
-        recommendations.push("Créez un déficit calorique modéré de 500 kcal par jour");
-        recommendations.push("Privilégiez les aliments peu caloriques et riches en fibres");
+        recommendations.push("Votre IMC indique un poids insuffisant. Concentrez-vous sur une alimentation équilibrée et riche en nutriments.");
+    } else if (imc >= 25 && imc < 30) {
+        recommendations.push("Votre IMC indique un léger surpoids. Un déficit calorique modéré de 300-500 calories est recommandé.");
+    } else if (imc >= 30) {
+        recommendations.push("Votre IMC indique une obésité. Consultez un professionnel de santé pour un suivi personnalisé.");
     }
-    
+
+    // Recommandations basées sur les objectifs
+    if (objectifsFitness.objectifsPrincipaux.includes('gain_muscle')) {
+        recommendations.push("Pour la prise de muscle, visez un surplus calorique de 300-500 calories et consommez 1.6-2.2g de protéines par kg de poids corporel.");
+        recommendations.push("Privilégiez les exercices de force composés : squats, développé couché, soulevé de terre.");
+    } else if (objectifsFitness.objectifsPrincipaux.includes('perte_poids')) {
+        recommendations.push("Pour la perte de poids, créez un déficit calorique de 500 calories et maintenez un apport protéique élevé.");
+        recommendations.push("Combinez cardio et musculation pour optimiser la perte de graisse.");
+    }
+
+    // Recommandations nutritionnelles
+    if (regimeAlimentaire.restrictions.includes('vegetarien')) {
+        recommendations.push("Pour un régime végétarien, assurez-vous de consommer suffisamment de protéines végétales : légumineuses, tofu, seitan.");
+    }
+    if (regimeAlimentaire.restrictions.includes('vegan')) {
+        recommendations.push("Pensez à supplémenter en vitamine B12 et surveillez vos apports en fer et en calcium.");
+    }
+
     // Recommandations basées sur le niveau d'activité
-    if (profile.niveau_activite === 'sedentaire') {
-        recommendations.push("Augmentez progressivement votre activité physique quotidienne");
-        recommendations.push("Commencez par 15-30 minutes de marche par jour");
+    if (habitudesVie.niveauActivite === 'sedentaire') {
+        recommendations.push("Augmentez progressivement votre activité physique en commençant par 3 séances par semaine.");
+    } else if (habitudesVie.niveauActivite === 'tres_actif') {
+        recommendations.push("Assurez-vous d'avoir une récupération adéquate entre les séances et une alimentation adaptée à votre niveau d'activité.");
     }
-    
-    // Recommandations générales
-    recommendations.push("Buvez au moins 2L d'eau par jour");
-    recommendations.push("Visez 7-8 heures de sommeil par nuit");
     
     return recommendations;
 }
