@@ -2084,7 +2084,7 @@ function genererRecommandationsNutritionnelles(formData, caloriesJournalieres) {
             points: [
                 'Privilégier les aliments à faible densité calorique',
                 'Éviter les sucres raffinés et les graisses saturées',
-                'Boire beaucoup d'eau (2L minimum par jour)',
+                "Boire beaucoup d'eau (2L minimum par jour)",
                 'Manger lentement et mastiquer longuement',
                 'Éviter de manger 3h avant le coucher'
             ]
