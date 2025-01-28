@@ -2460,3 +2460,7 @@ textarea::-webkit-scrollbar-thumb {
         grid-template-columns: 1fr;
     }
 } 
+
+.menu-alternatives {
+    display: none; /* Caché par défaut */
+} 

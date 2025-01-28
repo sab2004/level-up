@@ -2264,9 +2264,17 @@ function updateNutritionPlan() {
             `).join('');
     }
 
-    // Afficher les alternatives
+    // Afficher les alternatives seulement si un régime spécifique est défini
     const menuAlternativesElement = document.getElementById('menu-alternatives');
-    if (menuAlternativesElement && suggestionsMenus.alternatives) {
+    const menuAlternativesContainer = document.querySelector('.menu-alternatives');
+    
+    if (profile.regimeAlimentaire && profile.regimeAlimentaire.type && 
+        profile.regimeAlimentaire.type !== 'standard' && 
+        menuAlternativesElement && 
+        menuAlternativesContainer && 
+        suggestionsMenus.alternatives) {
+        
+        menuAlternativesContainer.style.display = 'block';
         menuAlternativesElement.innerHTML = Object.entries(suggestionsMenus.alternatives)
             .map(([repas, details]) => `
                 <li class="menu-repas">
@@ -2276,6 +2284,8 @@ function updateNutritionPlan() {
                     <div class="menu-repas-macros">${details.macros}</div>
                 </li>
             `).join('');
+    } else if (menuAlternativesContainer) {
+        menuAlternativesContainer.style.display = 'none';
     }
 }
 
