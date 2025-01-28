@@ -2401,3 +2401,31 @@ function genererSuggestionsMenus(profile, caloriesJournalieres) {
         alternatives: menuAlternatif
     };
 }
+
+// Gestion de la navigation
+document.addEventListener('DOMContentLoaded', function() {
+    const nutritionLink = document.querySelector('a[href="#nutrition"]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    
+    if (nutritionLink) {
+        nutritionLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Retirer la classe active de tous les liens
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            // Ajouter la classe active au lien Nutrition
+            this.classList.add('active');
+            
+            // Afficher la section nutrition et masquer les autres sections
+            document.querySelectorAll('.dashboard-content > section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            document.querySelector('#plan-nutritionnel').parentElement.style.display = 'block';
+            
+            // Mettre à jour le plan nutritionnel
+            updateNutritionPlan();
+        });
+    }
+});

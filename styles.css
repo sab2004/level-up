@@ -2463,4 +2463,19 @@ textarea::-webkit-scrollbar-thumb {
 
 .menu-alternatives {
     display: none; /* Caché par défaut */
+}
+
+.nav-links li a[href="#nutrition"] {
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+.nav-links li a[href="#nutrition"]:hover {
+    color: var(--primary-color);
+}
+
+/* Style actif pour l'onglet Nutrition */
+.nav-links li a[href="#nutrition"].active {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
 } 
