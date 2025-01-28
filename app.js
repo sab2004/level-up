@@ -2128,18 +2128,6 @@ function genererRecommandationsNutritionnelles(formData, caloriesJournalieres) {
         recommandations.push(recommandationsRegime[regime]);
     }
 
-    // Timing des repas selon l'activité
-    const timingRepas = {
-        titre: 'Timing des repas',
-        points: [
-            'Petit-déjeuner : Dans l\'heure suivant le réveil',
-            'Pré-entraînement : 2-3h avant la séance',
-            'Post-entraînement : Dans les 30-60 minutes après',
-            'Dernier repas : 2-3h avant le coucher'
-        ]
-    };
-    recommandations.push(timingRepas);
-
     return recommandations;
 } 
 
@@ -2257,17 +2245,6 @@ function updateNutritionPlan() {
                 </li>`
             ).join('');
         recommandationsElement.innerHTML = recommandationsHtml;
-    }
-
-    // Afficher le planning des repas
-    const planningRepasElement = document.getElementById('planning-repas');
-    if (planningRepasElement) {
-        const timingRepas = recommandations.find(r => r.titre === 'Timing des repas');
-        if (timingRepas) {
-            planningRepasElement.innerHTML = timingRepas.points
-                .map(point => `<li>${point}</li>`)
-                .join('');
-        }
     }
 
     // Générer et afficher les suggestions de menus
