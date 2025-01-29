@@ -6,7 +6,6 @@
     <title>Nutrition - FitCoach</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js" defer></script>
 </head>
 <body>
@@ -22,47 +21,159 @@
             <ul class="nav-links">
                 <li><a href="index.html">Accueil</a></li>
                 <li><a href="dashboard.html">Tableau de Bord</a></li>
-                <li><a href="#" class="active">Nutrition</a></li>
+                <li><a href="nutrition.html" class="active">Nutrition</a></li>
                 <li><a href="#" class="btn-connexion">Déconnexion</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <header class="page-header">
+    <!-- En-tête de la page Nutrition -->
+    <header class="nutrition-header">
         <h1>Plan Nutritionnel</h1>
+        <p>Votre programme alimentaire personnalisé pour atteindre vos objectifs</p>
     </header>
 
-    <!-- Main Content -->
+    <!-- Contenu principal -->
     <main class="nutrition-content">
-        <!-- Section Plan Nutritionnel -->
-        <div class="dashboard-card">
+        <!-- Section Plan Nutritionnel Personnalisé -->
+        <section class="nutrition-plan">
             <h2>Plan Nutritionnel Personnalisé</h2>
-            <div id="plan-nutritionnel">
-                <div class="nutrition-section">
-                    <h3>Répartition des Calories</h3>
-                    <ul id="repartition-calories"></ul>
+            
+            <!-- Résumé des objectifs -->
+            <div class="nutrition-summary">
+                <div class="summary-card">
+                    <i class="fas fa-bullseye"></i>
+                    <h3>Objectif</h3>
+                    <p>Perte de poids</p>
                 </div>
-                <div class="nutrition-section">
-                    <h3>Suggestions de Menus</h3>
-                    <div id="suggestions-menus">
-                        <div class="menu-jour">
-                            <h4>Menu Type</h4>
-                            <ul id="menu-suggestions"></ul>
+                <div class="summary-card">
+                    <i class="fas fa-fire"></i>
+                    <h3>Calories Quotidiennes</h3>
+                    <p>2000 kcal</p>
+                </div>
+                <div class="summary-card">
+                    <i class="fas fa-weight"></i>
+                    <h3>Objectif de Poids</h3>
+                    <p>-0.5 kg/semaine</p>
+                </div>
+            </div>
+
+            <!-- Répartition des Calories -->
+            <div class="macros-distribution">
+                <h3>Répartition des Macronutriments</h3>
+                <div class="macros-grid">
+                    <div class="macro-card">
+                        <div class="macro-icon">
+                            <i class="fas fa-drumstick-bite"></i>
                         </div>
-                        <div class="menu-alternatives">
-                            <h4>Alternatives</h4>
-                            <ul id="menu-alternatives"></ul>
+                        <div class="macro-details">
+                            <h4>Protéines</h4>
+                            <p>30%</p>
+                            <span>150g</span>
+                        </div>
+                    </div>
+                    <div class="macro-card">
+                        <div class="macro-icon">
+                            <i class="fas fa-bread-slice"></i>
+                        </div>
+                        <div class="macro-details">
+                            <h4>Glucides</h4>
+                            <p>45%</p>
+                            <span>225g</span>
+                        </div>
+                    </div>
+                    <div class="macro-card">
+                        <div class="macro-icon">
+                            <i class="fas fa-cheese"></i>
+                        </div>
+                        <div class="macro-details">
+                            <h4>Lipides</h4>
+                            <p>25%</p>
+                            <span>55g</span>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <!-- Suggestions de Menus -->
+            <div class="menu-suggestions">
+                <h3>Suggestions de Menus</h3>
+                <div class="meal-plans">
+                    <div class="meal-time">
+                        <h4>Petit-déjeuner</h4>
+                        <ul>
+                            <li>Flocons d'avoine (50g) avec fruits rouges</li>
+                            <li>Yaourt grec nature (150g)</li>
+                            <li>Amandes (15g)</li>
+                        </ul>
+                    </div>
+                    <div class="meal-time">
+                        <h4>Déjeuner</h4>
+                        <ul>
+                            <li>Blanc de poulet grillé (150g)</li>
+                            <li>Quinoa (100g)</li>
+                            <li>Légumes variés (200g)</li>
+                        </ul>
+                    </div>
+                    <div class="meal-time">
+                        <h4>Collation</h4>
+                        <ul>
+                            <li>Pomme</li>
+                            <li>Fromage blanc 0% (100g)</li>
+                        </ul>
+                    </div>
+                    <div class="meal-time">
+                        <h4>Dîner</h4>
+                        <ul>
+                            <li>Filet de saumon (150g)</li>
+                            <li>Patate douce (150g)</li>
+                            <li>Épinards (150g)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conseils Nutritionnels -->
+            <div class="nutrition-tips">
+                <h3>Conseils Nutritionnels</h3>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <i class="fas fa-clock"></i>
+                        <h4>Timing des Repas</h4>
+                        <p>Espacez vos repas de 3-4 heures pour maintenir un niveau d'énergie stable.</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-glass-water"></i>
+                        <h4>Hydratation</h4>
+                        <p>Buvez au moins 2L d'eau par jour, plus pendant l'exercice.</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-carrot"></i>
+                        <h4>Variété</h4>
+                        <p>Diversifiez vos sources de nutriments en variant les aliments.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer>
         <div class="footer-content">
+            <div class="footer-section">
+                <h4>FitCoach</h4>
+                <p>Votre partenaire vers une meilleure santé</p>
+            </div>
+            <div class="footer-section">
+                <h4>Liens Rapides</h4>
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="dashboard.html">Tableau de Bord</a></li>
+                    <li><a href="nutrition.html">Nutrition</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
             <p>&copy; 2024 FitCoach. Tous droits réservés.</p>
         </div>
     </footer>
