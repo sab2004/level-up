@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition - FitCoach</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span>FitCoach</span>
+            </div>
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="dashboard.html">Tableau de Bord</a></li>
+                <li><a href="#" class="active">Nutrition</a></li>
+                <li><a href="#" class="btn-connexion">Déconnexion</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Plan Nutritionnel</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="nutrition-content">
+        <!-- Section Plan Nutritionnel -->
+        <div class="dashboard-card">
+            <h2>Plan Nutritionnel Personnalisé</h2>
+            <div id="plan-nutritionnel">
+                <div class="nutrition-section">
+                    <h3>Répartition des Calories</h3>
+                    <ul id="repartition-calories"></ul>
+                </div>
+                <div class="nutrition-section">
+                    <h3>Suggestions de Menus</h3>
+                    <div id="suggestions-menus">
+                        <div class="menu-jour">
+                            <h4>Menu Type</h4>
+                            <ul id="menu-suggestions"></ul>
+                        </div>
+                        <div class="menu-alternatives">
+                            <h4>Alternatives</h4>
+                            <ul id="menu-alternatives"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 FitCoach. Tous droits réservés.</p>
+        </div>
+    </footer>
+</body>
+</html> 
