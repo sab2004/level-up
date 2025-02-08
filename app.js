@@ -1353,28 +1353,64 @@ function updateProfileAnalysis() {
     if (recommendationsList) {
         const recommendations = [];
 
-        // Ajuster les recommandations en fonction des objectifs de l'utilisateur
+        // Ajouter l'analyse IMC dans les recommandations
+        const profileRecommendations = document.getElementById('profile-recommendations');
+        if (profileRecommendations) {
+            profileRecommendations.innerHTML = `
+                <div class="recommendation-card">
+                    <div class="recommendation-header">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>Analyse IMC</h4>
+                    </div>
+                    <p>${weightAnalysis.details}</p>
+                </div>
+                <div class="recommendation-card">
+                    <div class="recommendation-header">
+                        <i class="fas fa-bullseye"></i>
+                        <h4>Objectif de Poids</h4>
+                    </div>
+                    <p>${weightAnalysis.recommendations.join(' ')}</p>
+                </div>
+            `;
+        }
+
+        // Calculer les besoins caloriques
+        const bmr = calculateBMR(poids, taille, age, sexe);
+        const tdee = calculateTDEE(bmr, profile.habitudesVie.niveauActivite);
+        let caloriesJournalieres = tdee;
+
+        // Ajuster les recommandations en fonction des objectifs
         if (wantsWeightLoss) {
+            caloriesJournalieres -= 500; // Déficit calorique pour la perte de poids
             recommendations.push("Objectif : Perte de poids");
-            recommendations.push("• Créez un déficit calorique modéré de 500 calories");
-            recommendations.push("• Objectif protéines : 2-2.2g par kg de poids idéal");
+            recommendations.push(`• Créez un déficit calorique de 500 calories (${caloriesJournalieres} kcal/jour)`);
+            recommendations.push(`• Objectif protéines : ${Math.round(poids * 2.2)}g par jour`);
             recommendations.push("• Répartition nutritionnelle recommandée :");
-            recommendations.push("  - 30-35% de protéines (viandes maigres, poisson, blanc d'œuf)");
-            recommendations.push("  - 40-45% de glucides complexes (légumes, céréales complètes)");
-            recommendations.push("  - 20-25% de graisses saines (poisson gras, huile d'olive)");
-            recommendations.push("• Privilégiez les aliments riches en fibres pour la satiété");
-            recommendations.push("• Augmentez votre activité physique quotidienne");
-            recommendations.push("• Visez une perte de poids de 0.5-1kg par semaine");
+            recommendations.push("  - 30-35% de protéines");
+            recommendations.push("  - 40-45% de glucides complexes");
+            recommendations.push("  - 20-25% de graisses saines");
         } else if (wantsMuscleGain) {
+            caloriesJournalieres += 300; // Surplus calorique pour la prise de masse
             recommendations.push("Objectif : Prise de masse musculaire");
-            recommendations.push("• Augmentez votre apport calorique de 10-20% au-dessus de votre maintien");
-            recommendations.push("• Objectif protéines : 1.8-2.2g par kg de poids corporel");
+            recommendations.push(`• Augmentez votre apport calorique à ${caloriesJournalieres} kcal/jour`);
+            recommendations.push(`• Objectif protéines : ${Math.round(poids * 1.8)}-${Math.round(poids * 2.2)}g par jour`);
             recommendations.push("• Répartition des macronutriments :");
-            recommendations.push("  - 30% de protéines (poulet, poisson, œufs, whey)");
-            recommendations.push("  - 50% de glucides (riz, pâtes, avoine, patates douces)");
-            recommendations.push("  - 20% de lipides (huiles, noix, avocat)");
-        } else {
-            recommendations.push(...weightAnalysis.recommendations);
+            recommendations.push("  - 30% de protéines");
+            recommendations.push("  - 50% de glucides");
+            recommendations.push("  - 20% de lipides");
+        }
+
+        // Ajouter des recommandations spécifiques selon le régime alimentaire
+        if (profile.regimeAlimentaire?.type === 'vegetarien') {
+            recommendations.push("• Sources de protéines recommandées :");
+            recommendations.push("  - Œufs, produits laitiers");
+            recommendations.push("  - Légumineuses, tofu, seitan");
+            recommendations.push("  - Quinoa, riz complet + légumineuses");
+        } else if (profile.regimeAlimentaire?.type === 'vegan') {
+            recommendations.push("• Sources de protéines végétales :");
+            recommendations.push("  - Légumineuses, tofu, tempeh");
+            recommendations.push("  - Seitan, protéines de pois");
+            recommendations.push("  - Supplémentation en B12 recommandée");
         }
 
         // Afficher les recommandations
@@ -1387,20 +1423,16 @@ function updateProfileAnalysis() {
     document.getElementById('tdee-value').textContent = Math.round(calculateTDEE(calculateBMR(poids, taille, age, sexe), profile.habitudesVie.niveauActivite));
     
     // Mettre à jour le message de différence de poids
+    const poidsIdeal = calculateIdealWeight(taille, sexe);
+    const difference = Math.abs(poids - poidsIdeal);
     let message = "";
     
-    // Déterminer le message en fonction des objectifs de l'utilisateur
     if (wantsWeightLoss) {
-        const poidsObjectif = calculateIdealWeight(taille, sexe);
-        const difference = Math.max(0, poids - poidsObjectif).toFixed(1);
-        message = `Poids à perdre : ${difference} kg`;
+        message = `Poids à perdre : ${Math.max(0, poids - poidsIdeal).toFixed(1)} kg`;
     } else if (wantsMuscleGain) {
-        const poidsObjectif = calculateIdealWeight(taille, sexe) * 1.1; // +10% pour la masse musculaire
-        const difference = Math.max(0, poidsObjectif - poids).toFixed(1);
-        message = `Poids à gagner : ${difference} kg`;
+        const poidsObjectif = poidsIdeal * 1.1; // +10% pour la masse musculaire
+        message = `Poids à gagner : ${Math.max(0, poidsObjectif - poids).toFixed(1)} kg`;
     } else {
-        const poidsIdeal = calculateIdealWeight(taille, sexe);
-        const difference = Math.abs(poids - poidsIdeal);
         if (imc < 18.5) {
             message = `Poids à gagner : ${difference.toFixed(1)} kg`;
         } else if (imc >= 25) {
