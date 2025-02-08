@@ -2211,11 +2211,30 @@ function updateNutritionPlan() {
     
     // Ajustement des calories selon l'objectif
     let caloriesJournalieres = tdee;
+    let objectifPoids = '';
+    let objectifTexte = '';
+
     if (profile.objectifsFitness.objectifsPrincipaux.includes('perte_poids')) {
         caloriesJournalieres = tdee - 500; // Déficit calorique pour la perte de poids
+        objectifPoids = '-0.5 kg/semaine';
+        objectifTexte = 'Perte de poids';
     } else if (profile.objectifsFitness.objectifsPrincipaux.includes('gain_muscle')) {
         caloriesJournalieres = tdee + 300; // Surplus calorique pour la prise de masse
+        objectifPoids = '+0.5 kg/semaine';
+        objectifTexte = 'Prise de masse musculaire';
+    } else {
+        objectifPoids = 'Maintien';
+        objectifTexte = 'Maintien du poids';
     }
+
+    // Mise à jour des éléments d'affichage du résumé
+    const objectifElement = document.querySelector('.nutrition-summary p:first-of-type');
+    const caloriesElement = document.querySelector('.nutrition-summary p:nth-of-type(2)');
+    const poidsElement = document.querySelector('.nutrition-summary p:last-of-type');
+
+    if (objectifElement) objectifElement.textContent = objectifTexte;
+    if (caloriesElement) caloriesElement.textContent = `${Math.round(caloriesJournalieres)} kcal`;
+    if (poidsElement) poidsElement.textContent = objectifPoids;
 
     // Générer les recommandations nutritionnelles
     const recommandations = genererRecommandationsNutritionnelles(profile, caloriesJournalieres);
