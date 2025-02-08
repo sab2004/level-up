@@ -1,0 +1,86 @@
+[33m07bd032[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Correction de la fonctionnalité de génération de menus et ajout du message de chargement
+[33mec89c35[m Ajout de la fonctionnalité de génération dynamique de menus personnalisés
+[33m2a00970[m Correction de l'objectif de poids recommandé pour un IMC santé
+[33m8f7df4f[m Amélioration de la présentation des recommandations personnalisées avec un design en cartes
+[33me282116[m Adaptation du plan nutritionnel pour la prise de masse musculaire
+[33m4d6620d[m Ajustement de la marge supérieure du titre Plan Nutritionnel
+[33ma8fcc5a[m Amélioration du design de la page nutrition avec une meilleure structure et mise en page
+[33m8149abb[m Mise à jour des liens de navigation dans dashboard.html et index.html
+[33m2c69363[m Création de la page nutrition avec le plan nutritionnel personnalisé
+[33me07b256[m Suppression de la section Plan Nutritionnel Personnalisé
+[33m17bfea2[m Ajout de la gestion conditionnelle des alternatives selon le régime alimentaire
+[33m67a5d7f[m Affichage conditionnel des alternatives selon le régime alimentaire
+[33m7e7b37f[m Suppression de la section Recommandations Nutritionnelles
+[33me941483[m Ajout de la section suggestions de menus dans le plan nutritionnel personnalisé
+[33m4526223[m Ajout de la section suggestions de menus dans le plan nutritionnel personnalisé
+[33md372a75[m Ajout de la section plan nutritionnel personnalisé dans le tableau de bord
+[33m7ae9e16[m Correction des erreurs de syntaxe dans les chaînes de caractères
+[33me94486c[m Ajout d'un gestionnaire d'événements spécifique pour le bouton 'Créer mon profil' et amélioration de la redirection
+[33m80e7126[m Amélioration de la gestion de la redirection et ajout de logs détaillés pour le débogage
+[33me563370[m Ajout des logs pour le débogage de la redirection et amélioration de l'initialisation du tableau de bord
+[33m184a58f[m Amélioration des recommandations nutritionnelles avec des plans détaillés selon les objectifs
+[33mb7ce7b2[m Suppression des recommandations génériques pour le poids normal
+[33m4ef6dcc[m Amélioration de l'analyse du poids avec prise en compte de la taille, du sexe et de l'âge
+[33m58f2bb7[m Ajout de l'analyse du poids et des recommandations personnalisées basées sur l'IMC
+[33m3590be4[m Simplification du texte des recommandations personnalisées dans le tableau de bord
+[33m3effe7e[m Modification du titre 'Objectif de poids' en 'Poids actuel' dans le tableau de bord
+[33me5b127a[m Mise à jour des fonctionnalités : tableau de bord, inscription et styles
+[33m46fd0f5[m feat: ajout des champs email et mot de passe dans le formulaire d'inscription
+[33ma0e146d[m feat: ajout de la génération de plans sportifs et nutritionnels personnalisés basés sur l'IA
+[33m6c0f1af[m feat: ajout de la génération de plans sportifs et nutritionnels personnalisés basés sur l'IA
+[33m2d30dc7[m fix: suppression du texte '(Autre objectif)' dans le champ de compétition spécifique
+[33m03fb548[m feat: enrichissement du formulaire d'inscription avec des champs détaillés pour une analyse IA
+[33me08562e[m fix: correction de la redirection vers dashboard.html après l'inscription
+[33m64a38c6[m feat: ajout des zones prioritaires 'poitrine' et 'fessiers' dans le formulaire d'inscription
+[33me5af504[m feat: enrichissement du formulaire d'inscription avec des champs détaillés pour une analyse IA
+[33m8e19e7f[m fix: correction du calcul de l'objectif de poids en fonction de l'IMC et de l'objectif principal
+[33m4291bd8[m feat: suppression de la section 'Programme de Perte de Poids' du tableau de bord
+[33m24df1f2[m fix: correction du stockage et de la récupération des données du profil
+[33m870f6ec[m feat: ajout des fonctions de calcul et d'affichage des analyses du profil
+[33mef3b18f[m feat: ajout de la section d'analyse du profil dans le tableau de bord
+[33mbd1be95[m fix: suppression effective de la section 'Séance d'aujourd'hui' du tableau de bord
+[33mbf08fc5[m style: suppression des styles de la séance d'aujourd'hui
+[33mb4010fa[m style: optimisation de la présentation de la séance dans le tableau de bord
+[33m559925e[m style: suppression de la duplication des titres d'exercices
+[33mc8278a5[m style: suppression de la duplication du titre des exercices
+[33m90cf539[m style: correction de l'affichage des exercices pour correspondre au format souhaité
+[33m14161f9[m style: modification de l'affichage des exercices en format liste
+[33m85d079f[m fix: affichage horizontal des exercices dans les séances
+[33mfe2c198[m Fix: uniformisation de l'affichage des exercices de yoga avec le style HIIT
+[33md24a505[m Feat: ajout d'une séance de yoga fitness alternant avec HIIT et cardio
+[33mf431a9e[m Fix: uniformisation de la présentation des exercices de cardio avec le style HIIT
+[33m39c7484[m Fix: uniformisation de la présentation des exercices de cardio avec le style HIIT
+[33m77f7229[m Feat: ajout d'une séance de cardio alternant avec la séance HIIT
+[33m213433f[m Fix: suppression des boutons 'Voir la démonstration' du HTML
+[33m0deb618[m Fix: suppression de la fonctionnalité des vidéos de démonstration
+[33m3a94e0b[m Fix: mise à jour des IDs des vidéos d'échauffement pour correspondre aux noms exacts
+[33m9c82376[m Fix: ajout d'une vérification de sécurité pour les éléments step-name
+[33m5e673b0[m Fix: ajout des vidéos pour tous les types d'exercices
+[33m7a513fd[m Fix: correction de la condition pour l'affichage des vidéos d'échauffement
+[33mebecb85[m Feat: activation du bouton 'voir la démonstration' pour l'échauffement dynamique
+[33m0dc06f5[m Feat: conservation uniquement de la séance HIIT 45 min
+[33md202461[m Fix: correction de l'affichage des exercices dans le style HIIT
+[33m9e38920[m feat: ajout des vidéos de démonstration pour la séance de renforcement
+[33m3cae6fe[m feat: modification de la structure HTML pour afficher les exercices en une seule colonne
+[33mea57339[m fix: correction du sélecteur pour le bouton Séance terminée
+[33m7203380[m feat: standardisation de la structure des séances avec échauffement détaillé
+[33m9b2768c[m fix: correction de l'affichage des vidéos de démonstration avec la modale
+[33mbabe4d6[m fix: correction de l'affichage des vidéos de démonstration
+[33m78c71a7[m feat: ajout de la fonction convertToId pour la gestion des vidéos de démonstration
+[33mbca9a11[m feat: modification de l'affichage des vidéos de démonstration avec un seul bouton par section
+[33m81a0d6a[m feat: retour au format HIIT avec vidéos de démonstration pour chaque exercice
+[33md60eafa[m feat: ajout d'exercices détaillés pour la séance de cardio avec descriptions précises
+[33m7f20233[m feat: ajout des vidéos de démonstration pour les nouveaux types de séances (Cardio, Renforcement, Yoga)
+[33m7c7fdc4[m feat: ajout de la génération automatique d'une nouvelle séance après avoir terminé la séance actuelle
+[33mdce752f[m feat: ajout de l'attribut data-stat-type pour cibler le poids perdu
+[33mdea3847[m feat: mise à jour du poids perdu dans la section Progression
+[33md0f1422[m fix: correction du sélecteur pour la mise à jour des séances complétées
+[33m879a73d[m fix: correction de la mise à jour des calories brûlées dans la section Progression
+[33mbcac1ff[m feat: réinitialisation des statistiques de progression à zéro
+[33m43cce51[m feat: amélioration du message de confirmation pour la séance terminée
+[33mdea0aa1[m feat: ajout du bouton Séance terminée
+[33m6407b43[m feat: ajout du graphique d'évolution du poids avec mise à jour automatique
+[33m6cb06d9[m feat: déplacement de la section Suivi du Poids sous le Programme de Perte de Poids
+[33m9e62650[m feat: déplacement de la section Programme de Perte de Poids en haut du dashboard
+[33mbed9057[m feat: modification de l'affichage des pas quotidiens en attente de connexion de la montre
+[33m890a661[m feat: modification de l'affichage de la distance parcourue en attente d

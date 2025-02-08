@@ -1343,88 +1343,38 @@ function updateProfileAnalysis() {
     // Mettre à jour l'interprétation de l'IMC
     document.getElementById('bmi-interpretation').textContent = weightAnalysis.details;
 
+    // Vérifier les objectifs de l'utilisateur
+    const userGoals = profile.objectifsFitness?.objectifsPrincipaux || [];
+    const wantsWeightLoss = userGoals.includes('perte_poids');
+    const wantsMuscleGain = userGoals.includes('gain_muscle');
+
     // Générer les recommandations
     const recommendationsList = document.getElementById('recommendations-list');
     if (recommendationsList) {
-        const recommendations = [weightAnalysis.details];
-        recommendations.push(...weightAnalysis.recommendations);
+        const recommendations = [];
 
-        // Ajouter des recommandations spécifiques basées sur le statut
-        switch (weightAnalysis.status) {
-            case "sous-poids":
-                recommendations.push("• Augmentez progressivement votre apport calorique quotidien de 300-500 calories");
-                recommendations.push("• Objectif protéines : 2g par kg de poids corporel");
-                recommendations.push("• Répartition nutritionnelle recommandée :");
-                recommendations.push("  - 25-30% de protéines (viandes maigres, œufs, produits laitiers, légumineuses)");
-                recommendations.push("  - 50-55% de glucides complexes (riz complet, pâtes complètes, patates douces)");
-                recommendations.push("  - 20-25% de bonnes graisses (avocat, huile d'olive, noix)");
-                recommendations.push("• Prenez 3 repas principaux et 2-3 collations riches en protéines");
-                recommendations.push("• Privilégiez les shakes protéinés après l'entraînement");
-                recommendations.push("• Consultez un professionnel de santé pour un suivi personnalisé");
-                break;
-            case "poids normal bas":
-            case "poids optimal":
-            case "poids normal haut":
-                if (profile.objectifsFitness && profile.objectifsFitness.objectifsPrincipaux.includes('gain_muscle')) {
-                    recommendations.push("• Plan nutritionnel pour la prise de masse musculaire :");
-                    recommendations.push("• Augmentez votre apport calorique de 10-20% au-dessus de votre maintien");
-                    recommendations.push("• Objectif protéines : 1.8-2.2g par kg de poids corporel");
-                    recommendations.push("• Répartition des macronutriments :");
-                    recommendations.push("  - 30% de protéines (poulet, poisson, œufs, whey)");
-                    recommendations.push("  - 50% de glucides (riz, pâtes, avoine, patates douces)");
-                    recommendations.push("  - 20% de lipides (huiles, noix, avocat)");
-                    recommendations.push("• Timing des repas :");
-                    recommendations.push("  - Petit-déjeuner riche en protéines et glucides");
-                    recommendations.push("  - Repas pré-entraînement : 2-3h avant, riche en glucides");
-                    recommendations.push("  - Post-entraînement : shake protéiné + glucides rapides");
-                    recommendations.push("  - 3-4 autres repas équilibrés dans la journée");
-                }
-                break;
-            case "surpoids":
-                recommendations.push("• Créez un déficit calorique modéré de 300-500 calories");
-                recommendations.push("• Objectif protéines : 2-2.2g par kg de poids idéal");
-                recommendations.push("• Répartition nutritionnelle recommandée :");
-                recommendations.push("  - 30-35% de protéines (viandes maigres, poisson, blanc d'œuf)");
-                recommendations.push("  - 40-45% de glucides complexes (légumes, céréales complètes)");
-                recommendations.push("  - 20-25% de graisses saines (poisson gras, huile d'olive)");
-                recommendations.push("• Privilégiez les aliments riches en fibres pour la satiété");
-                recommendations.push("• Augmentez votre activité physique quotidienne");
-                recommendations.push("• Fixez-vous des objectifs réalistes de perte de poids");
-                break;
-            case "obésité":
-                recommendations.push("• Consultez un professionnel de santé pour un suivi adapté");
-                recommendations.push("• Plan nutritionnel de base :");
-                recommendations.push("  - Réduisez progressivement les portions");
-                recommendations.push("  - Privilégiez les protéines maigres et légumes");
-                recommendations.push("  - Évitez les aliments transformés et sucrés");
-                recommendations.push("• Commencez une activité physique adaptée à votre condition");
-                break;
-        }
-
-        // Ajout de recommandations spécifiques selon l'expérience
-        if (profile.objectifsFitness && profile.objectifsFitness.experience === 'debutant') {
-            recommendations.push("• Conseils pour débutants :");
-            recommendations.push("  - Commencez par 3-4 repas équilibrés par jour");
-            recommendations.push("  - Utilisez une application de suivi nutritionnel");
-            recommendations.push("  - Préparez vos repas à l'avance");
-            recommendations.push("  - Hydratez-vous bien (2-3L d'eau par jour)");
-        }
-
-        // Ajout de recommandations selon les restrictions alimentaires
-        if (profile.regimeAlimentaire && profile.regimeAlimentaire.restrictions) {
-            if (profile.regimeAlimentaire.restrictions.includes('vegetarien')) {
-                recommendations.push("• Sources de protéines végétariennes :");
-                recommendations.push("  - Œufs et produits laitiers");
-                recommendations.push("  - Légumineuses et quinoa");
-                recommendations.push("  - Protéines de soja et seitan");
-            }
-            if (profile.regimeAlimentaire.restrictions.includes('vegan')) {
-                recommendations.push("• Sources de protéines végétales :");
-                recommendations.push("  - Tofu, tempeh et seitan");
-                recommendations.push("  - Légumineuses et quinoa");
-                recommendations.push("  - Suppléments en protéines végétales");
-                recommendations.push("• Supplémentez en vitamine B12 et D");
-            }
+        // Ajuster les recommandations en fonction des objectifs de l'utilisateur
+        if (wantsWeightLoss) {
+            recommendations.push("Objectif : Perte de poids");
+            recommendations.push("• Créez un déficit calorique modéré de 500 calories");
+            recommendations.push("• Objectif protéines : 2-2.2g par kg de poids idéal");
+            recommendations.push("• Répartition nutritionnelle recommandée :");
+            recommendations.push("  - 30-35% de protéines (viandes maigres, poisson, blanc d'œuf)");
+            recommendations.push("  - 40-45% de glucides complexes (légumes, céréales complètes)");
+            recommendations.push("  - 20-25% de graisses saines (poisson gras, huile d'olive)");
+            recommendations.push("• Privilégiez les aliments riches en fibres pour la satiété");
+            recommendations.push("• Augmentez votre activité physique quotidienne");
+            recommendations.push("• Visez une perte de poids de 0.5-1kg par semaine");
+        } else if (wantsMuscleGain) {
+            recommendations.push("Objectif : Prise de masse musculaire");
+            recommendations.push("• Augmentez votre apport calorique de 10-20% au-dessus de votre maintien");
+            recommendations.push("• Objectif protéines : 1.8-2.2g par kg de poids corporel");
+            recommendations.push("• Répartition des macronutriments :");
+            recommendations.push("  - 30% de protéines (poulet, poisson, œufs, whey)");
+            recommendations.push("  - 50% de glucides (riz, pâtes, avoine, patates douces)");
+            recommendations.push("  - 20% de lipides (huiles, noix, avocat)");
+        } else {
+            recommendations.push(...weightAnalysis.recommendations);
         }
 
         // Afficher les recommandations
@@ -1437,16 +1387,27 @@ function updateProfileAnalysis() {
     document.getElementById('tdee-value').textContent = Math.round(calculateTDEE(calculateBMR(poids, taille, age, sexe), profile.habitudesVie.niveauActivite));
     
     // Mettre à jour le message de différence de poids
-    const poidsIdeal = calculateIdealWeight(taille, sexe);
-    const difference = Math.abs(poids - poidsIdeal);
     let message = "";
     
-    if (weightAnalysis.status === "sous-poids" || weightAnalysis.status === "poids normal bas") {
-        message = `Poids à gagner : ${difference.toFixed(1)} kg`;
-    } else if (weightAnalysis.status === "surpoids" || weightAnalysis.status === "obésité") {
-        message = `Poids à perdre : ${difference.toFixed(1)} kg`;
+    // Déterminer le message en fonction des objectifs de l'utilisateur
+    if (wantsWeightLoss) {
+        const poidsObjectif = calculateIdealWeight(taille, sexe);
+        const difference = Math.max(0, poids - poidsObjectif).toFixed(1);
+        message = `Poids à perdre : ${difference} kg`;
+    } else if (wantsMuscleGain) {
+        const poidsObjectif = calculateIdealWeight(taille, sexe) * 1.1; // +10% pour la masse musculaire
+        const difference = Math.max(0, poidsObjectif - poids).toFixed(1);
+        message = `Poids à gagner : ${difference} kg`;
     } else {
-        message = "Poids dans la normale";
+        const poidsIdeal = calculateIdealWeight(taille, sexe);
+        const difference = Math.abs(poids - poidsIdeal);
+        if (imc < 18.5) {
+            message = `Poids à gagner : ${difference.toFixed(1)} kg`;
+        } else if (imc >= 25) {
+            message = `Poids à perdre : ${difference.toFixed(1)} kg`;
+        } else {
+            message = "Poids dans la normale";
+        }
     }
     
     document.getElementById('weight-to-lose').innerHTML = `<span>${message}</span>`;
@@ -2209,26 +2170,39 @@ function updateNutritionPlan() {
     const bmr = calculateBMR(poids, taille, age, sexe);
     const tdee = calculateTDEE(bmr, profile.habitudesVie.niveauActivite);
     
-    // Ajustement des calories selon l'objectif et l'IMC
+    // Vérifier les objectifs de l'utilisateur
+    const userGoals = profile.objectifsFitness?.objectifsPrincipaux || [];
+    const wantsWeightLoss = userGoals.includes('perte_poids');
+    const wantsMuscleGain = userGoals.includes('gain_muscle');
+    
+    // Ajustement des calories selon l'objectif de l'utilisateur
     let caloriesJournalieres = tdee;
     let objectifPoids = '';
     let objectifTexte = '';
 
-    // Calculer l'IMC
-    const imc = calculateBMI(poids, taille);
-    
-    // Déterminer l'objectif en fonction de l'IMC et des préférences utilisateur
-    if (imc < 18.5 || (profile.objectifsFitness && profile.objectifsFitness.objectifsPrincipaux.includes('gain_muscle'))) {
-        caloriesJournalieres = tdee + 300; // Surplus calorique pour la prise de masse
-        objectifPoids = '+0.5 kg/semaine';
-        objectifTexte = 'Prise de masse musculaire';
-    } else if (imc >= 25 || (profile.objectifsFitness && profile.objectifsFitness.objectifsPrincipaux.includes('perte_poids'))) {
+    if (wantsWeightLoss) {
         caloriesJournalieres = tdee - 500; // Déficit calorique pour la perte de poids
-        objectifPoids = '-0.5 kg/semaine';
+        objectifPoids = '-0.5 à -1 kg/semaine';
         objectifTexte = 'Perte de poids';
+    } else if (wantsMuscleGain) {
+        caloriesJournalieres = tdee + 300; // Surplus calorique pour la prise de masse
+        objectifPoids = '+0.25 à +0.5 kg/semaine';
+        objectifTexte = 'Prise de masse musculaire';
     } else {
-        objectifPoids = 'Maintien';
-        objectifTexte = 'Maintien du poids';
+        // Si aucun objectif spécifique, utiliser l'IMC comme guide
+        const imc = calculateBMI(poids, taille);
+        if (imc < 18.5) {
+            caloriesJournalieres = tdee + 300;
+            objectifPoids = '+0.25 à +0.5 kg/semaine';
+            objectifTexte = 'Prise de poids santé';
+        } else if (imc >= 25) {
+            caloriesJournalieres = tdee - 500;
+            objectifPoids = '-0.5 à -1 kg/semaine';
+            objectifTexte = 'Perte de poids santé';
+        } else {
+            objectifPoids = 'Maintien';
+            objectifTexte = 'Maintien du poids';
+        }
     }
 
     // Mise à jour des éléments d'affichage du résumé
@@ -2246,37 +2220,7 @@ function updateNutritionPlan() {
         nutritionHeader.textContent = `Votre programme alimentaire personnalisé pour ${objectifTexte.toLowerCase()}`;
     }
 
-    // Générer les recommandations nutritionnelles
-    const recommandations = genererRecommandationsNutritionnelles(profile, caloriesJournalieres);
-
-    // Afficher la répartition des calories
-    const repartitionCaloriesElement = document.getElementById('repartition-calories');
-    if (repartitionCaloriesElement) {
-        const repartitionHtml = recommandations
-            .find(r => r.titre === 'Répartition des calories')
-            ?.details.map(repas => 
-                `<li>${repas.repas}: ${repas.calories} calories (${repas.pourcentage}%)</li>`
-            ).join('') || '';
-        repartitionCaloriesElement.innerHTML = repartitionHtml;
-    }
-
-    // Afficher les recommandations nutritionnelles
-    const recommandationsElement = document.getElementById('recommandations-nutrition');
-    if (recommandationsElement) {
-        const recommandationsHtml = recommandations
-            .filter(r => r.titre !== 'Répartition des calories')
-            .map(rec => 
-                `<li class="recommandation-groupe">
-                    <h4>${rec.titre}</h4>
-                    <ul>
-                        ${rec.points.map(point => `<li>${point}</li>`).join('')}
-                    </ul>
-                </li>`
-            ).join('');
-        recommandationsElement.innerHTML = recommandationsHtml;
-    }
-
-    // Générer et afficher les suggestions de menus
+    // Générer les suggestions de menus adaptés à l'objectif
     const suggestionsMenus = genererSuggestionsMenus(profile, caloriesJournalieres);
     
     // Afficher le menu type
@@ -2293,11 +2237,11 @@ function updateNutritionPlan() {
             `).join('');
     }
 
-    // Afficher les alternatives seulement si un régime spécifique est défini
+    // Afficher les alternatives si nécessaire
     const menuAlternativesElement = document.getElementById('menu-alternatives');
     const menuAlternativesContainer = document.querySelector('.menu-alternatives');
     
-    if (profile.regimeAlimentaire && profile.regimeAlimentaire.type && 
+    if (profile.regimeAlimentaire?.type && 
         profile.regimeAlimentaire.type !== 'standard' && 
         menuAlternativesElement && 
         menuAlternativesContainer && 
@@ -2344,51 +2288,90 @@ document.addEventListener('DOMContentLoaded', function() {
 function genererSuggestionsMenus(profile, caloriesJournalieres) {
     const objectifs = profile.objectifsFitness.objectifsPrincipaux;
     const regime = profile.regimeAlimentaire.type;
+    const wantsWeightLoss = objectifs.includes('perte_poids');
+    const wantsMuscleGain = objectifs.includes('gain_muscle');
     
     // Menus de base selon l'objectif
     const menus = {
         perte_poids: {
             "Petit-déjeuner": {
-                base: "Porridge d'avoine aux fruits rouges",
-                details: "50g de flocons d'avoine, 150ml de lait écrémé, fruits rouges, 1 cuillère de miel",
-                macros: "Calories: 300, Protéines: 12g, Glucides: 45g, Lipides: 5g"
+                base: "Petit-déjeuner protéiné et fibres",
+                details: "40g de flocons d'avoine, 200ml de lait écrémé, 1 scoop de protéine whey, fruits rouges",
+                macros: "Calories: 300, Protéines: 25g, Glucides: 35g, Lipides: 5g"
             },
-            "Collation": {
-                base: "Yaourt grec et fruits secs",
-                details: "150g de yaourt grec 0%, 30g d'amandes",
-                macros: "Calories: 200, Protéines: 15g, Glucides: 10g, Lipides: 12g"
+            "Collation Matin": {
+                base: "Collation protéinée",
+                details: "150g de yaourt grec 0%, pomme, cannelle",
+                macros: "Calories: 120, Protéines: 15g, Glucides: 15g, Lipides: 0g"
             },
             "Déjeuner": {
-                base: "Salade de poulet grillé",
-                details: "150g de blanc de poulet, quinoa, légumes variés, vinaigrette légère",
-                macros: "Calories: 400, Protéines: 35g, Glucides: 35g, Lipides: 15g"
+                base: "Repas riche en protéines et légumes",
+                details: "180g de blanc de poulet, 150g de légumes vapeur, 100g de quinoa cuit",
+                macros: "Calories: 400, Protéines: 45g, Glucides: 35g, Lipides: 8g"
+            },
+            "Collation Après-midi": {
+                base: "Collation équilibrée",
+                details: "30g d'amandes, 1 fruit de saison",
+                macros: "Calories: 200, Protéines: 6g, Glucides: 15g, Lipides: 15g"
             },
             "Dîner": {
-                base: "Poisson et légumes vapeur",
-                details: "180g de cabillaud, brocolis, carottes, courgettes",
-                macros: "Calories: 300, Protéines: 35g, Glucides: 20g, Lipides: 8g"
+                base: "Dîner léger protéiné",
+                details: "200g de poisson blanc, 200g de légumes verts, 1 cuillère d'huile d'olive",
+                macros: "Calories: 300, Protéines: 35g, Glucides: 15g, Lipides: 12g"
             }
         },
         gain_muscle: {
             "Petit-déjeuner": {
-                base: "Omelette protéinée",
-                details: "4 œufs entiers, 50g d'avoine, 1 banane, 30g de beurre de cacahuète",
-                macros: "Calories: 650, Protéines: 35g, Glucides: 55g, Lipides: 35g"
+                base: "Petit-déjeuner hypercalorique",
+                details: "80g de flocons d'avoine, 300ml de lait entier, 2 œufs entiers, 1 banane, 30g de beurre de cacahuète",
+                macros: "Calories: 800, Protéines: 35g, Glucides: 90g, Lipides: 35g"
             },
-            "Collation": {
-                base: "Shake protéiné et fruits secs",
-                details: "30g de whey, 1 banane, 40g d'amandes, lait demi-écrémé",
-                macros: "Calories: 400, Protéines: 30g, Glucides: 35g, Lipides: 20g"
+            "Collation Matin": {
+                base: "Shake protéiné gain de masse",
+                details: "40g de whey, 1 banane, 40g d'avoine, 30g d'amandes",
+                macros: "Calories: 450, Protéines: 35g, Glucides: 45g, Lipides: 20g"
             },
             "Déjeuner": {
-                base: "Bol de riz et poulet",
-                details: "200g de poulet, 100g de riz complet, légumes grillés, huile d'olive",
-                macros: "Calories: 700, Protéines: 50g, Glucides: 70g, Lipides: 25g"
+                base: "Repas riche en protéines et glucides",
+                details: "220g de poulet, 150g de riz complet, légumes, 2 cuillères d'huile d'olive",
+                macros: "Calories: 750, Protéines: 55g, Glucides: 80g, Lipides: 25g"
+            },
+            "Collation Après-midi": {
+                base: "Collation gain de masse",
+                details: "200g de yaourt grec, 40g de granola, 20g de miel",
+                macros: "Calories: 400, Protéines: 20g, Glucides: 50g, Lipides: 15g"
             },
             "Dîner": {
-                base: "Steak et patates douces",
-                details: "200g de bœuf, 200g de patates douces, légumes verts",
-                macros: "Calories: 600, Protéines: 45g, Glucides: 50g, Lipides: 25g"
+                base: "Dîner riche en protéines",
+                details: "200g de bœuf, 200g de patates douces, légumes verts, huile d'olive",
+                macros: "Calories: 650, Protéines: 45g, Glucides: 60g, Lipides: 25g"
+            }
+        },
+        maintien: {
+            "Petit-déjeuner": {
+                base: "Petit-déjeuner équilibré",
+                details: "60g de flocons d'avoine, 200ml de lait demi-écrémé, 1 œuf, fruits frais",
+                macros: "Calories: 400, Protéines: 20g, Glucides: 55g, Lipides: 12g"
+            },
+            "Collation Matin": {
+                base: "Collation saine",
+                details: "150g de yaourt grec, 1 fruit, 20g d'amandes",
+                macros: "Calories: 250, Protéines: 15g, Glucides: 25g, Lipides: 12g"
+            },
+            "Déjeuner": {
+                base: "Repas équilibré",
+                details: "150g de poulet, 120g de riz complet, légumes variés, huile d'olive",
+                macros: "Calories: 500, Protéines: 35g, Glucides: 60g, Lipides: 15g"
+            },
+            "Collation Après-midi": {
+                base: "Collation énergétique",
+                details: "1 fruit, 30g de noix",
+                macros: "Calories: 200, Protéines: 5g, Glucides: 20g, Lipides: 15g"
+            },
+            "Dîner": {
+                base: "Dîner léger",
+                details: "180g de poisson, légumes variés, 100g de quinoa",
+                macros: "Calories: 450, Protéines: 35g, Glucides: 45g, Lipides: 15g"
             }
         }
     };
@@ -2398,13 +2381,23 @@ function genererSuggestionsMenus(profile, caloriesJournalieres) {
         vegetarien: {
             "Petit-déjeuner": {
                 base: "Bowl protéiné végétarien",
-                details: "Yaourt grec, granola, graines de chia, fruits frais",
+                details: "Yaourt grec, granola protéiné, graines de chia, fruits frais",
                 macros: "Calories: 400, Protéines: 20g, Glucides: 45g, Lipides: 15g"
             },
+            "Collation": {
+                base: "Smoothie protéiné",
+                details: "Protéine whey végétale, banane, épinards, graines de lin",
+                macros: "Calories: 250, Protéines: 20g, Glucides: 30g, Lipides: 8g"
+            },
             "Déjeuner": {
-                base: "Buddha bowl aux légumineuses",
+                base: "Buddha bowl protéiné",
                 details: "Quinoa, lentilles, pois chiches, avocat, légumes grillés",
                 macros: "Calories: 550, Protéines: 25g, Glucides: 65g, Lipides: 20g"
+            },
+            "Dîner": {
+                base: "Assiette végétarienne complète",
+                details: "Galette de légumineuses, légumes rôtis, houmous",
+                macros: "Calories: 450, Protéines: 20g, Glucides: 50g, Lipides: 18g"
             }
         },
         vegan: {
@@ -2413,17 +2406,39 @@ function genererSuggestionsMenus(profile, caloriesJournalieres) {
                 details: "Protéine de pois, banane, fruits rouges, graines, lait d'amande",
                 macros: "Calories: 350, Protéines: 20g, Glucides: 45g, Lipides: 12g"
             },
+            "Collation": {
+                base: "Encas protéiné vegan",
+                details: "Barre protéinée vegan, fruit sec, noix",
+                macros: "Calories: 300, Protéines: 15g, Glucides: 35g, Lipides: 15g"
+            },
             "Déjeuner": {
-                base: "Tofu grillé et quinoa",
-                details: "200g de tofu, quinoa, légumes, sauce tahini",
+                base: "Bowl protéiné vegan",
+                details: "Tofu grillé, quinoa, légumes, sauce tahini",
                 macros: "Calories: 500, Protéines: 25g, Glucides: 55g, Lipides: 22g"
+            },
+            "Dîner": {
+                base: "Dîner vegan complet",
+                details: "Tempeh mariné, patate douce, légumes verts, noix",
+                macros: "Calories: 450, Protéines: 22g, Glucides: 50g, Lipides: 20g"
             }
         }
     };
 
-    // Sélectionner le menu approprié
-    let menuType = objectifs.includes('perte_poids') ? menus.perte_poids : menus.gain_muscle;
-    let menuAlternatif = alternatives[regime] || null;
+    // Sélectionner le menu approprié selon l'objectif
+    let menuType;
+    if (wantsWeightLoss) {
+        menuType = menus.perte_poids;
+    } else if (wantsMuscleGain) {
+        menuType = menus.gain_muscle;
+    } else {
+        menuType = menus.maintien;
+    }
+
+    // Sélectionner les alternatives si nécessaire
+    let menuAlternatif = null;
+    if (regime && regime !== 'standard') {
+        menuAlternatif = alternatives[regime] || null;
+    }
 
     return {
         menuType: menuType,
