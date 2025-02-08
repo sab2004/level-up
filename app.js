@@ -2209,32 +2209,42 @@ function updateNutritionPlan() {
     const bmr = calculateBMR(poids, taille, age, sexe);
     const tdee = calculateTDEE(bmr, profile.habitudesVie.niveauActivite);
     
-    // Ajustement des calories selon l'objectif
+    // Ajustement des calories selon l'objectif et l'IMC
     let caloriesJournalieres = tdee;
     let objectifPoids = '';
     let objectifTexte = '';
 
-    if (profile.objectifsFitness.objectifsPrincipaux.includes('perte_poids')) {
-        caloriesJournalieres = tdee - 500; // Déficit calorique pour la perte de poids
-        objectifPoids = '-0.5 kg/semaine';
-        objectifTexte = 'Perte de poids';
-    } else if (profile.objectifsFitness.objectifsPrincipaux.includes('gain_muscle')) {
+    // Calculer l'IMC
+    const imc = calculateBMI(poids, taille);
+    
+    // Déterminer l'objectif en fonction de l'IMC et des préférences utilisateur
+    if (imc < 18.5 || (profile.objectifsFitness && profile.objectifsFitness.objectifsPrincipaux.includes('gain_muscle'))) {
         caloriesJournalieres = tdee + 300; // Surplus calorique pour la prise de masse
         objectifPoids = '+0.5 kg/semaine';
         objectifTexte = 'Prise de masse musculaire';
+    } else if (imc >= 25 || (profile.objectifsFitness && profile.objectifsFitness.objectifsPrincipaux.includes('perte_poids'))) {
+        caloriesJournalieres = tdee - 500; // Déficit calorique pour la perte de poids
+        objectifPoids = '-0.5 kg/semaine';
+        objectifTexte = 'Perte de poids';
     } else {
         objectifPoids = 'Maintien';
         objectifTexte = 'Maintien du poids';
     }
 
     // Mise à jour des éléments d'affichage du résumé
-    const objectifElement = document.querySelector('.nutrition-summary p:first-of-type');
-    const caloriesElement = document.querySelector('.nutrition-summary p:nth-of-type(2)');
-    const poidsElement = document.querySelector('.nutrition-summary p:last-of-type');
+    const objectifElement = document.querySelector('.nutrition-summary .summary-card:first-child p');
+    const caloriesElement = document.querySelector('.nutrition-summary .summary-card:nth-child(2) p');
+    const poidsElement = document.querySelector('.nutrition-summary .summary-card:last-child p');
 
     if (objectifElement) objectifElement.textContent = objectifTexte;
     if (caloriesElement) caloriesElement.textContent = `${Math.round(caloriesJournalieres)} kcal`;
     if (poidsElement) poidsElement.textContent = objectifPoids;
+
+    // Mettre à jour le titre de la page
+    const nutritionHeader = document.querySelector('.nutrition-header p');
+    if (nutritionHeader) {
+        nutritionHeader.textContent = `Votre programme alimentaire personnalisé pour ${objectifTexte.toLowerCase()}`;
+    }
 
     // Générer les recommandations nutritionnelles
     const recommandations = genererRecommandationsNutritionnelles(profile, caloriesJournalieres);
@@ -2482,55 +2492,57 @@ function generateNewMenu() {
     const bmr = calculateBMR(poids, taille, age, sexe);
     const tdee = calculateTDEE(bmr, profile.habitudesVie.niveauActivite);
     
-    // Ajuster les calories selon l'objectif
+    // Ajuster les calories selon l'objectif et l'IMC
     let caloriesJournalieres = tdee;
-    if (profile.objectifsFitness.objectifsPrincipaux.includes('perte_poids')) {
-        caloriesJournalieres = tdee - 500; // Déficit calorique pour la perte de poids
-    } else if (profile.objectifsFitness.objectifsPrincipaux.includes('gain_muscle')) {
-        caloriesJournalieres = tdee + 300; // Surplus calorique pour la prise de masse
-    }
     
-    // Simuler un temps de chargement
-    setTimeout(() => {
-        // Générer les suggestions de menus adaptées
-        const suggestions = genererSuggestionsMenus(profile, caloriesJournalieres);
-        
-        // Mettre à jour l'affichage avec le menu adapté
-        if (suggestions.menuType) {
-            mealPlans.innerHTML = Object.entries(suggestions.menuType)
-                .map(([repas, details]) => `
-                    <div class="meal-time">
-                        <h4>${repas}</h4>
-                        <ul>
-                            <li>${details.base}</li>
-                            <li>${details.details}</li>
-                            <li class="macros">${details.macros}</li>
-                        </ul>
-                    </div>
-                `).join('');
+    // Calculer l'IMC
+    const imc = calculateBMI(poids, taille);
+    
+    // Déterminer l'objectif en fonction de l'IMC et des préférences utilisateur
+    if (imc < 18.5 || (profile.objectifsFitness && profile.objectifsFitness.objectifsPrincipaux.includes('gain_muscle'))) {
+        caloriesJournalieres = tdee + 300; // Surplus calorique pour la prise de masse
+    } else if (imc >= 25 || (profile.objectifsFitness && profile.objectifsFitness.objectifsPrincipaux.includes('perte_poids'))) {
+        caloriesJournalieres = tdee - 500; // Déficit calorique pour la perte de poids
+    }
 
-            // Ajouter les alternatives si nécessaire
-            if (suggestions.alternatives) {
-                Object.entries(suggestions.alternatives).forEach(([repas, details]) => {
-                    const mealSection = mealPlans.querySelector(`div.meal-time:has(h4:contains("${repas}"))`);
-                    if (mealSection) {
-                        const alternativeHtml = `
-                            <div class="alternative">
-                                <h5>Alternative ${profile.regimeAlimentaire.type}</h5>
-                                <ul>
-                                    <li>${details.base}</li>
-                                    <li>${details.details}</li>
-                                    <li class="macros">${details.macros}</li>
-                                </ul>
-                            </div>
-                        `;
-                        mealSection.insertAdjacentHTML('beforeend', alternativeHtml);
-                    }
-                });
-            }
+    // Générer et afficher les suggestions de menus
+    const suggestionsMenus = genererSuggestionsMenus(profile, caloriesJournalieres);
+    
+    // Mettre à jour l'affichage avec le menu adapté
+    if (suggestionsMenus.menuType) {
+        mealPlans.innerHTML = Object.entries(suggestionsMenus.menuType)
+            .map(([repas, details]) => `
+                <div class="meal-time">
+                    <h4>${repas}</h4>
+                    <ul>
+                        <li>${details.base}</li>
+                        <li>${details.details}</li>
+                        <li class="macros">${details.macros}</li>
+                    </ul>
+                </div>
+            `).join('');
+
+        // Ajouter les alternatives si nécessaire
+        if (suggestionsMenus.alternatives) {
+            Object.entries(suggestionsMenus.alternatives).forEach(([repas, details]) => {
+                const mealSection = mealPlans.querySelector(`div.meal-time:has(h4:contains("${repas}"))`);
+                if (mealSection) {
+                    const alternativeHtml = `
+                        <div class="alternative">
+                            <h5>Alternative ${profile.regimeAlimentaire.type}</h5>
+                            <ul>
+                                <li>${details.base}</li>
+                                <li>${details.details}</li>
+                                <li class="macros">${details.macros}</li>
+                            </ul>
+                        </div>
+                    `;
+                    mealSection.insertAdjacentHTML('beforeend', alternativeHtml);
+                }
+            });
         }
+    }
 
-        // Retirer la classe loading
-        button.classList.remove('loading');
-    }, 800);
+    // Retirer la classe loading
+    button.classList.remove('loading');
 }
