@@ -2651,25 +2651,19 @@ textarea::-webkit-scrollbar-thumb {
     margin: 3rem 0;
 }
 
-.meal-plans {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-}
-
 .meal-time {
-    background: white;
-    padding: 1.5rem;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .meal-time h4 {
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--primary-color);
+    color: #2c3e50;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #3498db;
 }
 
 .meal-time ul {
@@ -2678,51 +2672,53 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 .meal-time ul li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--border-color);
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
 }
 
 .meal-time ul li:last-child {
     border-bottom: none;
 }
 
-.nutrition-tips {
-    margin: 3rem 0;
+.meal-time ul li.macros {
+    color: #666;
+    font-style: italic;
+    font-size: 0.9em;
+    background-color: #f8f9fa;
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 8px;
 }
 
-.tips-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+.alternative {
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border-left: 3px solid #27ae60;
 }
 
-.tip-card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    text-align: center;
+.alternative h5 {
+    color: #27ae60;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    text-transform: capitalize;
 }
 
-.tip-card i {
-    font-size: 2rem;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
+.alternative ul {
+    margin: 0;
+    padding: 0;
 }
 
-.tip-card h4 {
-    color: var(--text-color);
-    margin-bottom: 0.5rem;
+.alternative ul li {
+    padding: 6px 0;
+    font-size: 0.95em;
 }
 
-.tip-card p {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    line-height: 1.5;
+.alternative ul li.macros {
+    background-color: #fff;
 }
 
-/* Media Queries */
 @media (max-width: 768px) {
     .nutrition-header {
         padding: 2rem 1rem;

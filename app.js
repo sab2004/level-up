@@ -2442,138 +2442,76 @@ function generateNewMenu() {
     const button = document.getElementById('generate-menu');
     const mealPlans = document.querySelector('.meal-plans');
     
+    // Récupérer le profil utilisateur
+    const profile = JSON.parse(localStorage.getItem('levelup_profile') || '{}');
+    if (!profile.informationsGenerales) {
+        console.log('Aucun profil trouvé');
+        return;
+    }
+
     // Ajouter la classe loading
     button.classList.add('loading');
     
+    // Calculer les besoins caloriques
+    const {
+        poids,
+        taille,
+        age,
+        sexe
+    } = profile.informationsGenerales;
+
+    const bmr = calculateBMR(poids, taille, age, sexe);
+    const tdee = calculateTDEE(bmr, profile.habitudesVie.niveauActivite);
+    
+    // Ajuster les calories selon l'objectif
+    let caloriesJournalieres = tdee;
+    if (profile.objectifsFitness.objectifsPrincipaux.includes('perte_poids')) {
+        caloriesJournalieres = tdee - 500; // Déficit calorique pour la perte de poids
+    } else if (profile.objectifsFitness.objectifsPrincipaux.includes('gain_muscle')) {
+        caloriesJournalieres = tdee + 300; // Surplus calorique pour la prise de masse
+    }
+    
     // Simuler un temps de chargement
     setTimeout(() => {
-        // Générer de nouveaux menus
-        const menus = {
-            'Petit-déjeuner': generateMealOptions('petit-dejeuner'),
-            'Collation Matin': generateMealOptions('collation'),
-            'Déjeuner': generateMealOptions('dejeuner'),
-            'Collation Après-midi': generateMealOptions('collation'),
-            'Dîner': generateMealOptions('diner'),
-            'Collation Soir': generateMealOptions('collation')
-        };
+        // Générer les suggestions de menus adaptées
+        const suggestions = genererSuggestionsMenus(profile, caloriesJournalieres);
+        
+        // Mettre à jour l'affichage avec le menu adapté
+        if (suggestions.menuType) {
+            mealPlans.innerHTML = Object.entries(suggestions.menuType)
+                .map(([repas, details]) => `
+                    <div class="meal-time">
+                        <h4>${repas}</h4>
+                        <ul>
+                            <li>${details.base}</li>
+                            <li>${details.details}</li>
+                            <li class="macros">${details.macros}</li>
+                        </ul>
+                    </div>
+                `).join('');
 
-        // Mettre à jour l'affichage
-        mealPlans.innerHTML = Object.entries(menus)
-            .map(([mealTime, items]) => `
-                <div class="meal-time">
-                    <h4>${mealTime}</h4>
-                    <ul>
-                        ${items.map(item => `<li>${item}</li>`).join('')}
-                    </ul>
-                </div>
-            `).join('');
+            // Ajouter les alternatives si nécessaire
+            if (suggestions.alternatives) {
+                Object.entries(suggestions.alternatives).forEach(([repas, details]) => {
+                    const mealSection = mealPlans.querySelector(`div.meal-time:has(h4:contains("${repas}"))`);
+                    if (mealSection) {
+                        const alternativeHtml = `
+                            <div class="alternative">
+                                <h5>Alternative ${profile.regimeAlimentaire.type}</h5>
+                                <ul>
+                                    <li>${details.base}</li>
+                                    <li>${details.details}</li>
+                                    <li class="macros">${details.macros}</li>
+                                </ul>
+                            </div>
+                        `;
+                        mealSection.insertAdjacentHTML('beforeend', alternativeHtml);
+                    }
+                });
+            }
+        }
 
         // Retirer la classe loading
         button.classList.remove('loading');
     }, 800);
-}
-
-function generateMealOptions(mealType) {
-    const mealOptions = {
-        'petit-dejeuner': [
-            [
-                'Omelette 4 œufs entiers',
-                'Flocons d\'avoine (100g) avec lait entier',
-                '1 banane et 30g de beurre de cacahuète'
-            ],
-            [
-                'Pancakes protéinés (3 pièces)',
-                'Fromage blanc 0% (200g)',
-                'Myrtilles et sirop d\'érable'
-            ],
-            [
-                'Smoothie bowl protéiné',
-                'Granola maison (80g)',
-                'Mix de fruits frais'
-            ],
-            [
-                'Pain complet (4 tranches)',
-                'Œufs brouillés (3 œufs)',
-                'Avocat (1/2) et tomates cerises'
-            ]
-        ],
-        'collation': [
-            [
-                'Shake protéiné (30g whey)',
-                'Fruits secs (40g amandes)',
-                '1 banane'
-            ],
-            [
-                'Yaourt grec (200g)',
-                'Fruits rouges (100g)',
-                'Noix de cajou (30g)'
-            ],
-            [
-                'Barre protéinée maison',
-                'Pomme',
-                'Mix de fruits secs (30g)'
-            ],
-            [
-                'Cottage cheese (200g)',
-                'Miel (15g)',
-                'Noix (30g)'
-            ]
-        ],
-        'dejeuner': [
-            [
-                'Poulet grillé (200g)',
-                'Riz complet (150g)',
-                'Légumes variés (200g)',
-                'Huile d\'olive (2 cuillères)'
-            ],
-            [
-                'Saumon (180g)',
-                'Quinoa (150g)',
-                'Brocolis et carottes (200g)',
-                'Sauce citron-aneth'
-            ],
-            [
-                'Steak haché 5% (200g)',
-                'Patates douces (200g)',
-                'Haricots verts (150g)',
-                'Huile de coco (1 cuillère)'
-            ],
-            [
-                'Filet de cabillaud (200g)',
-                'Pâtes complètes (150g)',
-                'Ratatouille (200g)',
-                'Huile d\'olive (2 cuillères)'
-            ]
-        ],
-        'diner': [
-            [
-                'Steak de bœuf (200g)',
-                'Patates douces (200g)',
-                'Légumes verts (200g)',
-                'Avocat (1/2)'
-            ],
-            [
-                'Blanc de dinde (180g)',
-                'Boulgour (150g)',
-                'Poêlée de légumes (200g)',
-                'Huile d\'olive (1 cuillère)'
-            ],
-            [
-                'Tofu grillé (200g)',
-                'Riz basmati (150g)',
-                'Wok de légumes (200g)',
-                'Sauce soja et sésame'
-            ],
-            [
-                'Filet de porc (180g)',
-                'Lentilles (150g)',
-                'Épinards frais (200g)',
-                'Huile d\'olive (1 cuillère)'
-            ]
-        ]
-    };
-
-    // Sélectionner aléatoirement un menu pour le type de repas
-    const options = mealOptions[mealType] || mealOptions['collation'];
-    return options[Math.floor(Math.random() * options.length)];
 }
