@@ -2749,3 +2749,46 @@ textarea::-webkit-scrollbar-thumb {
         margin: 0 auto 1rem;
     }
 } 
+
+/* Styles pour la section des menus */
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.menu-header h3 {
+    margin: 0;
+}
+
+#generate-menu {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+#generate-menu:hover {
+    transform: scale(1.05);
+}
+
+#generate-menu i {
+    font-size: 0.9rem;
+}
+
+#generate-menu.loading {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+#generate-menu.loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+} 

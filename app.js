@@ -2429,3 +2429,151 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Gestion du menu nutritionnel
+document.addEventListener('DOMContentLoaded', function() {
+    const generateMenuBtn = document.getElementById('generate-menu');
+    if (generateMenuBtn) {
+        generateMenuBtn.addEventListener('click', generateNewMenu);
+    }
+});
+
+function generateNewMenu() {
+    const button = document.getElementById('generate-menu');
+    const mealPlans = document.querySelector('.meal-plans');
+    
+    // Ajouter la classe loading
+    button.classList.add('loading');
+    
+    // Simuler un temps de chargement
+    setTimeout(() => {
+        // Générer de nouveaux menus
+        const menus = {
+            'Petit-déjeuner': generateMealOptions('petit-dejeuner'),
+            'Collation Matin': generateMealOptions('collation'),
+            'Déjeuner': generateMealOptions('dejeuner'),
+            'Collation Après-midi': generateMealOptions('collation'),
+            'Dîner': generateMealOptions('diner'),
+            'Collation Soir': generateMealOptions('collation')
+        };
+
+        // Mettre à jour l'affichage
+        mealPlans.innerHTML = Object.entries(menus)
+            .map(([mealTime, items]) => `
+                <div class="meal-time">
+                    <h4>${mealTime}</h4>
+                    <ul>
+                        ${items.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+            `).join('');
+
+        // Retirer la classe loading
+        button.classList.remove('loading');
+    }, 800);
+}
+
+function generateMealOptions(mealType) {
+    const mealOptions = {
+        'petit-dejeuner': [
+            [
+                'Omelette 4 œufs entiers',
+                'Flocons d\'avoine (100g) avec lait entier',
+                '1 banane et 30g de beurre de cacahuète'
+            ],
+            [
+                'Pancakes protéinés (3 pièces)',
+                'Fromage blanc 0% (200g)',
+                'Myrtilles et sirop d\'érable'
+            ],
+            [
+                'Smoothie bowl protéiné',
+                'Granola maison (80g)',
+                'Mix de fruits frais'
+            ],
+            [
+                'Pain complet (4 tranches)',
+                'Œufs brouillés (3 œufs)',
+                'Avocat (1/2) et tomates cerises'
+            ]
+        ],
+        'collation': [
+            [
+                'Shake protéiné (30g whey)',
+                'Fruits secs (40g amandes)',
+                '1 banane'
+            ],
+            [
+                'Yaourt grec (200g)',
+                'Fruits rouges (100g)',
+                'Noix de cajou (30g)'
+            ],
+            [
+                'Barre protéinée maison',
+                'Pomme',
+                'Mix de fruits secs (30g)'
+            ],
+            [
+                'Cottage cheese (200g)',
+                'Miel (15g)',
+                'Noix (30g)'
+            ]
+        ],
+        'dejeuner': [
+            [
+                'Poulet grillé (200g)',
+                'Riz complet (150g)',
+                'Légumes variés (200g)',
+                'Huile d\'olive (2 cuillères)'
+            ],
+            [
+                'Saumon (180g)',
+                'Quinoa (150g)',
+                'Brocolis et carottes (200g)',
+                'Sauce citron-aneth'
+            ],
+            [
+                'Steak haché 5% (200g)',
+                'Patates douces (200g)',
+                'Haricots verts (150g)',
+                'Huile de coco (1 cuillère)'
+            ],
+            [
+                'Filet de cabillaud (200g)',
+                'Pâtes complètes (150g)',
+                'Ratatouille (200g)',
+                'Huile d\'olive (2 cuillères)'
+            ]
+        ],
+        'diner': [
+            [
+                'Steak de bœuf (200g)',
+                'Patates douces (200g)',
+                'Légumes verts (200g)',
+                'Avocat (1/2)'
+            ],
+            [
+                'Blanc de dinde (180g)',
+                'Boulgour (150g)',
+                'Poêlée de légumes (200g)',
+                'Huile d\'olive (1 cuillère)'
+            ],
+            [
+                'Tofu grillé (200g)',
+                'Riz basmati (150g)',
+                'Wok de légumes (200g)',
+                'Sauce soja et sésame'
+            ],
+            [
+                'Filet de porc (180g)',
+                'Lentilles (150g)',
+                'Épinards frais (200g)',
+                'Huile d\'olive (1 cuillère)'
+            ]
+        ]
+    };
+
+    // Sélectionner aléatoirement un menu pour le type de repas
+    const options = mealOptions[mealType] || mealOptions['collation'];
+    return options[Math.floor(Math.random() * options.length)];
+}
