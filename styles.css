@@ -2327,17 +2327,75 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 .recommendation-content {
-    color: var(--text-color);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
 }
 
-.recommendation-content ul {
-    margin-top: 1rem;
-    padding-left: 1.5rem;
+.recommendation-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
 }
 
-.recommendation-content li {
+.recommendation-card:hover {
+    transform: translateY(-5px);
+}
+
+.recommendation-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.recommendation-header i {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+.recommendation-header h4 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.recommendation-card p {
+    margin: 0;
+    color: #666;
+    line-height: 1.6;
+}
+
+.macro-list, .meal-timing-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0;
+}
+
+.macro-list li, .meal-timing-list li {
+    display: flex;
+    align-items: center;
     margin-bottom: 0.5rem;
-    line-height: 1.5;
+    color: #666;
+}
+
+.macro-list li i, .meal-timing-list li i {
+    color: #4CAF50;
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .recommendation-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .recommendation-card {
+        padding: 1rem;
+    }
 }
 
 /* Styles pour le plan nutritionnel */
