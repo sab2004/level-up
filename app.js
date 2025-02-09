@@ -86,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Fonction de déconnexion
 function handleLogout() {
-    // Supprimer les données de l'utilisateur du localStorage
     localStorage.removeItem('levelup_profile');
     localStorage.removeItem('levelup_objectifs');
     localStorage.removeItem('levelup_stats');
@@ -95,12 +94,220 @@ function handleLogout() {
     localStorage.removeItem('userProfile');
     localStorage.removeItem('weightHistory');
     
-    // Afficher un message de confirmation
     alert('Vous avez été déconnecté avec succès.');
-    
-    // Rediriger vers la page d'accueil
     window.location.href = 'index.html';
 }
+
+// Fonctions d'analyse du profil
+function updateProfileAnalysis() {
+    const profile = JSON.parse(localStorage.getItem('levelup_profile'));
+    if (!profile || !profile.informationsGenerales) {
+        console.error('Profil non trouvé');
+        return;
+    }
+
+    const {
+        poids,
+        taille,
+        age,
+        sexe
+    } = profile.informationsGenerales;
+
+    // Calcul et mise à jour de l'IMC
+    const imc = calculerIMC(poids, taille);
+    const imcElement = document.getElementById('bmi-value');
+    const imcInterpretationElement = document.getElementById('bmi-interpretation');
+    if (imcElement) imcElement.textContent = imc.toFixed(1);
+    if (imcInterpretationElement) imcInterpretationElement.textContent = interpreterIMC(imc);
+
+    // Calcul et mise à jour du métabolisme de base
+    const bmr = calculerMetabolismeBase(poids, taille, age, sexe);
+    const bmrElement = document.getElementById('bmr-value');
+    if (bmrElement) bmrElement.textContent = Math.round(bmr);
+
+    // Calcul et mise à jour de la dépense énergétique
+    const tdee = calculerDepenseEnergetique(bmr, profile.habitudesVie.niveauActivite);
+    const tdeeElement = document.getElementById('tdee-value');
+    if (tdeeElement) tdeeElement.textContent = Math.round(tdee);
+
+    // Mise à jour des objectifs de poids
+    const currentWeightElement = document.getElementById('current-weight');
+    const targetWeightElement = document.getElementById('target-weight');
+    const weightProgressElement = document.getElementById('weight-progress');
+
+    if (currentWeightElement) currentWeightElement.textContent = `${poids} kg`;
+
+    const objectifPoids = calculerObjectifPoids(profile);
+    if (targetWeightElement) targetWeightElement.textContent = `${objectifPoids.poidsIdeal.toFixed(1)} kg`;
+    if (weightProgressElement) weightProgressElement.textContent = objectifPoids.message;
+
+    // Générer et afficher les recommandations
+    const recommendationsElement = document.getElementById('profile-recommendations');
+    if (recommendationsElement) {
+        const recommendations = genererRecommandations(profile, imc, tdee);
+        recommendationsElement.innerHTML = recommendations.map(rec => `
+            <div class="recommendation-item">
+                <i class="fas fa-check"></i>
+                <p>${rec}</p>
+            </div>
+        `).join('');
+    }
+}
+
+function calculerIMC(poids, taille) {
+    const tailleEnMetres = taille / 100;
+    return poids / (tailleEnMetres * tailleEnMetres);
+}
+
+function interpreterIMC(imc) {
+    if (imc < 18.5) return "Insuffisance pondérale";
+    if (imc < 25) return "Poids normal";
+    if (imc < 30) return "Surpoids";
+    return "Obésité";
+}
+
+function calculerMetabolismeBase(poids, taille, age, sexe) {
+    // Formule de Mifflin-St Jeor
+    const mb = 10 * poids + 6.25 * taille - 5 * age;
+    return sexe === 'homme' ? mb + 5 : mb - 161;
+}
+
+function calculerDepenseEnergetique(bmr, niveauActivite) {
+    const coefficients = {
+        'sedentaire': 1.2,
+        'leger': 1.375,
+        'modere': 1.55,
+        'actif': 1.725,
+        'tres_actif': 1.9
+    };
+    return bmr * (coefficients[niveauActivite] || 1.2);
+}
+
+function genererRecommandations(profile, imc, tdee) {
+    const recommendations = [];
+    const objectifs = profile.objectifsFitness.objectifsPrincipaux;
+    const experience = profile.objectifsFitness.experience;
+    const regime = profile.regimeAlimentaire.type;
+    const niveauActivite = profile.habitudesVie.niveauActivite;
+
+    // Recommandations basées sur l'IMC
+    if (imc < 18.5) {
+        recommendations.push("Augmentez progressivement votre apport calorique pour atteindre un poids santé");
+        recommendations.push("Concentrez-vous sur des exercices de résistance pour développer la masse musculaire");
+    } else if (imc >= 25 && imc < 30) {
+        recommendations.push("Un léger déficit calorique de 300-500 calories est recommandé");
+        recommendations.push("Privilégiez les exercices cardio-vasculaires combinés à la musculation");
+    } else if (imc >= 30) {
+        recommendations.push("Consultez un professionnel de santé pour un suivi personnalisé de votre perte de poids");
+        recommendations.push("Commencez par des activités à faible impact comme la marche et la natation");
+    }
+
+    // Recommandations basées sur les objectifs
+    if (objectifs.includes('prise_de_muscle')) {
+        recommendations.push(`Visez un apport de ${Math.round(tdee + 300)} calories par jour`);
+        recommendations.push("Consommez 1.6-2.2g de protéines par kg de poids corporel");
+        recommendations.push("Privilégiez les exercices composés : squats, développé couché, soulevé de terre");
+    } else if (objectifs.includes('perte_poids')) {
+        recommendations.push(`Limitez votre apport à ${Math.round(tdee - 500)} calories par jour`);
+        recommendations.push("Maintenez un apport protéique élevé pour préserver la masse musculaire");
+        recommendations.push("Intégrez des séances HIIT pour maximiser la dépense calorique");
+    }
+
+    // Recommandations basées sur l'expérience
+    if (experience === 'debutant') {
+        recommendations.push("Concentrez-vous sur la maîtrise des mouvements de base");
+        recommendations.push("Commencez avec 2-3 séances par semaine");
+        recommendations.push("Privilégiez des séries de 12-15 répétitions pour apprendre la technique");
+    } else if (experience === 'intermediaire') {
+        recommendations.push("Variez vos routines d'entraînement toutes les 4-6 semaines");
+        recommendations.push("Augmentez progressivement l'intensité de vos séances");
+    } else if (experience === 'avance') {
+        recommendations.push("Incorporez des techniques avancées comme les séries descendantes");
+        recommendations.push("Planifiez des cycles de progression sur 8-12 semaines");
+    }
+
+    // Recommandations basées sur le niveau d'activité
+    if (niveauActivite === 'sedentaire') {
+        recommendations.push("Augmentez progressivement votre activité physique quotidienne");
+        recommendations.push("Visez 7000-8000 pas par jour pour commencer");
+    } else if (niveauActivite === 'tres_actif') {
+        recommendations.push("Assurez-vous d'avoir une récupération adéquate entre les séances");
+        recommendations.push("Surveillez les signes de surentraînement");
+    }
+
+    // Recommandations nutritionnelles selon le régime
+    if (regime === 'vegetarien') {
+        recommendations.push("Combinez différentes sources de protéines végétales");
+        recommendations.push("Surveillez votre apport en vitamine B12 et en fer");
+        recommendations.push("Privilégiez les légumineuses et les produits à base de soja");
+    } else if (regime === 'vegan') {
+        recommendations.push("Supplémentez en vitamine B12");
+        recommendations.push("Assurez-vous d'avoir des sources complètes de protéines végétales");
+        recommendations.push("Surveillez vos apports en calcium et en vitamine D");
+    }
+
+    // Limiter à 5 recommandations maximum pour ne pas surcharger l'interface
+    return recommendations.slice(0, 5);
+}
+
+// Amélioration de la fonction de calcul d'objectif de poids
+function calculerObjectifPoids(profile) {
+    const { poids, taille, sexe } = profile.informationsGenerales;
+    const imc = calculerIMC(poids, taille);
+    const objectifs = profile.objectifsFitness.objectifsPrincipaux;
+    const experience = profile.objectifsFitness.experience;
+
+    let poidsIdeal = 0;
+    let message = "";
+    let vitesse = "";
+
+    // Calcul du poids idéal selon la formule de Lorentz
+    const poidsIdealBase = taille - 100 - ((taille - 150) / (sexe === 'homme' ? 4 : 2));
+
+    if (objectifs.includes('prise_de_muscle')) {
+        poidsIdeal = poidsIdealBase * 1.1; // +10% pour la prise de muscle
+        const difference = Math.abs(poidsIdeal - poids);
+        
+        if (poids < poidsIdeal) {
+            vitesse = experience === 'debutant' ? '0.5-1 kg par mois'
+                   : experience === 'intermediaire' ? '0.3-0.7 kg par mois'
+                   : '0.2-0.5 kg par mois';
+            message = `Objectif : prendre ${difference.toFixed(1)} kg de masse musculaire (${vitesse})`;
+        } else {
+            message = "Poids optimal pour la prise de muscle";
+        }
+    } else if (objectifs.includes('perte_poids')) {
+        poidsIdeal = poidsIdealBase * 0.95; // -5% pour la définition
+        const difference = Math.abs(poids - poidsIdeal);
+        
+        if (poids > poidsIdeal) {
+            vitesse = imc >= 30 ? '1-1.5 kg par semaine'
+                   : imc >= 25 ? '0.5-1 kg par semaine'
+                   : '0.3-0.5 kg par semaine';
+            message = `Objectif : perdre ${difference.toFixed(1)} kg (${vitesse})`;
+        } else {
+            message = "Poids cible atteint";
+        }
+    } else {
+        poidsIdeal = poidsIdealBase;
+        const difference = Math.abs(poids - poidsIdeal);
+        
+        if (difference > 2) {
+            message = `Ajustement recommandé : ${poids > poidsIdeal ? '-' : '+'}${difference.toFixed(1)} kg`;
+        } else {
+            message = "Poids dans la zone optimale";
+        }
+    }
+
+    return { poidsIdeal, message };
+}
+
+// Initialisation du tableau de bord
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.endsWith('dashboard.html')) {
+        updateProfileAnalysis();
+    }
+});
 
 // Gestion du poids
 document.addEventListener('DOMContentLoaded', function() {
@@ -523,27 +730,6 @@ async function genererProgrammePersonnalise(profil) {
 }
 
 // Fonctions d'analyse et de calcul pour le programme personnalisé
-function calculerObjectifPoids(profil) {
-    let objectifPoids = profil.poids;
-    const imc = calculerIMC(profil.poids, profil.taille);
-    
-    if (profil.objectif_principal === 'prise_de_muscle') {
-        // Calcul basé sur la structure corporelle et l'expérience
-        const potentielMusculation = evaluerPotentielMusculation(profil);
-        const imcCible = determinerIMCCible(profil, potentielMusculation);
-        objectifPoids = Math.round((imcCible * (profil.taille/100) * (profil.taille/100)) * 10) / 10;
-    } else if (profil.objectif_principal === 'perte_de_poids') {
-        // Calcul progressif et sain de la perte de poids
-        const tauxPertePoids = determinerTauxPertePoids(profil);
-        objectifPoids = Math.max(
-            calculerPoidsMinimumSain(profil),
-            profil.poids * (1 - tauxPertePoids)
-        );
-    }
-
-    return objectifPoids;
-}
-
 function calculerCaloriesJournalieres(profil) {
     const bmr = calculerBMR(profil.poids, profil.taille, profil.age, profil.sexe);
     const tdee = calculerTDEE(bmr, profil.niveau_activite);
@@ -1054,360 +1240,6 @@ function genererRecommandationsNutritionnelles(formData, caloriesJournalieres) {
     }
 
     return recommandations;
-} 
-
-// Initialisation du tableau de bord
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initialisation du tableau de bord...');
-    
-    // Vérifier si nous sommes sur la page du tableau de bord
-    if (document.querySelector('.dashboard-content')) {
-        console.log('Page du tableau de bord détectée');
-        
-        // Vérifier si les données du profil existent
-        const profileData = localStorage.getItem('levelup_profile');
-        const planData = localStorage.getItem('levelup_plan');
-        
-        console.log('Données du profil:', profileData);
-        console.log('Données du plan:', planData);
-        
-        if (profileData && planData) {
-            console.log('Données trouvées, mise à jour du tableau de bord');
-            updateProfileAnalysis();
-        } else {
-            console.log('Aucune donnée trouvée');
-            // Rediriger vers la page d'inscription si aucune donnée n'est trouvée
-            window.location.href = 'inscription.html';
-        }
-    }
-});
-
-// Gestionnaire du bouton "Créer mon profil"
-document.addEventListener('DOMContentLoaded', function() {
-    const btnCreerProfil = document.getElementById('creer-profil-btn');
-    if (btnCreerProfil) {
-        btnCreerProfil.addEventListener('click', function(e) {
-            e.preventDefault(); // Empêcher la soumission par défaut
-            console.log('Clic sur le bouton Créer mon profil');
-            
-            // Vérifier si le formulaire est valide
-            const form = document.getElementById('inscription-form');
-            if (form && form.checkValidity()) {
-                // Simuler la soumission du formulaire
-                form.dispatchEvent(new Event('submit'));
-                
-                // Redirection directe après un court délai
-                setTimeout(() => {
-                    const dashboardUrl = new URL('dashboard.html', window.location.href).href;
-                    console.log('Redirection forcée vers:', dashboardUrl);
-                    window.location.href = dashboardUrl;
-                }, 500);
-            } else {
-                console.log('Formulaire invalide');
-                form.reportValidity();
-            }
-        });
-    }
-});
-
-function updateDashboard() {
-    console.log('Mise à jour du tableau de bord...');
-    updateProfileAnalysis();
-    updateNutritionPlan();
-}
-
-function updateNutritionPlan() {
-    const profile = JSON.parse(localStorage.getItem('levelup_profile') || '{}');
-    if (!profile.informationsGenerales) {
-        console.log('Aucun profil trouvé');
-        return;
-    }
-
-    const {
-        poids,
-        taille,
-        age,
-        sexe
-    } = profile.informationsGenerales;
-
-    // Calcul des besoins caloriques
-    const bmr = calculateBMR(poids, taille, age, sexe);
-    const tdee = calculateTDEE(bmr, profile.habitudesVie.niveauActivite);
-    
-    // Vérifier les objectifs de l'utilisateur
-    const userGoals = profile.objectifsFitness?.objectifsPrincipaux || [];
-    const wantsWeightLoss = userGoals.includes('perte_poids');
-    const wantsMuscleGain = userGoals.includes('gain_muscle');
-    
-    // Ajustement des calories selon l'objectif de l'utilisateur
-    let caloriesJournalieres = tdee;
-    let objectifPoids = '';
-    let objectifTexte = '';
-
-    if (wantsWeightLoss) {
-        caloriesJournalieres = tdee - 500; // Déficit calorique pour la perte de poids
-        objectifPoids = '-0.5 à -1 kg/semaine';
-        objectifTexte = 'Perte de poids';
-    } else if (wantsMuscleGain) {
-        caloriesJournalieres = tdee + 300; // Surplus calorique pour la prise de masse
-        objectifPoids = '+0.25 à +0.5 kg/semaine';
-        objectifTexte = 'Prise de masse musculaire';
-    } else {
-        // Si aucun objectif spécifique, utiliser l'IMC comme guide
-        const imc = calculateBMI(poids, taille);
-        if (imc < 18.5) {
-            caloriesJournalieres = tdee + 300;
-            objectifPoids = '+0.25 à +0.5 kg/semaine';
-            objectifTexte = 'Prise de poids santé';
-        } else if (imc >= 25) {
-            caloriesJournalieres = tdee - 500;
-            objectifPoids = '-0.5 à -1 kg/semaine';
-            objectifTexte = 'Perte de poids santé';
-        } else {
-            objectifPoids = 'Maintien';
-            objectifTexte = 'Maintien du poids';
-        }
-    }
-
-    // Mise à jour des éléments d'affichage du résumé
-    const objectifElement = document.querySelector('.nutrition-summary .summary-card:first-child p');
-    const caloriesElement = document.querySelector('.nutrition-summary .summary-card:nth-child(2) p');
-    const poidsElement = document.querySelector('.nutrition-summary .summary-card:last-child p');
-
-    if (objectifElement) objectifElement.textContent = objectifTexte;
-    if (caloriesElement) caloriesElement.textContent = `${Math.round(caloriesJournalieres)} kcal`;
-    if (poidsElement) poidsElement.textContent = objectifPoids;
-
-    // Mettre à jour le titre de la page
-    const nutritionHeader = document.querySelector('.nutrition-header p');
-    if (nutritionHeader) {
-        nutritionHeader.textContent = `Votre programme alimentaire personnalisé pour ${objectifTexte.toLowerCase()}`;
-    }
-
-    // Générer les suggestions de menus adaptés à l'objectif
-    const suggestionsMenus = genererSuggestionsMenus(profile, caloriesJournalieres);
-    
-    // Afficher le menu type
-    const menuSuggestionsElement = document.getElementById('menu-suggestions');
-    if (menuSuggestionsElement && suggestionsMenus.menuType) {
-        menuSuggestionsElement.innerHTML = Object.entries(suggestionsMenus.menuType)
-            .map(([repas, details]) => `
-                <li class="menu-repas">
-                    <div class="menu-repas-titre">${repas}</div>
-                    <div class="menu-repas-details">${details.base}</div>
-                    <div class="menu-repas-details">${details.details}</div>
-                    <div class="menu-repas-macros">${details.macros}</div>
-                </li>
-            `).join('');
-    }
-
-    // Afficher les alternatives si nécessaire
-    const menuAlternativesElement = document.getElementById('menu-alternatives');
-    const menuAlternativesContainer = document.querySelector('.menu-alternatives');
-    
-    if (profile.regimeAlimentaire?.type && 
-        profile.regimeAlimentaire.type !== 'standard' && 
-        menuAlternativesElement && 
-        menuAlternativesContainer && 
-        suggestionsMenus.alternatives) {
-        
-        menuAlternativesContainer.style.display = 'block';
-        menuAlternativesElement.innerHTML = Object.entries(suggestionsMenus.alternatives)
-            .map(([repas, details]) => `
-                <li class="menu-repas">
-                    <div class="menu-repas-titre">${repas}</div>
-                    <div class="menu-repas-details">${details.base}</div>
-                    <div class="menu-repas-details">${details.details}</div>
-                    <div class="menu-repas-macros">${details.macros}</div>
-                </li>
-            `).join('');
-    } else if (menuAlternativesContainer) {
-        menuAlternativesContainer.style.display = 'none';
-    }
-}
-
-// Modifier l'initialisation du tableau de bord pour utiliser la nouvelle fonction
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initialisation du tableau de bord...');
-    
-    if (document.querySelector('.dashboard-content')) {
-        console.log('Page du tableau de bord détectée');
-        
-        const profileData = localStorage.getItem('levelup_profile');
-        const planData = localStorage.getItem('levelup_plan');
-        
-        console.log('Données du profil:', profileData);
-        console.log('Données du plan:', planData);
-        
-        if (profileData && planData) {
-            console.log('Données trouvées, mise à jour du tableau de bord');
-            updateDashboard();
-        } else {
-            console.log('Aucune donnée trouvée');
-            window.location.href = 'inscription.html';
-        }
-    }
-});
-
-function genererSuggestionsMenus(profile, caloriesJournalieres) {
-    const objectifs = profile.objectifsFitness.objectifsPrincipaux;
-    const regime = profile.regimeAlimentaire.type;
-    const wantsWeightLoss = objectifs.includes('perte_poids');
-    const wantsMuscleGain = objectifs.includes('gain_muscle');
-    
-    // Menus de base selon l'objectif
-    const menus = {
-        perte_poids: {
-            "Petit-déjeuner": {
-                base: "Petit-déjeuner protéiné et fibres",
-                details: "40g de flocons d'avoine, 200ml de lait écrémé, 1 scoop de protéine whey, fruits rouges",
-                macros: "Calories: 300, Protéines: 25g, Glucides: 35g, Lipides: 5g"
-            },
-            "Collation Matin": {
-                base: "Collation protéinée",
-                details: "150g de yaourt grec 0%, pomme, cannelle",
-                macros: "Calories: 120, Protéines: 15g, Glucides: 15g, Lipides: 0g"
-            },
-            "Déjeuner": {
-                base: "Repas riche en protéines et légumes",
-                details: "180g de blanc de poulet, 150g de légumes vapeur, 100g de quinoa cuit",
-                macros: "Calories: 400, Protéines: 45g, Glucides: 35g, Lipides: 8g"
-            },
-            "Collation Après-midi": {
-                base: "Collation équilibrée",
-                details: "30g d'amandes, 1 fruit de saison",
-                macros: "Calories: 200, Protéines: 6g, Glucides: 15g, Lipides: 15g"
-            },
-            "Dîner": {
-                base: "Dîner léger protéiné",
-                details: "200g de poisson blanc, 200g de légumes verts, 1 cuillère d'huile d'olive",
-                macros: "Calories: 300, Protéines: 35g, Glucides: 15g, Lipides: 12g"
-            }
-        },
-        gain_muscle: {
-            "Petit-déjeuner": {
-                base: "Petit-déjeuner hypercalorique",
-                details: "80g de flocons d'avoine, 300ml de lait entier, 2 œufs entiers, 1 banane, 30g de beurre de cacahuète",
-                macros: "Calories: 800, Protéines: 35g, Glucides: 90g, Lipides: 35g"
-            },
-            "Collation Matin": {
-                base: "Shake protéiné gain de masse",
-                details: "40g de whey, 1 banane, 40g d'avoine, 30g d'amandes",
-                macros: "Calories: 450, Protéines: 35g, Glucides: 45g, Lipides: 20g"
-            },
-            "Déjeuner": {
-                base: "Repas riche en protéines et glucides",
-                details: "220g de poulet, 150g de riz complet, légumes, 2 cuillères d'huile d'olive",
-                macros: "Calories: 750, Protéines: 55g, Glucides: 80g, Lipides: 25g"
-            },
-            "Collation Après-midi": {
-                base: "Collation gain de masse",
-                details: "200g de yaourt grec, 40g de granola, 20g de miel",
-                macros: "Calories: 400, Protéines: 20g, Glucides: 50g, Lipides: 15g"
-            },
-            "Dîner": {
-                base: "Dîner riche en protéines",
-                details: "200g de bœuf, 200g de patates douces, légumes verts, huile d'olive",
-                macros: "Calories: 650, Protéines: 45g, Glucides: 60g, Lipides: 25g"
-            }
-        },
-        maintien: {
-            "Petit-déjeuner": {
-                base: "Petit-déjeuner équilibré",
-                details: "60g de flocons d'avoine, 200ml de lait demi-écrémé, 1 œuf, fruits frais",
-                macros: "Calories: 400, Protéines: 20g, Glucides: 55g, Lipides: 12g"
-            },
-            "Collation Matin": {
-                base: "Collation saine",
-                details: "150g de yaourt grec, 1 fruit, 20g d'amandes",
-                macros: "Calories: 250, Protéines: 15g, Glucides: 25g, Lipides: 12g"
-            },
-            "Déjeuner": {
-                base: "Repas équilibré",
-                details: "150g de poulet, 120g de riz complet, légumes variés, huile d'olive",
-                macros: "Calories: 500, Protéines: 35g, Glucides: 60g, Lipides: 15g"
-            },
-            "Collation Après-midi": {
-                base: "Collation énergétique",
-                details: "1 fruit, 30g de noix",
-                macros: "Calories: 200, Protéines: 5g, Glucides: 20g, Lipides: 15g"
-            },
-            "Dîner": {
-                base: "Dîner léger",
-                details: "180g de poisson, légumes variés, 100g de quinoa",
-                macros: "Calories: 450, Protéines: 35g, Glucides: 45g, Lipides: 15g"
-            }
-        }
-    };
-
-    // Alternatives végétariennes/vegans
-    const alternatives = {
-        vegetarien: {
-            "Petit-déjeuner": {
-                base: "Bowl protéiné végétarien",
-                details: "Yaourt grec, granola protéiné, graines de chia, fruits frais",
-                macros: "Calories: 400, Protéines: 20g, Glucides: 45g, Lipides: 15g"
-            },
-            "Collation": {
-                base: "Smoothie protéiné",
-                details: "Protéine whey végétale, banane, épinards, graines de lin",
-                macros: "Calories: 250, Protéines: 20g, Glucides: 30g, Lipides: 8g"
-            },
-            "Déjeuner": {
-                base: "Buddha bowl protéiné",
-                details: "Quinoa, lentilles, pois chiches, avocat, légumes grillés",
-                macros: "Calories: 550, Protéines: 25g, Glucides: 65g, Lipides: 20g"
-            },
-            "Dîner": {
-                base: "Assiette végétarienne complète",
-                details: "Galette de légumineuses, légumes rôtis, houmous",
-                macros: "Calories: 450, Protéines: 20g, Glucides: 50g, Lipides: 18g"
-            }
-        },
-        vegan: {
-            "Petit-déjeuner": {
-                base: "Smoothie bowl protéiné vegan",
-                details: "Protéine de pois, banane, fruits rouges, graines, lait d'amande",
-                macros: "Calories: 350, Protéines: 20g, Glucides: 45g, Lipides: 12g"
-            },
-            "Collation": {
-                base: "Encas protéiné vegan",
-                details: "Barre protéinée vegan, fruit sec, noix",
-                macros: "Calories: 300, Protéines: 15g, Glucides: 35g, Lipides: 15g"
-            },
-            "Déjeuner": {
-                base: "Bowl protéiné vegan",
-                details: "Tofu grillé, quinoa, légumes, sauce tahini",
-                macros: "Calories: 500, Protéines: 25g, Glucides: 55g, Lipides: 22g"
-            },
-            "Dîner": {
-                base: "Dîner vegan complet",
-                details: "Tempeh mariné, patate douce, légumes verts, noix",
-                macros: "Calories: 450, Protéines: 22g, Glucides: 50g, Lipides: 20g"
-            }
-        }
-    };
-
-    // Sélectionner le menu approprié selon l'objectif
-    let menuType;
-    if (wantsWeightLoss) {
-        menuType = menus.perte_poids;
-    } else if (wantsMuscleGain) {
-        menuType = menus.gain_muscle;
-    } else {
-        menuType = menus.maintien;
-    }
-
-    // Sélectionner les alternatives si nécessaire
-    let menuAlternatif = null;
-    if (regime && regime !== 'standard') {
-        menuAlternatif = alternatives[regime] || null;
-    }
-
-    return {
-        menuType: menuType,
-        alternatives: menuAlternatif
-    };
 }
 
 // Gestion de la navigation
