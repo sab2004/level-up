@@ -1891,9 +1891,9 @@ textarea::-webkit-scrollbar-thumb {
 
 .stat-value {
     display: block;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: bold;
-    color: var(--primary-color);
+    color: var(--danger-color);
 }
 
 .progress-chart {
@@ -2398,7 +2398,7 @@ textarea::-webkit-scrollbar-thumb {
 .progress-value {
     font-size: 1.1rem;
     font-weight: bold;
-    color: var(--primary-color);
+    color: var(--danger-color);
 }
 
 .progress-bar {
