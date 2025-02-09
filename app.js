@@ -1234,7 +1234,7 @@ function generateNextWorkout() {
 }
 
 // Fonction pour analyser le poids de manière détaillée
-function analyzeWeight(poids, taille, sexe, age) {
+function analyzeWeight(poids, taille, sexe, age, objectifs) {
     const imc = calculateBMI(poids, taille);
     const poidsIdeal = calculateIdealWeight(taille, sexe);
     const muscleIndex = calculateMuscleIndex(poids, taille, sexe, age);
@@ -1249,48 +1249,61 @@ function analyzeWeight(poids, taille, sexe, age) {
     const minHealthyWeight = (18.5 * (taille/100) * (taille/100));
     const maxHealthyWeight = (25 * (taille/100) * (taille/100));
     
-    // Analyse détaillée
-    if (imc < 18.5) {
-        analysis.status = "sous-poids";
-        analysis.details = `Avec une taille de ${taille}cm et un poids de ${poids}kg, votre IMC de ${imc.toFixed(1)} indique un sous-poids.`;
-        if (sexe === 'homme') {
-            if (age < 35) {
-                analysis.details += " Pour un homme de votre âge, il est particulièrement important d'avoir une masse musculaire suffisante.";
-            }
-            analysis.recommendations.push(`Pour atteindre un poids santé, vous devriez viser au moins ${Math.round(minHealthyWeight)}kg.`);
+    // Analyse détaillée en fonction des objectifs
+    if (objectifs && objectifs.includes('perte_poids')) {
+        analysis.status = "objectif perte de poids";
+        analysis.details = `Avec une taille de ${taille}cm et un poids de ${poids}kg, votre IMC est de ${imc.toFixed(1)}.`;
+        
+        if (imc < 18.5) {
+            analysis.details += " Attention : votre IMC indique un sous-poids, la perte de poids n'est pas recommandée.";
+            analysis.recommendations.push("Consultez un professionnel de santé avant d'entamer un programme de perte de poids.");
         } else {
-            analysis.recommendations.push(`Pour atteindre un poids santé, vous devriez viser au moins ${Math.round(minHealthyWeight)}kg.`);
+            const poidsObjectif = Math.max(minHealthyWeight, poidsIdeal * 0.95);
+            analysis.recommendations.push(`Pour une perte de poids saine, visez un objectif de ${Math.round(poidsObjectif)}kg.`);
         }
-    } else if (imc >= 18.5 && imc < 25) {
-        if (poids < poidsIdeal - 5) {
-            analysis.status = "poids normal bas";
-            analysis.details = `Bien que votre IMC de ${imc.toFixed(1)} soit dans la normale, vous êtes dans la fourchette basse pour votre morphologie.`;
-            analysis.recommendations.push(`Votre poids idéal théorique serait autour de ${Math.round(poidsIdeal)}kg.`);
-        } else if (poids > poidsIdeal + 5) {
-            analysis.status = "poids normal haut";
-            analysis.details = `Votre IMC de ${imc.toFixed(1)} est normal, mais vous êtes dans la fourchette haute pour votre morphologie.`;
-        } else {
-            analysis.status = "poids optimal";
-            analysis.details = `Votre poids de ${poids}kg est optimal pour votre taille de ${taille}cm.`;
-        }
-    } else if (imc >= 25 && imc < 30) {
-        analysis.status = "surpoids";
-        analysis.details = `Avec un IMC de ${imc.toFixed(1)}, vous êtes en surpoids.`;
-        if (sexe === 'homme' && muscleIndex > 23) {
-            analysis.details += " Cependant, si vous pratiquez régulièrement la musculation, ce surpoids pourrait être dû à une masse musculaire importante.";
-        }
-        analysis.recommendations.push(`Un poids santé pour votre taille serait entre ${Math.round(minHealthyWeight)}kg et ${Math.round(maxHealthyWeight)}kg.`);
+    } else if (objectifs && objectifs.includes('gain_muscle')) {
+        analysis.status = "objectif prise de masse";
+        analysis.details = `Avec une taille de ${taille}cm et un poids de ${poids}kg, votre IMC est de ${imc.toFixed(1)}.`;
+        
+        const poidsObjectif = Math.min(maxHealthyWeight, poidsIdeal * 1.1);
+        analysis.recommendations.push(`Pour optimiser votre prise de masse musculaire, visez un objectif de ${Math.round(poidsObjectif)}kg.`);
     } else {
-        analysis.status = "obésité";
-        analysis.details = `Votre IMC de ${imc.toFixed(1)} indique une obésité.`;
-        analysis.recommendations.push(`Un poids santé pour votre taille serait entre ${Math.round(minHealthyWeight)}kg et ${Math.round(maxHealthyWeight)}kg.`);
-    }
-
-    // Ajout de recommandations spécifiques selon l'âge
-    if (age < 25) {
-        analysis.recommendations.push("À votre âge, il est important de développer de bonnes habitudes alimentaires et d'activité physique pour maintenir un poids santé à long terme.");
-    } else if (age > 50) {
-        analysis.recommendations.push("Après 50 ans, il est important de maintenir une masse musculaire suffisante tout en gardant un poids santé.");
+        // Analyse standard basée sur l'IMC si pas d'objectif spécifique
+        if (imc < 18.5) {
+            analysis.status = "sous-poids";
+            analysis.details = `Avec une taille de ${taille}cm et un poids de ${poids}kg, votre IMC de ${imc.toFixed(1)} indique un sous-poids.`;
+            if (sexe === 'homme') {
+                if (age < 35) {
+                    analysis.details += " Pour un homme de votre âge, il est particulièrement important d'avoir une masse musculaire suffisante.";
+                }
+                analysis.recommendations.push(`Pour atteindre un poids santé, vous devriez viser au moins ${Math.round(minHealthyWeight)}kg.`);
+            } else {
+                analysis.recommendations.push(`Pour atteindre un poids santé, vous devriez viser au moins ${Math.round(minHealthyWeight)}kg.`);
+            }
+        } else if (imc >= 25 && imc < 30) {
+            analysis.status = "surpoids";
+            analysis.details = `Avec un IMC de ${imc.toFixed(1)}, vous êtes en surpoids.`;
+            if (sexe === 'homme' && muscleIndex > 23) {
+                analysis.details += " Cependant, si vous pratiquez régulièrement la musculation, ce surpoids pourrait être dû à une masse musculaire importante.";
+            }
+            analysis.recommendations.push(`Un poids santé pour votre taille serait entre ${Math.round(minHealthyWeight)}kg et ${Math.round(maxHealthyWeight)}kg.`);
+        } else if (imc >= 30) {
+            analysis.status = "obésité";
+            analysis.details = `Votre IMC de ${imc.toFixed(1)} indique une obésité.`;
+            analysis.recommendations.push(`Un poids santé pour votre taille serait entre ${Math.round(minHealthyWeight)}kg et ${Math.round(maxHealthyWeight)}kg.`);
+        } else {
+            if (poids < poidsIdeal - 5) {
+                analysis.status = "poids normal bas";
+                analysis.details = `Bien que votre IMC de ${imc.toFixed(1)} soit dans la normale, vous êtes dans la fourchette basse pour votre morphologie.`;
+                analysis.recommendations.push(`Votre poids idéal théorique serait autour de ${Math.round(poidsIdeal)}kg.`);
+            } else if (poids > poidsIdeal + 5) {
+                analysis.status = "poids normal haut";
+                analysis.details = `Votre IMC de ${imc.toFixed(1)} est normal, mais vous êtes dans la fourchette haute pour votre morphologie.`;
+            } else {
+                analysis.status = "poids optimal";
+                analysis.details = `Votre poids de ${poids}kg est optimal pour votre taille de ${taille}cm.`;
+            }
+        }
     }
 
     return analysis;
@@ -1313,14 +1326,12 @@ function calculateMuscleIndex(poids, taille, sexe, age) {
 
 function updateProfileAnalysis() {
     // Récupérer les données du profil
-    const profile = JSON.parse(localStorage.getItem('levelup_profile') || '{}');
-    
-    if (!profile.informationsGenerales) {
-        console.log('Aucun profil trouvé');
+    const profile = JSON.parse(localStorage.getItem('levelup_profile'));
+    if (!profile || !profile.informationsGenerales) {
+        console.error('Profil non trouvé');
         return;
     }
 
-    // Extraire les informations du profil
     const {
         poids,
         taille,
@@ -1328,121 +1339,153 @@ function updateProfileAnalysis() {
         sexe
     } = profile.informationsGenerales;
 
-    if (!poids || !taille) {
-        console.log('Données essentielles manquantes');
-        return;
-    }
-
-    // Calculer l'IMC
-    const imc = calculateBMI(poids, taille);
-    document.getElementById('bmi-value').textContent = imc.toFixed(1);
+    const objectifs = profile.objectifsFitness?.objectifsPrincipaux || [];
     
-    // Obtenir l'analyse détaillée du poids
-    const weightAnalysis = analyzeWeight(poids, taille, sexe, age);
-    
-    // Mettre à jour l'interprétation de l'IMC
-    document.getElementById('bmi-interpretation').textContent = weightAnalysis.details;
+    // Calculer l'IMC et autres métriques
+    const imc = calculerIMC(poids, taille);
+    const bmr = calculerMetabolismeBase(poids, taille, age, sexe);
+    const tdee = calculerBesoinsCaloriques(bmr, profile.habitudesVie.niveauActivite);
 
-    // Vérifier les objectifs de l'utilisateur
-    const userGoals = profile.objectifsFitness?.objectifsPrincipaux || [];
-    const wantsWeightLoss = userGoals.includes('perte_poids');
-    const wantsMuscleGain = userGoals.includes('gain_muscle');
-
-    // Générer les recommandations
-    const recommendationsList = document.getElementById('recommendations-list');
-    if (recommendationsList) {
-        const recommendations = [];
-
-        // Ajouter l'analyse IMC dans les recommandations
-        const profileRecommendations = document.getElementById('profile-recommendations');
-        if (profileRecommendations) {
-            profileRecommendations.innerHTML = `
-                <div class="recommendation-card">
-                    <div class="recommendation-header">
-                        <i class="fas fa-chart-line"></i>
-                        <h4>Analyse IMC</h4>
-                    </div>
-                    <p>${weightAnalysis.details}</p>
+    // Mettre à jour les recommandations personnalisées
+    const profileRecommendations = document.getElementById('profile-recommendations');
+    if (profileRecommendations) {
+        profileRecommendations.innerHTML = `
+            <div class="recommendation-card">
+                <div class="recommendation-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Analyse IMC</h4>
                 </div>
-                <div class="recommendation-card">
-                    <div class="recommendation-header">
-                        <i class="fas fa-bullseye"></i>
-                        <h4>Objectif de Poids</h4>
-                    </div>
-                    <p>${weightAnalysis.recommendations.join(' ')}</p>
+                <p>${genererAnalyseIMC(imc, taille, poids, sexe, age)}</p>
+            </div>
+
+            <div class="recommendation-card">
+                <div class="recommendation-header">
+                    <i class="fas fa-bullseye"></i>
+                    <h4>Objectif de Poids</h4>
                 </div>
-            `;
-        }
+                <p>${genererObjectifPoids(taille, poids, imc, objectifs, sexe)}</p>
+            </div>
 
-        // Calculer les besoins caloriques
-        const bmr = calculateBMR(poids, taille, age, sexe);
-        const tdee = calculateTDEE(bmr, profile.habitudesVie.niveauActivite);
-        let caloriesJournalieres = tdee;
+            <div class="recommendation-card">
+                <div class="recommendation-header">
+                    <i class="fas fa-fire"></i>
+                    <h4>Apport Calorique</h4>
+                </div>
+                <p>${genererApportCalorique(tdee, objectifs)}</p>
+            </div>
 
-        // Ajuster les recommandations en fonction des objectifs
-        if (wantsWeightLoss) {
-            caloriesJournalieres -= 500; // Déficit calorique pour la perte de poids
-            recommendations.push("Objectif : Perte de poids");
-            recommendations.push(`• Créez un déficit calorique de 500 calories (${caloriesJournalieres} kcal/jour)`);
-            recommendations.push(`• Objectif protéines : ${Math.round(poids * 2.2)}g par jour`);
-            recommendations.push("• Répartition nutritionnelle recommandée :");
-            recommendations.push("  - 30-35% de protéines");
-            recommendations.push("  - 40-45% de glucides complexes");
-            recommendations.push("  - 20-25% de graisses saines");
-        } else if (wantsMuscleGain) {
-            caloriesJournalieres += 300; // Surplus calorique pour la prise de masse
-            recommendations.push("Objectif : Prise de masse musculaire");
-            recommendations.push(`• Augmentez votre apport calorique à ${caloriesJournalieres} kcal/jour`);
-            recommendations.push(`• Objectif protéines : ${Math.round(poids * 1.8)}-${Math.round(poids * 2.2)}g par jour`);
-            recommendations.push("• Répartition des macronutriments :");
-            recommendations.push("  - 30% de protéines");
-            recommendations.push("  - 50% de glucides");
-            recommendations.push("  - 20% de lipides");
-        }
+            <div class="recommendation-card">
+                <div class="recommendation-header">
+                    <i class="fas fa-balance-scale"></i>
+                    <h4>Répartition Nutritionnelle</h4>
+                </div>
+                <p>${genererRepartitionNutritionnelle(poids, objectifs)}</p>
+            </div>
 
-        // Ajouter des recommandations spécifiques selon le régime alimentaire
-        if (profile.regimeAlimentaire?.type === 'vegetarien') {
-            recommendations.push("• Sources de protéines recommandées :");
-            recommendations.push("  - Œufs, produits laitiers");
-            recommendations.push("  - Légumineuses, tofu, seitan");
-            recommendations.push("  - Quinoa, riz complet + légumineuses");
-        } else if (profile.regimeAlimentaire?.type === 'vegan') {
-            recommendations.push("• Sources de protéines végétales :");
-            recommendations.push("  - Légumineuses, tofu, tempeh");
-            recommendations.push("  - Seitan, protéines de pois");
-            recommendations.push("  - Supplémentation en B12 recommandée");
-        }
+            <div class="recommendation-card">
+                <div class="recommendation-header">
+                    <i class="fas fa-clock"></i>
+                    <h4>Timing des Repas</h4>
+                </div>
+                <p>${genererTimingRepas(profile.regimeAlimentaire?.nombreRepas)}</p>
+            </div>
 
-        // Afficher les recommandations
-        recommendationsList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
+            <div class="recommendation-card">
+                <div class="recommendation-header">
+                    <i class="fas fa-user-md"></i>
+                    <h4>Suivi</h4>
+                </div>
+                <p>${genererRecommandationsSuivi(imc, objectifs)}</p>
+            </div>
+        `;
     }
-    
-    // Mettre à jour les autres valeurs
-    document.getElementById('target-weight').textContent = poids;
-    document.getElementById('bmr-value').textContent = Math.round(calculateBMR(poids, taille, age, sexe));
-    document.getElementById('tdee-value').textContent = Math.round(calculateTDEE(calculateBMR(poids, taille, age, sexe), profile.habitudesVie.niveauActivite));
-    
-    // Mettre à jour le message de différence de poids
-    const poidsIdeal = calculateIdealWeight(taille, sexe);
-    const difference = Math.abs(poids - poidsIdeal);
-    let message = "";
-    
-    if (wantsWeightLoss) {
-        message = `Poids à perdre : ${Math.max(0, poids - poidsIdeal).toFixed(1)} kg`;
-    } else if (wantsMuscleGain) {
-        const poidsObjectif = poidsIdeal * 1.1; // +10% pour la masse musculaire
-        message = `Poids à gagner : ${Math.max(0, poidsObjectif - poids).toFixed(1)} kg`;
-    } else {
-        if (imc < 18.5) {
-            message = `Poids à gagner : ${difference.toFixed(1)} kg`;
-        } else if (imc >= 25) {
-            message = `Poids à perdre : ${difference.toFixed(1)} kg`;
+}
+
+function genererAnalyseIMC(imc, taille, poids, sexe, age) {
+    let analyseIMCText = `Avec une taille de ${taille}cm et un poids de ${poids}kg, votre IMC de ${imc.toFixed(1)} `;
+    if (imc < 18.5) {
+        analyseIMCText += "indique un sous-poids. ";
+        if (sexe === 'homme') {
+            analyseIMCText += "Pour un homme de votre âge, il est particulièrement important d'avoir une masse musculaire suffisante.";
         } else {
-            message = "Poids dans la normale";
+            analyseIMCText += "Pour une femme de votre âge, il est important de maintenir un poids santé.";
         }
+    } else if (imc >= 25) {
+        analyseIMCText += "indique un surpoids. Une perte de poids progressive est recommandée.";
+    } else {
+        analyseIMCText += "est dans la normale. Continuez à maintenir un mode de vie sain.";
+    }
+    return analyseIMCText;
+}
+
+function genererObjectifPoids(taille, poids, imc, objectifs, sexe) {
+    const poidsIdeal = calculerPoidsIdeal(taille, sexe);
+    if (objectifs.includes('prise_de_muscle')) {
+        const poidsObjectif = Math.round(poidsIdeal * 1.1);
+        return `Pour atteindre vos objectifs de prise de masse musculaire, visez un poids de ${poidsObjectif}kg de manière progressive.`;
+    } else if (objectifs.includes('perte_poids')) {
+        const poidsMinimum = Math.round(taille * taille * 0.02);
+        const poidsMaximum = Math.round(taille * taille * 0.025);
+        return `Pour atteindre un poids santé (IMC entre 20 et 25), vous devriez viser entre ${poidsMinimum}kg et ${poidsMaximum}kg.`;
+    } else {
+        return `Votre poids idéal théorique se situe autour de ${Math.round(poidsIdeal)}kg.`;
+    }
+}
+
+function genererApportCalorique(tdee, objectifs) {
+    let caloriesRecommandees = tdee;
+    if (objectifs.includes('perte_poids')) {
+        caloriesRecommandees = Math.round(tdee * 0.85);
+        return `Pour une perte de poids saine, visez un apport quotidien de ${caloriesRecommandees} calories.`;
+    } else if (objectifs.includes('prise_de_muscle')) {
+        caloriesRecommandees = Math.round(tdee * 1.1);
+        return `Pour favoriser la prise de masse musculaire, visez un apport quotidien de ${caloriesRecommandees} calories.`;
+    } else {
+        return `Pour maintenir votre poids actuel, visez un apport quotidien de ${caloriesRecommandees} calories.`;
+    }
+}
+
+function genererRepartitionNutritionnelle(poids, objectifs) {
+    let proteinePourcentage, glucidesPourcentage, lipidesPourcentage;
+    if (objectifs.includes('prise_de_muscle')) {
+        proteinePourcentage = 30;
+        glucidesPourcentage = 50;
+        lipidesPourcentage = 20;
+    } else if (objectifs.includes('perte_poids')) {
+        proteinePourcentage = 35;
+        glucidesPourcentage = 40;
+        lipidesPourcentage = 25;
+    } else {
+        proteinePourcentage = 25;
+        glucidesPourcentage = 55;
+        lipidesPourcentage = 20;
     }
     
-    document.getElementById('weight-to-lose').innerHTML = `<span>${message}</span>`;
+    const proteinesParJour = Math.round(poids * 2);
+    return `Objectif protéines : ${proteinesParJour}g par jour (${proteinePourcentage}%), Glucides : ${glucidesPourcentage}%, Lipides : ${lipidesPourcentage}%`;
+}
+
+function genererTimingRepas(nombreRepas) {
+    switch(nombreRepas) {
+        case '3':
+            return "Prenez 3 repas principaux riches en protéines répartis dans la journée";
+        case '4-5':
+            return "Prenez 3 repas principaux et 1-2 collations riches en protéines";
+        case '6':
+            return "Répartissez vos apports en 6 petits repas tout au long de la journée";
+        default:
+            return "Prenez 3 repas principaux et 2-3 collations riches en protéines";
+    }
+}
+
+function genererRecommandationsSuivi(imc, objectifs) {
+    if (imc < 18.5 || imc >= 30) {
+        return "Consultez un professionnel de santé pour un suivi personnalisé";
+    } else if (objectifs.includes('perte_poids') || objectifs.includes('prise_de_muscle')) {
+        return "Un suivi avec un nutritionniste pourrait optimiser vos résultats";
+    } else {
+        return "Maintenez un suivi régulier de votre poids et de vos mesures";
+    }
 }
 
 // Fonction pour calculer le poids idéal (formule de Lorentz)
