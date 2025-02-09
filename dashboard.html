@@ -39,6 +39,68 @@
 
     <!-- Dashboard Content -->
     <main class="dashboard-content">
+        <!-- Section Analyse du Profil -->
+        <section class="profile-analysis">
+            <h2>Analyse de votre Profil</h2>
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <div class="analysis-header">
+                        <i class="fas fa-calculator"></i>
+                        <h3>Métriques Clés</h3>
+                    </div>
+                    <div class="metrics-grid">
+                        <div class="metric">
+                            <span class="metric-label">Indice de Masse Corporelle (IMC)</span>
+                            <span class="metric-value" id="bmi-value">--</span>
+                            <span class="metric-interpretation" id="bmi-interpretation">--</span>
+                            <span class="metric-unit">kg/m²</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Métabolisme de Base</span>
+                            <span class="metric-value" id="bmr-value">--</span>
+                            <span class="metric-unit">kcal/jour</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Dépense Énergétique Totale</span>
+                            <span class="metric-value" id="tdee-value">--</span>
+                            <span class="metric-unit">kcal/jour</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analysis-card">
+                    <div class="analysis-header">
+                        <i class="fas fa-bullseye"></i>
+                        <h3>Objectifs</h3>
+                    </div>
+                    <div class="objectives-list">
+                        <div class="objective">
+                            <span class="objective-label">Poids Actuel</span>
+                            <span class="objective-value" id="current-weight">--</span>
+                        </div>
+                        <div class="objective">
+                            <span class="objective-label">Poids Cible</span>
+                            <span class="objective-value" id="target-weight">--</span>
+                        </div>
+                        <div class="objective">
+                            <span class="objective-label">Progression</span>
+                            <span class="objective-value" id="weight-progress">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analysis-card">
+                    <div class="analysis-header">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Recommandations</h3>
+                    </div>
+                    <div class="recommendations-list" id="profile-recommendations">
+                        <!-- Les recommandations seront ajoutées dynamiquement ici -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Section Gestion du Poids -->
         <section class="weight-management">
             <h2>Suivi du Poids</h2>
@@ -244,68 +306,6 @@
                     </div>
                     <h3>Calories</h3>
                     <p>2,450 / 2,700</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section Analyse du Profil -->
-        <section class="profile-analysis">
-            <h2>Analyse de votre Profil</h2>
-            <div class="analysis-grid">
-                <div class="analysis-card">
-                    <div class="analysis-header">
-                        <i class="fas fa-calculator"></i>
-                        <h3>Métriques Clés</h3>
-                    </div>
-                    <div class="metrics-grid">
-                        <div class="metric">
-                            <span class="metric-label">Indice de Masse Corporelle (IMC)</span>
-                            <span class="metric-value" id="bmi-value">--</span>
-                            <span class="metric-interpretation" id="bmi-interpretation">--</span>
-                            <span class="metric-unit">kg/m²</span>
-                        </div>
-                        <div class="metric">
-                            <span class="metric-label">Métabolisme de Base</span>
-                            <span class="metric-value" id="bmr-value">--</span>
-                            <span class="metric-unit">kcal/jour</span>
-                        </div>
-                        <div class="metric">
-                            <span class="metric-label">Dépense Énergétique Totale</span>
-                            <span class="metric-value" id="tdee-value">--</span>
-                            <span class="metric-unit">kcal/jour</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="analysis-card">
-                    <div class="analysis-header">
-                        <i class="fas fa-bullseye"></i>
-                        <h3>Objectifs</h3>
-                    </div>
-                    <div class="objectives-list">
-                        <div class="objective">
-                            <span class="objective-label">Poids Actuel</span>
-                            <span class="objective-value" id="current-weight">--</span>
-                        </div>
-                        <div class="objective">
-                            <span class="objective-label">Poids Cible</span>
-                            <span class="objective-value" id="target-weight">--</span>
-                        </div>
-                        <div class="objective">
-                            <span class="objective-label">Progression</span>
-                            <span class="objective-value" id="weight-progress">--</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="analysis-card">
-                    <div class="analysis-header">
-                        <i class="fas fa-lightbulb"></i>
-                        <h3>Recommandations</h3>
-                    </div>
-                    <div class="recommendations-list" id="profile-recommendations">
-                        <!-- Les recommandations seront ajoutées dynamiquement ici -->
-                    </div>
                 </div>
             </div>
         </section>
