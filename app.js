@@ -1346,6 +1346,54 @@ function updateProfileAnalysis() {
     const bmr = calculerMetabolismeBase(poids, taille, age, sexe);
     const tdee = calculerBesoinsCaloriques(bmr, profile.habitudesVie.niveauActivite);
 
+    // Mettre à jour les valeurs dans "Analyse de votre profil"
+    const imcElement = document.getElementById('bmi-value');
+    const bmrElement = document.getElementById('bmr-value');
+    const tdeeElement = document.getElementById('tdee-value');
+    const poidsElement = document.getElementById('target-weight');
+    const poidsPerteElement = document.getElementById('weight-to-lose');
+
+    if (imcElement) imcElement.textContent = `${imc.toFixed(1)}`;
+    if (bmrElement) bmrElement.textContent = `${Math.round(bmr)}`;
+    if (tdeeElement) tdeeElement.textContent = `${Math.round(tdee)}`;
+    if (poidsElement) poidsElement.textContent = `${poids}`;
+
+    // Calculer le poids à perdre/gagner
+    const poidsIdeal = calculerPoidsIdeal(taille, sexe);
+    let messagePoidsObjectif = '';
+    if (objectifs.includes('prise_de_muscle')) {
+        const poidsAGagner = Math.max(0, (poidsIdeal * 1.1) - poids).toFixed(1);
+        messagePoidsObjectif = `Poids à gagner : ${poidsAGagner} kg`;
+    } else if (objectifs.includes('perte_poids')) {
+        const poidsAPerdre = Math.max(0, poids - poidsIdeal).toFixed(1);
+        messagePoidsObjectif = `Poids à perdre : ${poidsAPerdre} kg`;
+    } else if (imc < 18.5) {
+        const poidsAGagner = (poidsIdeal - poids).toFixed(1);
+        messagePoidsObjectif = `Poids à gagner : ${poidsAGagner} kg`;
+    } else if (imc >= 25) {
+        const poidsAPerdre = (poids - poidsIdeal).toFixed(1);
+        messagePoidsObjectif = `Poids à perdre : ${poidsAPerdre} kg`;
+    } else {
+        messagePoidsObjectif = 'Poids dans la normale';
+    }
+    if (poidsPerteElement) poidsPerteElement.innerHTML = `<span>${messagePoidsObjectif}</span>`;
+
+    // Mettre à jour l'interprétation de l'IMC
+    const imcInterpretationElement = document.getElementById('bmi-interpretation');
+    if (imcInterpretationElement) {
+        let interpretation = '';
+        if (imc < 18.5) {
+            interpretation = 'Sous-poids';
+        } else if (imc < 25) {
+            interpretation = 'Poids normal';
+        } else if (imc < 30) {
+            interpretation = 'Surpoids';
+        } else {
+            interpretation = 'Obésité';
+        }
+        imcInterpretationElement.textContent = interpretation;
+    }
+
     // Mettre à jour les recommandations personnalisées
     const profileRecommendations = document.getElementById('profile-recommendations');
     if (profileRecommendations) {
@@ -1379,7 +1427,9 @@ function updateProfileAnalysis() {
                     <i class="fas fa-balance-scale"></i>
                     <h4>Répartition Nutritionnelle</h4>
                 </div>
-                <p>${genererRepartitionNutritionnelle(poids, objectifs)}</p>
+                <ul class="macro-list">
+                    ${genererRepartitionNutritionnelle(poids, objectifs)}
+                </ul>
             </div>
 
             <div class="recommendation-card">
@@ -1387,7 +1437,9 @@ function updateProfileAnalysis() {
                     <i class="fas fa-clock"></i>
                     <h4>Timing des Repas</h4>
                 </div>
-                <p>${genererTimingRepas(profile.regimeAlimentaire?.nombreRepas)}</p>
+                <ul class="meal-timing-list">
+                    ${genererTimingRepas(profile.regimeAlimentaire?.nombreRepas)}
+                </ul>
             </div>
 
             <div class="recommendation-card">
@@ -1400,6 +1452,70 @@ function updateProfileAnalysis() {
         `;
     }
 }
+
+// Modifier la fonction genererRepartitionNutritionnelle pour retourner une liste HTML
+function genererRepartitionNutritionnelle(poids, objectifs) {
+    let proteinePourcentage, glucidesPourcentage, lipidesPourcentage;
+    if (objectifs.includes('prise_de_muscle')) {
+        proteinePourcentage = 30;
+        glucidesPourcentage = 50;
+        lipidesPourcentage = 20;
+    } else if (objectifs.includes('perte_poids')) {
+        proteinePourcentage = 35;
+        glucidesPourcentage = 40;
+        lipidesPourcentage = 25;
+    } else {
+        proteinePourcentage = 25;
+        glucidesPourcentage = 55;
+        lipidesPourcentage = 20;
+    }
+    
+    const proteinesParJour = Math.round(poids * 2);
+    return `
+        <li><i class="fas fa-check"></i>Objectif protéines : ${proteinesParJour}g par jour (${proteinePourcentage}%)</li>
+        <li><i class="fas fa-check"></i>${proteinePourcentage}% de protéines (viandes maigres, œufs, produits laitiers, légumineuses)</li>
+        <li><i class="fas fa-check"></i>${glucidesPourcentage}% de glucides complexes (riz complet, pâtes complètes, patates douces)</li>
+        <li><i class="fas fa-check"></i>${lipidesPourcentage}% de bonnes graisses (avocat, huile d'olive, noix)</li>
+    `;
+}
+
+// Modifier la fonction genererTimingRepas pour retourner une liste HTML
+function genererTimingRepas(nombreRepas) {
+    let recommendations = [];
+    switch(nombreRepas) {
+        case '3':
+            recommendations = [
+                "Prenez 3 repas principaux riches en protéines répartis dans la journée",
+                "Privilégiez les shakes protéinés après l'entraînement"
+            ];
+            break;
+        case '4-5':
+            recommendations = [
+                "Prenez 3 repas principaux et 1-2 collations riches en protéines",
+                "Privilégiez les shakes protéinés après l'entraînement"
+            ];
+            break;
+        case '6':
+            recommendations = [
+                "Répartissez vos apports en 6 petits repas tout au long de la journée",
+                "Privilégiez les shakes protéinés après l'entraînement"
+            ];
+            break;
+        default:
+            recommendations = [
+                "Prenez 3 repas principaux et 2-3 collations riches en protéines",
+                "Privilégiez les shakes protéinés après l'entraînement"
+            ];
+    }
+    return recommendations.map(rec => `<li><i class="fas fa-check"></i>${rec}</li>`).join('');
+}
+
+// Assurer que la fonction est appelée au chargement de la page et après la connexion
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.endsWith('dashboard.html')) {
+        updateProfileAnalysis();
+    }
+});
 
 function genererAnalyseIMC(imc, taille, poids, sexe, age) {
     let analyseIMCText = `Avec une taille de ${taille}cm et un poids de ${poids}kg, votre IMC de ${imc.toFixed(1)} `;
@@ -1442,39 +1558,6 @@ function genererApportCalorique(tdee, objectifs) {
         return `Pour favoriser la prise de masse musculaire, visez un apport quotidien de ${caloriesRecommandees} calories.`;
     } else {
         return `Pour maintenir votre poids actuel, visez un apport quotidien de ${caloriesRecommandees} calories.`;
-    }
-}
-
-function genererRepartitionNutritionnelle(poids, objectifs) {
-    let proteinePourcentage, glucidesPourcentage, lipidesPourcentage;
-    if (objectifs.includes('prise_de_muscle')) {
-        proteinePourcentage = 30;
-        glucidesPourcentage = 50;
-        lipidesPourcentage = 20;
-    } else if (objectifs.includes('perte_poids')) {
-        proteinePourcentage = 35;
-        glucidesPourcentage = 40;
-        lipidesPourcentage = 25;
-    } else {
-        proteinePourcentage = 25;
-        glucidesPourcentage = 55;
-        lipidesPourcentage = 20;
-    }
-    
-    const proteinesParJour = Math.round(poids * 2);
-    return `Objectif protéines : ${proteinesParJour}g par jour (${proteinePourcentage}%), Glucides : ${glucidesPourcentage}%, Lipides : ${lipidesPourcentage}%`;
-}
-
-function genererTimingRepas(nombreRepas) {
-    switch(nombreRepas) {
-        case '3':
-            return "Prenez 3 repas principaux riches en protéines répartis dans la journée";
-        case '4-5':
-            return "Prenez 3 repas principaux et 1-2 collations riches en protéines";
-        case '6':
-            return "Répartissez vos apports en 6 petits repas tout au long de la journée";
-        default:
-            return "Prenez 3 repas principaux et 2-3 collations riches en protéines";
     }
 }
 
