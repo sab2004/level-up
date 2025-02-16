@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Level Up Fitness</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="inscription-container">
+        <h1>Créez votre compte Level Up</h1>
+        <form id="inscriptionForm" class="inscription-form">
+            <div class="form-section">
+                <h3>Informations personnelles</h3>
+                <div class="form-group">
+                    <label for="nom">Nom complet</label>
+                    <input type="text" id="nom" name="nom" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="age">Âge</label>
+                        <input type="number" id="age" name="age" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sexe">Sexe</label>
+                        <select id="sexe" name="sexe" required>
+                            <option value="">Sélectionnez</option>
+                            <option value="homme">Homme</option>
+                            <option value="femme">Femme</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Mensurations</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="poids">Poids (kg)</label>
+                        <input type="number" id="poids" name="poids" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taille">Taille (cm)</label>
+                        <input type="number" id="taille" name="taille" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Objectifs</h3>
+                <div class="form-group">
+                    <label for="objectifPrincipal">Objectif principal</label>
+                    <select id="objectifPrincipal" name="objectifPrincipal" required>
+                        <option value="">Sélectionnez votre objectif</option>
+                        <option value="perte_poids">Perte de poids</option>
+                        <option value="prise_masse">Prise de masse musculaire</option>
+                        <option value="endurance">Amélioration de l'endurance</option>
+                        <option value="force">Gain en force</option>
+                        <option value="bien_etre">Bien-être général</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="niveauActivite">Niveau d'activité actuel</label>
+                    <select id="niveauActivite" name="niveauActivite" required>
+                        <option value="">Sélectionnez votre niveau</option>
+                        <option value="debutant">Débutant</option>
+                        <option value="intermediaire">Intermédiaire</option>
+                        <option value="avance">Avancé</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="frequenceEntrainement">Fréquence d'entraînement souhaitée</label>
+                    <select id="frequenceEntrainement" name="frequenceEntrainement" required>
+                        <option value="">Sélectionnez la fréquence</option>
+                        <option value="1-2">1-2 fois par semaine</option>
+                        <option value="3-4">3-4 fois par semaine</option>
+                        <option value="5+">5 fois ou plus par semaine</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Créer mon compte</button>
+                <p class="login-link">Déjà un compte ? <a href="connexion.html">Connectez-vous</a></p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- Configuration Firebase -->
+    <script src="../../js/config/firebase.config.js"></script>
+
+    <!-- Script d'inscription -->
+    <script src="../../js/auth/inscription.js"></script>
+</body>
+</html> 
