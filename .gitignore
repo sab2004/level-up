@@ -1,0 +1,20 @@
+# Firebase configuration
+src/js/config/firebase.config.js
+
+# Environment variables
+.env
+.env.local
+
+# Dependencies
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db 
