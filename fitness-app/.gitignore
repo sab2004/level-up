@@ -1,0 +1,17 @@
+# Environment variables
+.env
+.env.local
+
+# Firebase config
+firebase.config.js
+firebase.config.local.js
+
+# Dependencies
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log 
